@@ -4,3 +4,7 @@ main: me.youhavetrouble.purpurextras.PurpurExtras
 api-version: 1.16
 authors: [ YouHaveTrouble ]
 description: "\"This should be a plugin\" features from Purpur"
+commands:
+  purpurextras:
+    description: Command controlling PurpurExtras
+    permission: purpurextras.command

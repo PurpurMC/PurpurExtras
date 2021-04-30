@@ -1,7 +1,12 @@
 package me.youhavetrouble.purpurextras;
 
+import me.youhavetrouble.purpurextras.command.FancyCommand;
 import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.serverlib.forks.Yatopia;
@@ -35,6 +40,13 @@ public final class PurpurExtras extends JavaPlugin {
 
         instance = this;
         config = new PurpurConfig(this);
+
+        PluginCommand command = getCommand("purpurextras");
+        if (command != null) {
+            command.setExecutor(new PurpurExtrasCommand());
+            getServer().getPluginManager().registerEvents(new FancyCommand(), this);
+        }
+
     }
 
     public static PurpurConfig getPurpurConfig() {
@@ -42,6 +54,12 @@ public final class PurpurExtras extends JavaPlugin {
     }
     public static PurpurExtras getInstance() {
         return instance;
+    }
+    protected void reloadPurpurExtrasConfig(CommandSender commandSender) {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            config = new PurpurConfig(this);
+            commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
+        });
     }
 
     public void registerListener(Class<?> clazz) {

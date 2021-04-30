@@ -18,6 +18,7 @@ public class PurpurConfig {
     public final String beeHiveLoreBees, beeHiveLoreHoney;
 
     public PurpurConfig(PurpurExtras plugin) {
+        plugin.reloadConfig();
         logger = plugin.getSLF4JLogger();
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
