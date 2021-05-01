@@ -15,8 +15,8 @@ public class PurpurExtrasCommand implements CommandExecutor {
 
         if (strings.length == 0) {
             commandSender.sendMessage(
-                    Component.text("PurpurExtras", TextColor.fromHexString("#805280"), TextDecoration.BOLD)
-                    .append(Component.text("by YouHaveTrouble"))
+                    Component.text("PurpurExtras", NamedTextColor.DARK_PURPLE, TextDecoration.BOLD)
+                    .append(Component.text(" by YouHaveTrouble"))
             );
         }
 
@@ -27,6 +27,11 @@ public class PurpurExtrasCommand implements CommandExecutor {
             }
             commandSender.sendMessage(Component.text("Reloading PurpurExtras config..."));
             PurpurExtras.getInstance().reloadPurpurExtrasConfig(commandSender);
+            return true;
+        }
+
+        if (strings.length == 1 && strings[0].equalsIgnoreCase("version")) {
+            commandSender.sendMessage(Component.text("PurpurExtras version "+PurpurExtras.getInstance().getDescription().getVersion()));
         }
 
         return true;

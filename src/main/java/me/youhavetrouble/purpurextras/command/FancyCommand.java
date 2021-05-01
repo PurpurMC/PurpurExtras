@@ -16,6 +16,7 @@ public class FancyCommand implements Listener {
             event.setLiteral(
                     LiteralArgumentBuilder.<BukkitBrigadierCommandSource>literal(event.getCommandLabel())
                             .then(LiteralArgumentBuilder.literal("reload"))
+                            .then(LiteralArgumentBuilder.literal("version"))
                             .build()
             );
         }
