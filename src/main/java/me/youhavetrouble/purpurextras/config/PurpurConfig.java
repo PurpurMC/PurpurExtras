@@ -2,10 +2,7 @@ package me.youhavetrouble.purpurextras.config;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.BeehiveLoreListener;
-import me.youhavetrouble.purpurextras.listeners.OfflineModePlayerKickMessageListener;
 import me.youhavetrouble.purpurextras.listeners.RespawnAnchorNeedsChargeListener;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.slf4j.Logger;
@@ -19,7 +16,6 @@ public class PurpurConfig {
     File configPath;
     public final boolean beeHiveLore, respawnAnchorNeedsCharges;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
-    public final Component offlineModePlayerKickMessage;
 
     public PurpurConfig(PurpurExtras plugin) {
         plugin.reloadConfig();
@@ -39,13 +35,6 @@ public class PurpurConfig {
         this.respawnAnchorNeedsCharges = getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true);
         if (!respawnAnchorNeedsCharges)
             plugin.registerListener(RespawnAnchorNeedsChargeListener.class);
-
-        String offlineModeKickMesage = getString("settings.messages.offline-mode-player-kick-message", "default");
-        if (!offlineModeKickMesage.equalsIgnoreCase("default")) {
-            this.offlineModePlayerKickMessage = MiniMessage.get().parse(offlineModeKickMesage);
-            plugin.registerListener(OfflineModePlayerKickMessageListener.class);
-        } else
-            this.offlineModePlayerKickMessage = null;
 
         saveConfig();
     }
