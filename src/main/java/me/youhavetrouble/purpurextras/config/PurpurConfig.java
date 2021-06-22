@@ -2,6 +2,7 @@ package me.youhavetrouble.purpurextras.config;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.BeehiveLoreListener;
+import me.youhavetrouble.purpurextras.listeners.EscapeCommandSlashListener;
 import me.youhavetrouble.purpurextras.listeners.RespawnAnchorNeedsChargeListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
@@ -14,7 +15,7 @@ public class PurpurConfig {
     Logger logger;
     FileConfiguration config;
     File configPath;
-    public final boolean beeHiveLore, respawnAnchorNeedsCharges;
+    public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
 
     public PurpurConfig(PurpurExtras plugin) {
@@ -36,6 +37,10 @@ public class PurpurConfig {
         if (!respawnAnchorNeedsCharges)
             plugin.registerListener(RespawnAnchorNeedsChargeListener.class);
 
+        this.escapeEscapedCommands = getBoolean("settings.chat.escape-commands", false);
+        if (!escapeEscapedCommands)
+            plugin.registerListener(EscapeCommandSlashListener.class);
+
         saveConfig();
     }
 
@@ -45,8 +50,7 @@ public class PurpurConfig {
         try {
             config.save(configPath);
         } catch (IOException e) {
-            logger.error("Failed to save configuration file!");
-            e.printStackTrace();
+            logger.error("Failed to save configuration file! - "+e.getLocalizedMessage());
         }
     }
 
