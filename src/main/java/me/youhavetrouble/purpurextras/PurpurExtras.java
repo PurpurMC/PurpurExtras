@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.incendo.serverlib.forks.Yatopia;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -25,14 +24,6 @@ public final class PurpurExtras extends JavaPlugin {
         } catch (ClassNotFoundException e) {
             getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0PurpurExtras was created to compliment Purpur, and it appears you're not using it!"));
             getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0Purpur is a drop-in replacement for " + getServer().getName()+"."));
-            getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0You can get Purpur on https://purpur.pl3x.net/downloads/"));
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        if (Yatopia.unsafeYatopia()) {
-            getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0PurpurExtras was created to compliment Purpur, and it appears you're using an unstable fork that doesn't contain all of its patches!"));
-            getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0Purpur is a drop-in replacement for Yatopia."));
             getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0You can get Purpur on https://purpur.pl3x.net/downloads/"));
             getServer().getPluginManager().disablePlugin(this);
             return;
