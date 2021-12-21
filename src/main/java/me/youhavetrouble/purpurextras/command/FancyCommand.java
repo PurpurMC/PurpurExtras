@@ -6,12 +6,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class FancyCommand implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onCommandRegister(final @NonNull CommandRegisteredEvent<BukkitBrigadierCommandSource> event) {
+    public void onCommandRegister(final CommandRegisteredEvent<BukkitBrigadierCommandSource> event) {
         if (event.getCommand().getName().equalsIgnoreCase("purpurextras")) {
             event.setLiteral(
                     LiteralArgumentBuilder.<BukkitBrigadierCommandSource>literal(event.getCommandLabel())
