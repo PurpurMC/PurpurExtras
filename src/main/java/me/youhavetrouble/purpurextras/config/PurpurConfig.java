@@ -1,26 +1,32 @@
 package me.youhavetrouble.purpurextras.config;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
+import me.youhavetrouble.purpurextras.listeners.AnvilMakesSandListener;
 import me.youhavetrouble.purpurextras.listeners.BeehiveLoreListener;
 import me.youhavetrouble.purpurextras.listeners.EscapeCommandSlashListener;
 import me.youhavetrouble.purpurextras.listeners.RespawnAnchorNeedsChargeListener;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
-import org.slf4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class PurpurConfig {
 
     Logger logger;
     FileConfiguration config;
     File configPath;
-    public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands;
+    public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
+    public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
 
     public PurpurConfig(PurpurExtras plugin) {
         plugin.reloadConfig();
-        logger = plugin.getSLF4JLogger();
+        logger = plugin.getLogger();
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
 
@@ -41,16 +47,22 @@ public class PurpurConfig {
         if (!escapeEscapedCommands)
             plugin.registerListener(EscapeCommandSlashListener.class);
 
+        this.anvilCrushesBlocks = getBoolean("settings.anvil-crushes-blocks.enabled", false);
+
+        ConfigurationSection anvilToCrush = config.getConfigurationSection("settings.anvil-crushes-blocks.blocks");
+        getAnvilCrushIndex(anvilToCrush);
+        if (anvilCrushesBlocks) {
+            plugin.registerListener(AnvilMakesSandListener.class);
+        }
+
         saveConfig();
     }
-
-
 
     public void saveConfig() {
         try {
             config.save(configPath);
         } catch (IOException e) {
-            logger.error("Failed to save configuration file! - "+e.getLocalizedMessage());
+            logger.severe("Failed to save configuration file! - "+e.getLocalizedMessage());
         }
     }
 
@@ -73,6 +85,30 @@ public class PurpurConfig {
             return config.getDouble(path, def);
         config.set(path, def);
         return def;
+    }
+
+    private void getAnvilCrushIndex(ConfigurationSection section) {
+        if (section != null) {
+            for (String key : section.getKeys(false)) {
+                String matString = section.getString(key);
+                if (matString == null) continue;
+                Material materialFrom = Material.getMaterial(key.toUpperCase());
+                if (materialFrom == null || !materialFrom.isBlock()) {
+                    logger.warning(key + " is not valid block material.");
+                    continue;
+                }
+                Material materialTo = Material.getMaterial(matString.toUpperCase());
+                if (materialTo == null || !materialTo.isBlock()) {
+                    logger.warning(matString + " is not valid block material.");
+                    continue;
+                }
+                anvilCrushBlocksIndex.put(materialFrom, materialTo);
+            }
+            return;
+        }
+        ConfigurationSection newSection = config.createSection("settings.anvil-crushes-blocks.blocks");
+        newSection.set("cobblestone", "sand");
+        getAnvilCrushIndex(newSection);
     }
 
 }
