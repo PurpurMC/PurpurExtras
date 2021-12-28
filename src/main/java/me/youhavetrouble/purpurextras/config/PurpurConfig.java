@@ -1,10 +1,7 @@
 package me.youhavetrouble.purpurextras.config;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
-import me.youhavetrouble.purpurextras.listeners.AnvilMakesSandListener;
-import me.youhavetrouble.purpurextras.listeners.BeehiveLoreListener;
-import me.youhavetrouble.purpurextras.listeners.EscapeCommandSlashListener;
-import me.youhavetrouble.purpurextras.listeners.RespawnAnchorNeedsChargeListener;
+import me.youhavetrouble.purpurextras.listeners.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,7 +17,9 @@ public class PurpurConfig {
     Logger logger;
     FileConfiguration config;
     File configPath;
-    public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks;
+    public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks,
+            dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
+            dispenserBreakBlockAxe;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
 
@@ -53,6 +52,20 @@ public class PurpurConfig {
         getAnvilCrushIndex(anvilToCrush);
         if (anvilCrushesBlocks) {
             plugin.registerListener(AnvilMakesSandListener.class);
+        }
+
+        this.dispenserBreakBlockPickaxe = getBoolean("settings.dispenser.break-blocks.pickaxe", false);
+        this.dispenserBreakBlockShovel = getBoolean("settings.dispenser.break-blocks.shovel", false);
+        this.dispenserBreakBlockHoe = getBoolean("settings.dispenser.break-blocks.hoe", false);
+        this.dispenserBreakBlockAxe = getBoolean("settings.dispenser.break-blocks.axe", false);
+        this.dispenserBreakBlockShears = getBoolean("settings.dispenser.break-blocks.shears", false);
+
+        if (dispenserBreakBlockPickaxe
+                || dispenserBreakBlockAxe
+                || dispenserBreakBlockShovel
+                || dispenserBreakBlockHoe
+                || dispenserBreakBlockShears) {
+            plugin.registerListener(DispenserBlockBreaker.class);
         }
 
         saveConfig();
