@@ -2,6 +2,7 @@ package me.youhavetrouble.purpurextras.config;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.*;
+import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,7 +20,8 @@ public class PurpurConfig {
     File configPath;
     public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks,
             dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
-            dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox;
+            dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox,
+            upgradeWoodToStoneTools, upgradeStoneToIronTools, upgradeIronToDiamondTools;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
 
@@ -76,6 +78,16 @@ public class PurpurConfig {
                 || dispenserShearPumpkin) {
             plugin.registerListener(DispenserListener.class);
         }
+
+        this.upgradeWoodToStoneTools = getBoolean("settings.smithing-table.tools.wood-to-stone", false);
+        this.upgradeStoneToIronTools = getBoolean("settings.smithing-table.tools.stone-to-iron", false);
+        this.upgradeIronToDiamondTools = getBoolean("settings.smithing-table.tools.iron-to-diamond", false);
+
+        ToolUpgradesRecipes.addUpgradeRecipes(
+                upgradeWoodToStoneTools,
+                upgradeStoneToIronTools,
+                upgradeIronToDiamondTools
+        );
 
         saveConfig();
     }
