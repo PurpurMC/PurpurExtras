@@ -6,14 +6,14 @@
 
     <groupId>me.youhavetrouble</groupId>
     <artifactId>PurpurExtras</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>jar</packaging>
 
     <name>PurpurExtras</name>
 
     <description>"This should be a plugin" features from Purpur</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

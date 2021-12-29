@@ -19,7 +19,7 @@ public class PurpurConfig {
     File configPath;
     public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks,
             dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
-            dispenserBreakBlockAxe;
+            dispenserBreakBlockAxe, grindstoneGivesEnchantsBack;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
 
@@ -52,6 +52,11 @@ public class PurpurConfig {
         getAnvilCrushIndex(anvilToCrush);
         if (anvilCrushesBlocks) {
             plugin.registerListener(AnvilMakesSandListener.class);
+        }
+
+        this.grindstoneGivesEnchantsBack = getBoolean("settings.grindstone.gives-enchants-back", false);
+        if (grindstoneGivesEnchantsBack) {
+            plugin.registerListener(GrindstoneEnchantsBooksListener.class);
         }
 
         this.dispenserBreakBlockPickaxe = getBoolean("settings.dispenser.break-blocks.pickaxe", false);
