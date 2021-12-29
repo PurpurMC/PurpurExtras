@@ -3,7 +3,6 @@ package me.youhavetrouble.purpurextras.listeners;
 import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import me.youhavetrouble.purpurextras.PurpurExtras;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
@@ -31,18 +30,22 @@ public class DispenserListener implements Listener {
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockPickaxe && MaterialTags.PICKAXES.isTagged(item)) {
             event.setCancelled(true);
             tryBreakBlock(item, blockDispenser, block);
+            return;
         }
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockAxe && MaterialTags.AXES.isTagged(item)) {
             event.setCancelled(true);
             tryBreakBlock(item, blockDispenser, block);
+            return;
         }
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockShovel && MaterialTags.SHOVELS.isTagged(item)) {
             event.setCancelled(true);
             tryBreakBlock(item, blockDispenser, block);
+            return;
         }
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockHoe && MaterialTags.HOES.isTagged(item)) {
             event.setCancelled(true);
             tryBreakBlock(item, blockDispenser, block);
+            return;
         }
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockShears && item.getType().equals(Material.SHEARS)) {
             event.setCancelled(true);
@@ -67,14 +70,9 @@ public class DispenserListener implements Listener {
             if (!block.getType().equals(Material.JUKEBOX)) return;
             Jukebox jukebox = (Jukebox) block.getState(false);
             jukebox.eject();
-            ItemStack record = item.clone();
-            record.setAmount(1);
+            ItemStack record = consumeItem(item);
             jukebox.setRecord(record);
-            jukebox.setPlaying(record.getType());
-            item.setAmount(item.getAmount()-1);
-            block.getLocation().getNearbyPlayers(65).forEach(player -> {
-                player.playEffect(block.getLocation(), Effect.RECORD_PLAY,  record.getType());
-            });
+            jukebox.update();
             return;
         }
 
@@ -88,13 +86,18 @@ public class DispenserListener implements Listener {
         item.damage(1);
     }
 
+    private ItemStack consumeItem(ItemStack itemStack) {
+        ItemStack consumed = itemStack.clone();
+        consumed.setAmount(1);
+        itemStack.setAmount(itemStack.getAmount()-1);
+        return consumed;
+    }
+
     private void tryBreakBlock(ItemStack itemStack, org.bukkit.block.Dispenser dispenser, Block block) {
         if (block.getDestroySpeed(itemStack, false) <= 1.0f) return;
         Inventory inventory = dispenser.getInventory();
         damageItem(itemStack, inventory);
         block.breakNaturally(itemStack, true);
     }
-
-
 
 }
