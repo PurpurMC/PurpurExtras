@@ -75,7 +75,7 @@ public class PurpurConfig {
         try {
             config.save(configPath);
         } catch (IOException e) {
-            logger.severe("Failed to save configuration file! - "+e.getLocalizedMessage());
+            logger.severe("Failed to save configuration file! - " + e.getLocalizedMessage());
         }
     }
 
@@ -101,27 +101,26 @@ public class PurpurConfig {
     }
 
     private void getAnvilCrushIndex(ConfigurationSection section) {
-        if (section != null) {
-            for (String key : section.getKeys(false)) {
-                String matString = section.getString(key);
-                if (matString == null) continue;
-                Material materialFrom = Material.getMaterial(key.toUpperCase());
-                if (materialFrom == null || !materialFrom.isBlock()) {
-                    logger.warning(key + " is not valid block material.");
-                    continue;
-                }
-                Material materialTo = Material.getMaterial(matString.toUpperCase());
-                if (materialTo == null || !materialTo.isBlock()) {
-                    logger.warning(matString + " is not valid block material.");
-                    continue;
-                }
-                anvilCrushBlocksIndex.put(materialFrom, materialTo);
-            }
-            return;
+        if (section == null) {
+            ConfigurationSection newSection = config.createSection("settings.anvil-crushes-blocks.blocks");
+            newSection.set("cobblestone", "sand");
+            section = newSection;
         }
-        ConfigurationSection newSection = config.createSection("settings.anvil-crushes-blocks.blocks");
-        newSection.set("cobblestone", "sand");
-        getAnvilCrushIndex(newSection);
+        for (String key : section.getKeys(false)) {
+            String matString = section.getString(key);
+            if (matString == null) continue;
+            Material materialFrom = Material.getMaterial(key.toUpperCase());
+            if (materialFrom == null || !materialFrom.isBlock()) {
+                logger.warning(key + " is not valid block material.");
+                continue;
+            }
+            Material materialTo = Material.getMaterial(matString.toUpperCase());
+            if (materialTo == null || !materialTo.isBlock()) {
+                logger.warning(matString + " is not valid block material.");
+                continue;
+            }
+            anvilCrushBlocksIndex.put(materialFrom, materialTo);
+        }
     }
 
 }
