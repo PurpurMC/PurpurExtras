@@ -19,7 +19,7 @@ public class PurpurConfig {
     File configPath;
     public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks,
             dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
-            dispenserBreakBlockAxe, grindstoneGivesEnchantsBack;
+            dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
 
@@ -65,12 +65,16 @@ public class PurpurConfig {
         this.dispenserBreakBlockAxe = getBoolean("settings.dispenser.break-blocks.axe", false);
         this.dispenserBreakBlockShears = getBoolean("settings.dispenser.break-blocks.shears", false);
 
+        this.dispenserShearPumpkin = getBoolean("settings.dispenser.shears-shear-pumpkin", false);
+        this.dispenserActivatesJukebox = getBoolean("settings.dispenser.puts-discs-in-jukebox", false);
+
         if (dispenserBreakBlockPickaxe
                 || dispenserBreakBlockAxe
                 || dispenserBreakBlockShovel
                 || dispenserBreakBlockHoe
-                || dispenserBreakBlockShears) {
-            plugin.registerListener(DispenserBlockBreaker.class);
+                || dispenserBreakBlockShears
+                || dispenserShearPumpkin) {
+            plugin.registerListener(DispenserListener.class);
         }
 
         saveConfig();
