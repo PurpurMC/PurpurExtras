@@ -43,7 +43,7 @@ public class PurpurConfig {
             plugin.registerListener(RespawnAnchorNeedsChargeListener.class);
 
         this.escapeEscapedCommands = getBoolean("settings.chat.escape-commands", false);
-        if (!escapeEscapedCommands)
+        if (escapeEscapedCommands)
             plugin.registerListener(EscapeCommandSlashListener.class);
 
         this.anvilCrushesBlocks = getBoolean("settings.anvil-crushes-blocks.enabled", false);
