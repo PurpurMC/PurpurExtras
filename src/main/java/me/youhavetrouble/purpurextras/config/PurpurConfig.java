@@ -21,7 +21,7 @@ public class PurpurConfig {
     public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks,
             dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
             dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox,
-            upgradeWoodToStoneTools, upgradeStoneToIronTools, upgradeIronToDiamondTools;
+            upgradeWoodToStoneTools, upgradeStoneToIronTools, upgradeIronToDiamondTools, requireNametagForRiding;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
 
@@ -88,6 +88,11 @@ public class PurpurConfig {
                 upgradeStoneToIronTools,
                 upgradeIronToDiamondTools
         );
+
+        this.requireNametagForRiding = getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false);
+        if (requireNametagForRiding) {
+            plugin.registerListener(ForceNametaggedForRidingListener.class);
+        }
 
         saveConfig();
     }
