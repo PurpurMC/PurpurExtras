@@ -25,6 +25,7 @@ public final class PurpurExtras extends JavaPlugin {
             getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0PurpurExtras was created to compliment Purpur, and it appears you're not using it!"));
             getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0Purpur is a drop-in replacement for " + getServer().getName()+"."));
             getLogger().warning( ChatColor.translateAlternateColorCodes('&', "&x&8&0&5&2&8&0You can get Purpur on https://purpurmc.org/downloads"));
+            this.getPluginLoader().disablePlugin(this);
             return;
         }
 
