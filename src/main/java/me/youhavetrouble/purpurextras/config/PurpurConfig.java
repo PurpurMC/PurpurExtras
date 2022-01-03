@@ -6,6 +6,7 @@ import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.HandlerList;
 
 import java.io.File;
@@ -100,6 +101,17 @@ public class PurpurConfig {
             plugin.registerListener(MobNoTargetListener.class);
         }
 
+        // Generate Stonecutter Damage Filter dynamically
+        for (EntityType e: EntityType.values()) {
+            if (!e.isAlive()) { continue; }
+            //noinspection UnnecessaryToStringCall
+            String path = "settings.stonecutter-damage." + e.toString(); // Even though IDE thinks .toString() isn't necessary, it is!
+            if (!config.contains(path)) {
+                config.set(path, true);
+            }
+        }
+        plugin.registerListener(StonecutterDamageListener.class);
+
         saveConfig();
     }
 
@@ -155,4 +167,8 @@ public class PurpurConfig {
         }
     }
 
+    public boolean getStonecutterDamageFilter(String entity) {
+        String path = "settings.stonecutter-damage." + entity;
+        return getBoolean(path, true);
+    }
 }
