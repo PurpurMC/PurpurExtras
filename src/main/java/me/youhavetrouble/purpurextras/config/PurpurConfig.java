@@ -19,16 +19,18 @@ public class PurpurConfig {
     Logger logger;
     FileConfiguration config;
     File configPath;
-    public final boolean beeHiveLore, respawnAnchorNeedsCharges, escapeEscapedCommands, anvilCrushesBlocks,
-            dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
-            dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox,
-            upgradeWoodToStoneTools, upgradeStoneToIronTools, upgradeIronToDiamondTools, requireNametagForRiding,
-            noTargetPermissions, stonecutterBlacklistEnabled;
+
+    private final PurpurExtras plugin = PurpurExtras.getInstance();
+    public boolean dispenserBreakBlockPickaxe,dispenserBreakBlockShovel, dispenserBreakBlockHoe,
+            dispenserBreakBlockShears, dispenserBreakBlockAxe, dispenserShearPumpkin, dispenserActivatesJukebox;
+    public final boolean upgradeWoodToStoneTools;
+    public final boolean upgradeStoneToIronTools;
+    public final boolean upgradeIronToDiamondTools;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
     public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
 
-    public PurpurConfig(PurpurExtras plugin) {
+    public PurpurConfig() {
         plugin.reloadConfig();
         logger = plugin.getLogger();
         config = plugin.getConfig();
@@ -37,50 +39,26 @@ public class PurpurConfig {
         // Make sure that no listeners are registered from the plugin
         HandlerList.unregisterAll(plugin);
 
-        this.beeHiveLore = getBoolean("settings.items.beehive-lore.enabled", false);
-        if (beeHiveLore)
-            plugin.registerListener(BeehiveLoreListener.class);
+        enableFeature(BeehiveLoreListener.class, getBoolean("settings.items.beehive-lore.enabled", false));
+
         this.beeHiveLoreBees = getString("settings.items.beehive-lore.bees", "<reset><gray>Bees: <bees>/<maxbees>");
         this.beeHiveLoreHoney = getString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
 
-        this.respawnAnchorNeedsCharges = getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true);
-        if (!respawnAnchorNeedsCharges)
-            plugin.registerListener(RespawnAnchorNeedsChargeListener.class);
+        enableFeature(RespawnAnchorNeedsChargeListener.class, getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
-        this.escapeEscapedCommands = getBoolean("settings.chat.escape-commands", false);
-        if (escapeEscapedCommands)
-            plugin.registerListener(EscapeCommandSlashListener.class);
-
-        this.anvilCrushesBlocks = getBoolean("settings.anvil-crushes-blocks.enabled", false);
+        enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
 
         ConfigurationSection anvilToCrush = config.getConfigurationSection("settings.anvil-crushes-blocks.blocks");
         getAnvilCrushIndex(anvilToCrush);
-        if (anvilCrushesBlocks) {
-            plugin.registerListener(AnvilMakesSandListener.class);
-        }
+        enableFeature(AnvilMakesSandListener.class, getBoolean("settings.anvil-crushes-blocks.enabled", false));
 
-        this.grindstoneGivesEnchantsBack = getBoolean("settings.grindstone.gives-enchants-back", false);
-        if (grindstoneGivesEnchantsBack) {
-            plugin.registerListener(GrindstoneEnchantsBooksListener.class);
-        }
+        enableFeature(GrindstoneEnchantsBooksListener.class, getBoolean("settings.grindstone.gives-enchants-back", false));
 
-        this.dispenserBreakBlockPickaxe = getBoolean("settings.dispenser.break-blocks.pickaxe", false);
-        this.dispenserBreakBlockShovel = getBoolean("settings.dispenser.break-blocks.shovel", false);
-        this.dispenserBreakBlockHoe = getBoolean("settings.dispenser.break-blocks.hoe", false);
-        this.dispenserBreakBlockAxe = getBoolean("settings.dispenser.break-blocks.axe", false);
-        this.dispenserBreakBlockShears = getBoolean("settings.dispenser.break-blocks.shears", false);
+        enableFeature(ForceNametaggedForRidingListener.class, getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false));
 
-        this.dispenserShearPumpkin = getBoolean("settings.dispenser.shears-shear-pumpkin", false);
-        this.dispenserActivatesJukebox = getBoolean("settings.dispenser.puts-discs-in-jukebox", false);
+        enableFeature(MobNoTargetListener.class, getBoolean("settings.use-notarget-permissions", false));
 
-        if (dispenserBreakBlockPickaxe
-                || dispenserBreakBlockAxe
-                || dispenserBreakBlockShovel
-                || dispenserBreakBlockHoe
-                || dispenserBreakBlockShears
-                || dispenserShearPumpkin) {
-            plugin.registerListener(DispenserListener.class);
-        }
+        handleBetterDispenser();
 
         this.upgradeWoodToStoneTools = getBoolean("settings.smithing-table.tools.wood-to-stone", false);
         this.upgradeStoneToIronTools = getBoolean("settings.smithing-table.tools.stone-to-iron", false);
@@ -92,19 +70,8 @@ public class PurpurConfig {
                 upgradeIronToDiamondTools
         );
 
-        this.requireNametagForRiding = getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false);
-        if (requireNametagForRiding) {
-            plugin.registerListener(ForceNametaggedForRidingListener.class);
-        }
-
-        this.noTargetPermissions = getBoolean("settings.use-notarget-permissions", false);
-        if (noTargetPermissions) {
-            plugin.registerListener(MobNoTargetListener.class);
-        }
-
-        this.stonecutterBlacklistEnabled = getBoolean("settings.stonecutter-damage-filter.enabled", false);
         List<String> blacklist = getList("settings.stonecutter-damage-filter.blacklist");
-        if (stonecutterBlacklistEnabled) {
+        if (getBoolean("settings.stonecutter-damage-filter.enabled", false)) {
             handleStonecutterDamageBlacklist(blacklist, plugin);
         }
 
@@ -175,7 +142,7 @@ public class PurpurConfig {
         }
     }
 
-    public void handleStonecutterDamageBlacklist(List<String> blacklist, PurpurExtras plugin) {
+    private void handleStonecutterDamageBlacklist(List<String> blacklist, PurpurExtras plugin) {
         if (blacklist.isEmpty()) return;
         for (EntityType entityType : EntityType.values()) {
             if (!entityType.isAlive()) continue;
@@ -186,5 +153,30 @@ public class PurpurConfig {
         }
         if (!stonecutterDamageBlacklist.isEmpty())
             plugin.registerListener(StonecutterDamageListener.class);
+    }
+
+    private void handleBetterDispenser() {
+        this.dispenserBreakBlockPickaxe = getBoolean("settings.dispenser.break-blocks.pickaxe", false);
+        this.dispenserBreakBlockShovel = getBoolean("settings.dispenser.break-blocks.shovel", false);
+        this.dispenserBreakBlockHoe = getBoolean("settings.dispenser.break-blocks.hoe", false);
+        this.dispenserBreakBlockAxe = getBoolean("settings.dispenser.break-blocks.axe", false);
+        this.dispenserBreakBlockShears = getBoolean("settings.dispenser.break-blocks.shears", false);
+
+        this.dispenserShearPumpkin = getBoolean("settings.dispenser.shears-shear-pumpkin", false);
+        this.dispenserActivatesJukebox = getBoolean("settings.dispenser.puts-discs-in-jukebox", false);
+
+        if (dispenserBreakBlockPickaxe
+                || dispenserBreakBlockAxe
+                || dispenserBreakBlockShovel
+                || dispenserBreakBlockHoe
+                || dispenserBreakBlockShears
+                || dispenserShearPumpkin) {
+            plugin.registerListener(DispenserListener.class);
+        }
+    }
+
+    private void enableFeature(Class<?> listenerClass, boolean enable) {
+        if (enable)
+            plugin.registerListener(listenerClass);
     }
 }
