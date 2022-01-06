@@ -4,6 +4,7 @@ import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.*;
 import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -12,6 +13,7 @@ import org.bukkit.event.HandlerList;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class PurpurConfig {
@@ -23,9 +25,10 @@ public class PurpurConfig {
             dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
             dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox,
             upgradeWoodToStoneTools, upgradeStoneToIronTools, upgradeIronToDiamondTools, requireNametagForRiding,
-            noTargetPermissions;
+            noTargetPermissions, stonecutterBlacklistEnabled;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
+    public final HashMap<EntityType, Boolean> stonecutterBlacklist = new HashMap<>();
 
     public PurpurConfig(PurpurExtras plugin) {
         plugin.reloadConfig();
@@ -101,16 +104,28 @@ public class PurpurConfig {
             plugin.registerListener(MobNoTargetListener.class);
         }
 
-        // Generate Stonecutter Damage Filter dynamically
-        for (EntityType e: EntityType.values()) {
-            if (!e.isAlive()) { continue; }
-            //noinspection UnnecessaryToStringCall
-            String path = "settings.stonecutter-damage." + e.toString(); // Even though IDE thinks .toString() isn't necessary, it is!
-            if (!config.contains(path)) {
-                config.set(path, true);
+        this.stonecutterBlacklistEnabled = getBoolean("settings.stonecutter-damage-filter.enabled", false);
+        List<String> blacklist = getList("settings.stonecutter-damage-filter.blacklist");
+        if (stonecutterBlacklistEnabled) {
+            // Do not register event listener if blacklist is not set
+            if (blacklist.isEmpty()) return;
+
+            // Register stonecutter damage event listener because blacklist is set
+            plugin.registerListener(StonecutterDamageListener.class);
+
+            for (EntityType e : EntityType.values()) {
+                // Loop EntityType first because blacklist would be smaller than EntityType list
+                if (!e.isAlive()) continue; // If the entity is not alive, pass it
+
+                for (String str : blacklist) {
+                    NamespacedKey namespacedKey = NamespacedKey.fromString(str);
+                    if (namespacedKey == null) continue; // Skip list item if invalid
+                    if (e.getKey().equals(namespacedKey)) {
+                        stonecutterBlacklist.put(e, true);
+                    }
+                }
             }
         }
-        plugin.registerListener(StonecutterDamageListener.class);
 
         saveConfig();
     }
@@ -144,6 +159,13 @@ public class PurpurConfig {
         return def;
     }
 
+    private List<String> getList(String path) {
+        if (config.isSet(path))
+            return config.getStringList(path);
+        config.set(path, List.of()); // I'm not sure if this is a right way to do it
+        return List.of(); // Return empty list
+    }
+
     private void getAnvilCrushIndex(ConfigurationSection section) {
         if (section == null) {
             ConfigurationSection newSection = config.createSection("settings.anvil-crushes-blocks.blocks");
@@ -165,10 +187,5 @@ public class PurpurConfig {
             }
             anvilCrushBlocksIndex.put(materialFrom, materialTo);
         }
-    }
-
-    public boolean getStonecutterDamageFilter(String entity) {
-        String path = "settings.stonecutter-damage." + entity;
-        return getBoolean(path, true);
     }
 }
