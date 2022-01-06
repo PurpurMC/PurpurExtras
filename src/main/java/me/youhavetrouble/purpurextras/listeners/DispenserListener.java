@@ -15,8 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class DispenserListener implements Listener {
 
-    //TODO make this not shit
-
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onDispense(BlockPreDispenseEvent event) {
         if (!event.getBlock().getType().equals(Material.DISPENSER)) return;
@@ -27,26 +25,10 @@ public class DispenserListener implements Listener {
 
         // Block breaking
 
-        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockPickaxe && MaterialTags.PICKAXES.isTagged(item)) {
-            event.setCancelled(true);
-            tryBreakBlock(item, blockDispenser, block);
-            return;
-        }
-        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockAxe && MaterialTags.AXES.isTagged(item)) {
-            event.setCancelled(true);
-            tryBreakBlock(item, blockDispenser, block);
-            return;
-        }
-        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockShovel && MaterialTags.SHOVELS.isTagged(item)) {
-            event.setCancelled(true);
-            tryBreakBlock(item, blockDispenser, block);
-            return;
-        }
-        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockHoe && MaterialTags.HOES.isTagged(item)) {
-            event.setCancelled(true);
-            tryBreakBlock(item, blockDispenser, block);
-            return;
-        }
+        // if block is broken, stop processing
+        if (handleBlockBreaking(event, item, blockDispenser, block)) return;
+
+        // shears is different story since it's also used for shearing pumpkins
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockShears && item.getType().equals(Material.SHEARS)) {
             event.setCancelled(true);
             tryBreakBlock(item, blockDispenser, block);
@@ -76,6 +58,35 @@ public class DispenserListener implements Listener {
             return;
         }
 
+    }
+
+    private boolean handleBlockBreaking(
+            BlockPreDispenseEvent event,
+            ItemStack item,
+            org.bukkit.block.Dispenser blockDispenser,
+            Block block
+    ) {
+        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockPickaxe && MaterialTags.PICKAXES.isTagged(item)) {
+            event.setCancelled(true);
+            tryBreakBlock(item, blockDispenser, block);
+            return true;
+        }
+        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockAxe && MaterialTags.AXES.isTagged(item)) {
+            event.setCancelled(true);
+            tryBreakBlock(item, blockDispenser, block);
+            return true;
+        }
+        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockShovel && MaterialTags.SHOVELS.isTagged(item)) {
+            event.setCancelled(true);
+            tryBreakBlock(item, blockDispenser, block);
+            return true;
+        }
+        if (PurpurExtras.getPurpurConfig().dispenserBreakBlockHoe && MaterialTags.HOES.isTagged(item)) {
+            event.setCancelled(true);
+            tryBreakBlock(item, blockDispenser, block);
+            return true;
+        }
+        return false;
     }
 
     private void damageItem(ItemStack itemStack, Inventory inventory) {
