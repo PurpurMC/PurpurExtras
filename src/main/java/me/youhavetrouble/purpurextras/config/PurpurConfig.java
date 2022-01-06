@@ -4,7 +4,6 @@ import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.*;
 import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -12,9 +11,7 @@ import org.bukkit.event.HandlerList;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class PurpurConfig {
@@ -29,7 +26,7 @@ public class PurpurConfig {
             noTargetPermissions, stonecutterBlacklistEnabled;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
-    public final HashSet<EntityType> stonecutterBlacklist = new HashSet<>();
+    public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
 
     public PurpurConfig(PurpurExtras plugin) {
         plugin.reloadConfig();
@@ -107,25 +104,16 @@ public class PurpurConfig {
 
         this.stonecutterBlacklistEnabled = getBoolean("settings.stonecutter-damage-filter.enabled", false);
         List<String> blacklist = getList("settings.stonecutter-damage-filter.blacklist");
-        if (stonecutterBlacklistEnabled) {
-            // Do not register event listener if blacklist is not set
-            if (blacklist.isEmpty()) return;
-
-            // Register stonecutter damage event listener because blacklist is set
-            plugin.registerListener(StonecutterDamageListener.class);
-
-            for (EntityType e : EntityType.values()) {
-                // Loop EntityType first because blacklist would be smaller than EntityType list
-                if (!e.isAlive()) continue; // If the entity is not alive, pass it
-
+        if (stonecutterBlacklistEnabled && !blacklist.isEmpty()) {
+            for (EntityType entityType : EntityType.values()) {
+                if (!entityType.isAlive()) continue;
                 for (String str : blacklist) {
-                    NamespacedKey namespacedKey = NamespacedKey.fromString(str);
-                    if (namespacedKey == null) continue; // Skip list item if invalid
-                    if (e.getKey().equals(namespacedKey)) {
-                        stonecutterBlacklist.add(e);
-                    }
+                    if (entityType.getKey().getKey().equals(str.toLowerCase(Locale.ROOT)))
+                        stonecutterDamageBlacklist.add(entityType);
                 }
             }
+            if (!stonecutterDamageBlacklist.isEmpty())
+                plugin.registerListener(StonecutterDamageListener.class);
         }
 
         saveConfig();
@@ -160,11 +148,16 @@ public class PurpurConfig {
         return def;
     }
 
+    /**
+     * @param path config path
+     * @return List of strings or empty list if list doesn't exist in configuration file
+     */
     private List<String> getList(String path) {
         if (config.isSet(path))
             return config.getStringList(path);
-        config.set(path, List.of()); // I'm not sure if this is a right way to do it
-        return List.of(); // Return empty list
+        List<String> newList = new ArrayList<>();
+        config.set(path, newList);
+        return newList;
     }
 
     private void getAnvilCrushIndex(ConfigurationSection section) {
