@@ -6,11 +6,12 @@ import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.HandlerList;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class PurpurConfig {
@@ -22,9 +23,10 @@ public class PurpurConfig {
             dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe, dispenserBreakBlockShears,
             dispenserBreakBlockAxe, grindstoneGivesEnchantsBack, dispenserShearPumpkin, dispenserActivatesJukebox,
             upgradeWoodToStoneTools, upgradeStoneToIronTools, upgradeIronToDiamondTools, requireNametagForRiding,
-            noTargetPermissions;
+            noTargetPermissions, stonecutterBlacklistEnabled;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
+    public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
 
     public PurpurConfig(PurpurExtras plugin) {
         plugin.reloadConfig();
@@ -100,6 +102,20 @@ public class PurpurConfig {
             plugin.registerListener(MobNoTargetListener.class);
         }
 
+        this.stonecutterBlacklistEnabled = getBoolean("settings.stonecutter-damage-filter.enabled", false);
+        List<String> blacklist = getList("settings.stonecutter-damage-filter.blacklist");
+        if (stonecutterBlacklistEnabled && !blacklist.isEmpty()) {
+            for (EntityType entityType : EntityType.values()) {
+                if (!entityType.isAlive()) continue;
+                for (String str : blacklist) {
+                    if (entityType.getKey().getKey().equals(str.toLowerCase(Locale.ROOT)))
+                        stonecutterDamageBlacklist.add(entityType);
+                }
+            }
+            if (!stonecutterDamageBlacklist.isEmpty())
+                plugin.registerListener(StonecutterDamageListener.class);
+        }
+
         saveConfig();
     }
 
@@ -132,6 +148,18 @@ public class PurpurConfig {
         return def;
     }
 
+    /**
+     * @param path config path
+     * @return List of strings or empty list if list doesn't exist in configuration file
+     */
+    private List<String> getList(String path) {
+        if (config.isSet(path))
+            return config.getStringList(path);
+        List<String> newList = new ArrayList<>();
+        config.set(path, newList);
+        return newList;
+    }
+
     private void getAnvilCrushIndex(ConfigurationSection section) {
         if (section == null) {
             ConfigurationSection newSection = config.createSection("settings.anvil-crushes-blocks.blocks");
@@ -154,5 +182,4 @@ public class PurpurConfig {
             anvilCrushBlocksIndex.put(materialFrom, materialTo);
         }
     }
-
 }
