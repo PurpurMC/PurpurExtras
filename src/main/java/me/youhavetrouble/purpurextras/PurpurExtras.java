@@ -3,6 +3,8 @@ package me.youhavetrouble.purpurextras;
 import me.youhavetrouble.purpurextras.command.FancyCommand;
 import me.youhavetrouble.purpurextras.config.PurpurConfig;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.transformation.TransformationType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -17,6 +19,16 @@ public final class PurpurExtras extends JavaPlugin {
     private static PurpurConfig config;
     private static PurpurExtras instance;
 
+    public final MiniMessage miniMessage = MiniMessage.builder().removeDefaultTransformations()
+            .transformation(TransformationType.COLOR)
+            .transformation(TransformationType.DECORATION)
+            .transformation(TransformationType.GRADIENT)
+            .transformation(TransformationType.FONT)
+            .transformation(TransformationType.RESET)
+            .transformation(TransformationType.RAINBOW)
+            .transformation(TransformationType.TRANSLATABLE)
+            .build();
+
     @Override
     public void onEnable() {
         try {
@@ -30,7 +42,7 @@ public final class PurpurExtras extends JavaPlugin {
         }
 
         instance = this;
-        config = new PurpurConfig(this);
+        config = new PurpurConfig();
 
         PluginCommand command = getCommand("purpurextras");
         if (command != null) {
@@ -48,7 +60,7 @@ public final class PurpurExtras extends JavaPlugin {
     }
     protected void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            config = new PurpurConfig(this);
+            config = new PurpurConfig();
             commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
         });
     }
