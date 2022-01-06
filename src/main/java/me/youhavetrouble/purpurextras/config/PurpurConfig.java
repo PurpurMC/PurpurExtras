@@ -13,6 +13,7 @@ import org.bukkit.event.HandlerList;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,7 +29,7 @@ public class PurpurConfig {
             noTargetPermissions, stonecutterBlacklistEnabled;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
-    public final HashMap<EntityType, Boolean> stonecutterBlacklist = new HashMap<>();
+    public final HashSet<EntityType> stonecutterBlacklist = new HashSet<>();
 
     public PurpurConfig(PurpurExtras plugin) {
         plugin.reloadConfig();
@@ -121,7 +122,7 @@ public class PurpurConfig {
                     NamespacedKey namespacedKey = NamespacedKey.fromString(str);
                     if (namespacedKey == null) continue; // Skip list item if invalid
                     if (e.getKey().equals(namespacedKey)) {
-                        stonecutterBlacklist.put(e, true);
+                        stonecutterBlacklist.add(e);
                     }
                 }
             }

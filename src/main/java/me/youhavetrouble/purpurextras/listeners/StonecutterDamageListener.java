@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class StonecutterDamageListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -19,8 +20,8 @@ public class StonecutterDamageListener implements Listener {
         // Return if DamageCause is not CONTACT or entity is not on ground
         if (!(e.getCause().equals(EntityDamageEvent.DamageCause.CONTACT)) || !(e.getEntity().isOnGround())) return;
 
-        HashMap<EntityType, Boolean> hashMap = PurpurExtras.getPurpurConfig().stonecutterBlacklist;
-        if (hashMap.containsKey(e.getEntity().getType())) {
+        HashSet<EntityType> hashMap = PurpurExtras.getPurpurConfig().stonecutterBlacklist;
+        if (hashMap.contains(e.getEntity().getType())) {
             e.setCancelled(true);
         }
     }
