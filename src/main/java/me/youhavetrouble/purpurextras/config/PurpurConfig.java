@@ -104,16 +104,8 @@ public class PurpurConfig {
 
         this.stonecutterBlacklistEnabled = getBoolean("settings.stonecutter-damage-filter.enabled", false);
         List<String> blacklist = getList("settings.stonecutter-damage-filter.blacklist");
-        if (stonecutterBlacklistEnabled && !blacklist.isEmpty()) {
-            for (EntityType entityType : EntityType.values()) {
-                if (!entityType.isAlive()) continue;
-                for (String str : blacklist) {
-                    if (entityType.getKey().getKey().equals(str.toLowerCase(Locale.ROOT)))
-                        stonecutterDamageBlacklist.add(entityType);
-                }
-            }
-            if (!stonecutterDamageBlacklist.isEmpty())
-                plugin.registerListener(StonecutterDamageListener.class);
+        if (stonecutterBlacklistEnabled) {
+            handleStonecutterDamageBlacklist(blacklist, plugin);
         }
 
         saveConfig();
@@ -181,5 +173,18 @@ public class PurpurConfig {
             }
             anvilCrushBlocksIndex.put(materialFrom, materialTo);
         }
+    }
+
+    public void handleStonecutterDamageBlacklist(List<String> blacklist, PurpurExtras plugin) {
+        if (blacklist.isEmpty()) return;
+        for (EntityType entityType : EntityType.values()) {
+            if (!entityType.isAlive()) continue;
+            for (String str : blacklist) {
+                if (entityType.getKey().getKey().equals(str.toLowerCase(Locale.ROOT)))
+                    stonecutterDamageBlacklist.add(entityType);
+            }
+        }
+        if (!stonecutterDamageBlacklist.isEmpty())
+            plugin.registerListener(StonecutterDamageListener.class);
     }
 }
