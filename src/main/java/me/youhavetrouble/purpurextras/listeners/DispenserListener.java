@@ -43,6 +43,7 @@ public class DispenserListener implements Listener {
         ) {
             Inventory inventory = blockDispenser.getInventory();
             damageItem(item, inventory);
+            event.setCancelled(true);
             block.setType(Material.CARVED_PUMPKIN);
             return;
         }
