@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class DispenserListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onDispense(BlockPreDispenseEvent event) {
+    public void onPreDispense(BlockPreDispenseEvent event) {
         if (!event.getBlock().getType().equals(Material.DISPENSER)) return;
         Dispenser dispenser = (Dispenser) event.getBlock().getBlockData();
         Block block = event.getBlock().getRelative(dispenser.getFacing());
@@ -28,18 +28,19 @@ public class DispenserListener implements Listener {
         // if block is broken, stop processing
         if (handleBlockBreaking(event, item, blockDispenser, block)) return;
 
-        // shears is different story since it's also used for shearing pumpkins
+        // shears do not drop as an item from dispenser by default, so no need to cancel event
         if (PurpurExtras.getPurpurConfig().dispenserBreakBlockShears && item.getType().equals(Material.SHEARS)) {
-            event.setCancelled(true);
-            tryBreakBlock(item, blockDispenser, block);
+            // if block was broken, don't process more
+            if (tryBreakBlock(item, blockDispenser, block)) return;
         }
 
         // Interactions
 
         // Shear pumpkin
-        if (PurpurExtras.getPurpurConfig().dispenserShearPumpkin && item.getType().equals(Material.SHEARS)) {
-            event.setCancelled(true);
-            if (!block.getType().equals(Material.PUMPKIN)) return;
+        if (PurpurExtras.getPurpurConfig().dispenserShearPumpkin
+                && item.getType().equals(Material.SHEARS)
+                && block.getType().equals(Material.PUMPKIN)
+        ) {
             Inventory inventory = blockDispenser.getInventory();
             damageItem(item, inventory);
             block.setType(Material.CARVED_PUMPKIN);
@@ -47,9 +48,11 @@ public class DispenserListener implements Listener {
         }
 
         // Swap records in jukebox
-        if (PurpurExtras.getPurpurConfig().dispenserActivatesJukebox && MaterialTags.MUSIC_DISCS.isTagged(item)) {
+        if (PurpurExtras.getPurpurConfig().dispenserActivatesJukebox
+                && MaterialTags.MUSIC_DISCS.isTagged(item)
+                && block.getType().equals(Material.JUKEBOX)
+        ) {
             event.setCancelled(true);
-            if (!block.getType().equals(Material.JUKEBOX)) return;
             Jukebox jukebox = (Jukebox) block.getState(false);
             jukebox.eject();
             ItemStack record = consumeItem(item);
@@ -104,11 +107,11 @@ public class DispenserListener implements Listener {
         return consumed;
     }
 
-    private void tryBreakBlock(ItemStack itemStack, org.bukkit.block.Dispenser dispenser, Block block) {
-        if (block.getDestroySpeed(itemStack, false) <= 1.0f) return;
+    private boolean tryBreakBlock(ItemStack itemStack, org.bukkit.block.Dispenser dispenser, Block block) {
+        if (block.getDestroySpeed(itemStack, false) <= 1.0f) return false;
         Inventory inventory = dispenser.getInventory();
         damageItem(itemStack, inventory);
-        block.breakNaturally(itemStack, true);
+        return block.breakNaturally(itemStack, true);
     }
 
 }
