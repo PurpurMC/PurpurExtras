@@ -21,7 +21,7 @@ public class PurpurConfig {
     File configPath;
 
     private final PurpurExtras plugin = PurpurExtras.getInstance();
-    public boolean dispenserBreakBlockPickaxe,dispenserBreakBlockShovel, dispenserBreakBlockHoe,
+    public boolean dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe,
             dispenserBreakBlockShears, dispenserBreakBlockAxe, dispenserShearPumpkin, dispenserActivatesJukebox;
     public final boolean upgradeWoodToStoneTools;
     public final boolean upgradeStoneToIronTools;
@@ -29,6 +29,7 @@ public class PurpurConfig {
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
     public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
+    public final HashMap<EntityType, EntityType> lightningTransformEntities = new HashMap<>();
 
     public PurpurConfig() {
         plugin.reloadConfig();
@@ -48,8 +49,7 @@ public class PurpurConfig {
 
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
 
-        ConfigurationSection anvilToCrush = config.getConfigurationSection("settings.anvil-crushes-blocks.blocks");
-        getAnvilCrushIndex(anvilToCrush);
+        getAnvilCrushIndex();
         enableFeature(AnvilMakesSandListener.class, getBoolean("settings.anvil-crushes-blocks.enabled", false));
 
         enableFeature(GrindstoneEnchantsBooksListener.class, getBoolean("settings.grindstone.gives-enchants-back", false));
@@ -57,6 +57,10 @@ public class PurpurConfig {
         enableFeature(ForceNametaggedForRidingListener.class, getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false));
 
         enableFeature(MobNoTargetListener.class, getBoolean("settings.use-notarget-permissions", false));
+
+
+        boolean lightningTransformEntities = getBoolean("settings.lightning-transforms-entities.enabled", false);
+        handleLightningTransformedEntities(lightningTransformEntities);
 
         handleBetterDispenser();
 
@@ -70,9 +74,9 @@ public class PurpurConfig {
                 upgradeIronToDiamondTools
         );
 
-        List<String> blacklist = getList("settings.stonecutter-damage-filter.blacklist");
+        List<String> stonecutterDamageblacklist = getList("settings.stonecutter-damage-filter.blacklist", List.of("player"));
         if (getBoolean("settings.stonecutter-damage-filter.enabled", false)) {
-            handleStonecutterDamageBlacklist(blacklist, plugin);
+            handleStonecutterDamageBlacklist(stonecutterDamageblacklist, plugin);
         }
 
         saveConfig();
@@ -108,23 +112,56 @@ public class PurpurConfig {
     }
 
     /**
-     * @param path config path
-     * @return List of strings or empty list if list doesn't exist in configuration file
+     * @param defKV Default key-value map
      */
-    private List<String> getList(String path) {
-        if (config.isSet(path))
-            return config.getStringList(path);
-        List<String> newList = new ArrayList<>();
-        config.set(path, newList);
-        return newList;
+    private ConfigurationSection getConfigSection(String path, Map<String, Object> defKV) {
+        if (config.isConfigurationSection(path))
+            return config.getConfigurationSection(path);
+        return config.createSection(path, defKV);
     }
 
-    private void getAnvilCrushIndex(ConfigurationSection section) {
-        if (section == null) {
-            ConfigurationSection newSection = config.createSection("settings.anvil-crushes-blocks.blocks");
-            newSection.set("cobblestone", "sand");
-            section = newSection;
+    /**
+     * @return List of strings or empty list if list doesn't exist in configuration file
+     */
+    private List<String> getList(String path, List<String> def) {
+        if (config.isSet(path))
+            return config.getStringList(path);
+        config.set(path, def);
+        return def;
+    }
+
+    private void handleLightningTransformedEntities(boolean enable) {
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put("villager", "witch");
+        defaults.put("pig", "zombie_piglin");
+        ConfigurationSection section = getConfigSection("settings.lightning-transforms-entities.entities", defaults);
+        if (!enable) return;
+        for (String key : section.getKeys(false)) {
+            String value = section.getString(key);
+            if (value == null) continue;
+            EntityType keyType = null;
+            EntityType valueType = null;
+            for (EntityType entityType : EntityType.values()) {
+                if (!entityType.isSpawnable()) continue;
+                String entityKey = entityType.getKey().getKey();
+                if (entityKey.equals(key.toLowerCase(Locale.ROOT))) {
+                    keyType = entityType;
+                }
+                if (entityKey.equals(value.toLowerCase(Locale.ROOT))) {
+                    valueType = entityType;
+                }
+            }
+            if (keyType == null || valueType == null) continue;
+            lightningTransformEntities.put(keyType, valueType);
         }
+        if (lightningTransformEntities.isEmpty()) return;
+        plugin.registerListener(LightningTransformsMobsListener.class);
+    }
+
+    private void getAnvilCrushIndex() {
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put("cobblestone", "sand");
+        ConfigurationSection section = getConfigSection("settings.anvil-crushes-blocks.blocks", defaults);
         for (String key : section.getKeys(false)) {
             String matString = section.getString(key);
             if (matString == null) continue;
@@ -151,8 +188,8 @@ public class PurpurConfig {
                     stonecutterDamageBlacklist.add(entityType);
             }
         }
-        if (!stonecutterDamageBlacklist.isEmpty())
-            plugin.registerListener(StonecutterDamageListener.class);
+        if (stonecutterDamageBlacklist.isEmpty()) return;
+        plugin.registerListener(StonecutterDamageListener.class);
     }
 
     private void handleBetterDispenser() {
