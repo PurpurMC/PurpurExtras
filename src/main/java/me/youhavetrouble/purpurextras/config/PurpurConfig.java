@@ -45,7 +45,7 @@ public class PurpurConfig {
         this.beeHiveLoreBees = getString("settings.items.beehive-lore.bees", "<reset><gray>Bees: <bees>/<maxbees>");
         this.beeHiveLoreHoney = getString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
 
-        enableFeature(RespawnAnchorNeedsChargeListener.class, getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
+        enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
 
