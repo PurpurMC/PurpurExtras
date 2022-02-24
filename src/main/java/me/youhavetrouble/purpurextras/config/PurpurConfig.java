@@ -30,6 +30,7 @@ public class PurpurConfig {
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
     public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
     public final HashMap<EntityType, EntityType> lightningTransformEntities = new HashMap<>();
+    public double furnaceBurnTimeMultiplier;
 
     public PurpurConfig() {
         plugin.reloadConfig();
@@ -78,6 +79,9 @@ public class PurpurConfig {
         if (getBoolean("settings.stonecutter-damage-filter.enabled", false)) {
             handleStonecutterDamageBlacklist(stonecutterDamageblacklist, plugin);
         }
+
+        enableFeature(FurnaceBurnTimeListener.class, getBoolean("settings.furnace.burn-time.enabled", false));
+        this.furnaceBurnTimeMultiplier = getDouble("settings.furnace.burn-time.multiplier", 1.0);
 
         saveConfig();
     }
