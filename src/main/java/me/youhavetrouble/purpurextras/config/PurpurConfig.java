@@ -30,7 +30,7 @@ public class PurpurConfig {
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
     public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
     public final HashMap<EntityType, EntityType> lightningTransformEntities = new HashMap<>();
-    public double furnaceBurnTimeMultiplier;
+    public final double furnaceBurnTimeMultiplier;
 
     public PurpurConfig() {
         plugin.reloadConfig();
