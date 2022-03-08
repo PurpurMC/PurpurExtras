@@ -2,9 +2,7 @@ package me.youhavetrouble.purpurextras.listeners;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Item;
@@ -39,8 +37,8 @@ public class BeehiveLoreListener implements Listener {
             ItemStack item = itemDrop.getItemStack();
             if (item.getType().equals(Material.BEE_NEST) || item.getType().equals(Material.BEEHIVE)) {
                 ItemMeta meta = item.getItemMeta();
-                Component beeCountComponent = Component.text().append(miniMessage.parse(PurpurExtras.getPurpurConfig().beeHiveLoreBees, Template.of("bees", String.valueOf(beehive.getEntityCount())), Template.of("maxbees", String.valueOf(beehive.getMaxEntities()))).decoration(TextDecoration.ITALIC, false)).build();
-                Component honeyLevelComponent = Component.text().append(miniMessage.parse(PurpurExtras.getPurpurConfig().beeHiveLoreHoney, Template.of("honey", String.valueOf(beehiveData.getHoneyLevel())), Template.of("maxhoney", String.valueOf(beehiveData.getMaximumHoneyLevel()))).decoration(TextDecoration.ITALIC, false)).build();
+                Component beeCountComponent = getBeesComponent(beehive.getEntityCount(), beehive.getMaxEntities());
+                Component honeyLevelComponent = getHoneyComponent(beehiveData.getHoneyLevel(), beehiveData.getMaximumHoneyLevel());
                 List<Component> lore = List.of(beeCountComponent, honeyLevelComponent);
                 meta.lore(lore);
                 item.setItemMeta(meta);
@@ -57,11 +55,25 @@ public class BeehiveLoreListener implements Listener {
         ItemStack item = event.getCursor();
         ItemMeta meta = item.getItemMeta();
         //TODO find a way to read bee data from ItemStack
-        Component beeCountComponent = Component.text().append(miniMessage.parse(PurpurExtras.getPurpurConfig().beeHiveLoreBees, Template.of("bees", String.valueOf(0)), Template.of("maxbees", String.valueOf(3))).decoration(TextDecoration.ITALIC, false)).build();
-        Component honeyLevelComponent = Component.text().append(miniMessage.parse(PurpurExtras.getPurpurConfig().beeHiveLoreHoney, Template.of("honey", String.valueOf(0)), Template.of("maxhoney", String.valueOf(5))).decoration(TextDecoration.ITALIC, false)).build();
+        Component beeCountComponent = getBeesComponent(0, 3);
+        Component honeyLevelComponent = getHoneyComponent(0, 5);
         List<Component> lore = List.of(beeCountComponent, honeyLevelComponent);
         meta.lore(lore);
         item.setItemMeta(meta);
+    }
+
+    private Component getBeesComponent(int bees, int maxBees) {
+        String beeHiveLoreBeesString = PurpurExtras.getPurpurConfig().beeHiveLoreBees;
+        beeHiveLoreBeesString = beeHiveLoreBeesString.replaceAll("<bees>", String.valueOf(bees));
+        beeHiveLoreBeesString = beeHiveLoreBeesString.replaceAll("<maxbees>", String.valueOf(maxBees));
+        return miniMessage.deserializeOrNull(beeHiveLoreBeesString);
+    }
+
+    private Component getHoneyComponent(int honey, int maxHoney) {
+        String beeHiveLoreHoneyString = PurpurExtras.getPurpurConfig().beeHiveLoreHoney;
+        beeHiveLoreHoneyString = beeHiveLoreHoneyString.replaceAll("<honey>", String.valueOf(honey));
+        beeHiveLoreHoneyString = beeHiveLoreHoneyString.replaceAll("<maxhoney>", String.valueOf(maxHoney));
+        return miniMessage.deserializeOrNull(beeHiveLoreHoneyString);
     }
 
 }
