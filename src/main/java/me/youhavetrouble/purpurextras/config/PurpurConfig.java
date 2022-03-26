@@ -83,6 +83,8 @@ public class PurpurConfig {
         enableFeature(FurnaceBurnTimeListener.class, getBoolean("settings.furnace.burn-time.enabled", false));
         this.furnaceBurnTimeMultiplier = getDouble("settings.furnace.burn-time.multiplier", 1.0);
 
+        enableFeature(VoidTotemListener.class, getBoolean("settings.totem.work-on-void-death", false));
+
         saveConfig();
     }
 
