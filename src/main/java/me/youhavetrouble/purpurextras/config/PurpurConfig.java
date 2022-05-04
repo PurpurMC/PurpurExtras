@@ -85,6 +85,8 @@ public class PurpurConfig {
 
         enableFeature(VoidTotemListener.class, getBoolean("settings.totem.work-on-void-death", false));
 
+        enableFeature(SkeletonWitherRoseListener.class, getBoolean("settings.mobs.skeleton.give-wither-rose-for-wither-skeleton", false));
+
         saveConfig();
     }
 
