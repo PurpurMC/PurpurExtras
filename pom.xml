@@ -71,6 +71,10 @@
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -85,6 +89,11 @@
             <artifactId>paper-mojangapi</artifactId>
             <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.YouHaveTrouble</groupId>
+            <artifactId>Entiddy</artifactId>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 </project>

@@ -29,7 +29,7 @@ public class PurpurConfig {
     public final String beeHiveLoreBees, beeHiveLoreHoney;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
     public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
-    public final HashMap<EntityType, EntityType> lightningTransformEntities = new HashMap<>();
+    public final HashMap<String, String> lightningTransformEntities = new HashMap<>();
     public final double furnaceBurnTimeMultiplier;
 
     public PurpurConfig() {
@@ -146,21 +146,7 @@ public class PurpurConfig {
         if (!enable) return;
         for (String key : section.getKeys(false)) {
             String value = section.getString(key);
-            if (value == null) continue;
-            EntityType keyType = null;
-            EntityType valueType = null;
-            for (EntityType entityType : EntityType.values()) {
-                if (!entityType.isSpawnable()) continue;
-                String entityKey = entityType.getKey().getKey();
-                if (entityKey.equals(key.toLowerCase(Locale.ROOT))) {
-                    keyType = entityType;
-                }
-                if (entityKey.equals(value.toLowerCase(Locale.ROOT))) {
-                    valueType = entityType;
-                }
-            }
-            if (keyType == null || valueType == null) continue;
-            lightningTransformEntities.put(keyType, valueType);
+            lightningTransformEntities.put(key, value);
         }
         if (lightningTransformEntities.isEmpty()) return;
         plugin.registerListener(LightningTransformsMobsListener.class);
