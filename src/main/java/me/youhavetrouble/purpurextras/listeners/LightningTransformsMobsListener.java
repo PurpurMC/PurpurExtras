@@ -1,7 +1,7 @@
 package me.youhavetrouble.purpurextras.listeners;
 
+import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import me.youhavetrouble.entiddy.Entiddy;
-import me.youhavetrouble.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -18,10 +18,10 @@ import java.util.Map;
 
 public class LightningTransformsMobsListener implements Listener {
 
-    private final HashMap<String, Object> entities = new HashMap<>();
+    private static final HashMap<String, Object> entities = new HashMap<>();
 
-    public LightningTransformsMobsListener() {
-        for (Map.Entry<String, String> entry : PurpurExtras.getPurpurConfig().lightningTransformEntities.entrySet()) {
+    public LightningTransformsMobsListener(Map<String, String> lightningTransformEntities) {
+        for (Map.Entry<String, String> entry : lightningTransformEntities.entrySet()) {
             getEntityTypeOrSpecial(entry.getKey(), entry.getValue());
         }
     }
@@ -31,7 +31,10 @@ public class LightningTransformsMobsListener implements Listener {
         if (!event.getDamager().getType().equals(EntityType.LIGHTNING)) return;
         Entity entity = event.getEntity();
         if (!(entity instanceof LivingEntity livingEntity)) return;
-        if (entity.getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.LIGHTNING)) return;
+        if (entity.getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.LIGHTNING)) {
+            event.setCancelled(true);
+            return;
+        };
         Location location = entity.getLocation();
         Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
         if (specialEntity != null) {
@@ -72,15 +75,22 @@ public class LightningTransformsMobsListener implements Listener {
         }
         if (sourceKey == null) {
             try {
-                Entiddy entiddy = Entiddy.valueOf(key);
+                Entiddy entiddy = Entiddy.valueOf(key.toUpperCase(Locale.ROOT));
                 sourceKey = key;
             } catch (IllegalArgumentException ignored) {}
         }
         if (goal == null) {
             try {
-                goal = Entiddy.valueOf(value);
+                goal = Entiddy.valueOf(value.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException ignored) {}
         }
-        this.entities.put(sourceKey, goal);
+        System.out.println(sourceKey);
+        System.out.println(goal);
+        entities.put(sourceKey, goal);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onLightningStrike(EntityZapEvent event) {
+        event.setCancelled(true);
     }
 }

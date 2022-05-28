@@ -149,7 +149,8 @@ public class PurpurConfig {
             lightningTransformEntities.put(key, value);
         }
         if (lightningTransformEntities.isEmpty()) return;
-        plugin.registerListener(LightningTransformsMobsListener.class);
+
+        plugin.getServer().getPluginManager().registerEvents(new LightningTransformsMobsListener(lightningTransformEntities), plugin);
     }
 
     private void getAnvilCrushIndex() {

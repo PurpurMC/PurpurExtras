@@ -6,7 +6,7 @@
 
     <groupId>me.youhavetrouble</groupId>
     <artifactId>PurpurExtras</artifactId>
-    <version>1.15.0</version>
+    <version>1.16.0</version>
     <packaging>jar</packaging>
 
     <name>PurpurExtras</name>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.github.YouHaveTrouble</groupId>
             <artifactId>Entiddy</artifactId>
-            <version>1.2.0</version>
+            <version>v2.0.1</version>
         </dependency>
     </dependencies>
 </project>
