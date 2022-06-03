@@ -2,6 +2,7 @@ package me.youhavetrouble.purpurextras.listeners;
 
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Openable;
 import org.bukkit.entity.Player;
@@ -27,23 +28,24 @@ public class OpenIronDoorsWithHandListener implements Listener {
         if (!event.getAction().isRightClick()) return;
         if (event.getClickedBlock() == null) return;
         Block block = event.getClickedBlock();
+        World world = block.getWorld();
         switch (block.getType()) {
             case IRON_DOOR -> {
                 if (!this.doors) return;
                 event.setCancelled(true);
                 if (open(block, event.getPlayer())) {
-                    event.getClickedBlock().getLocation().getWorld().playSound(block.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
+                    world.playSound(block.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
                 } else {
-                    event.getClickedBlock().getLocation().getWorld().playSound(block.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1f);
+                    world.playSound(block.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1f);
                 }
             }
             case IRON_TRAPDOOR -> {
                 if (!this.trapdoors) return;
                 event.setCancelled(true);
                 if (open(block, event.getPlayer())) {
-                    event.getClickedBlock().getLocation().getWorld().playSound(block.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
+                    world.playSound(block.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
                 } else {
-                    event.getClickedBlock().getLocation().getWorld().playSound(block.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1f);
+                    world.playSound(block.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1f);
                 }
             }
         }
