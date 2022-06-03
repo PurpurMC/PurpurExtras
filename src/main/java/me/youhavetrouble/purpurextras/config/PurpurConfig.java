@@ -87,6 +87,15 @@ public class PurpurConfig {
 
         enableFeature(SkeletonWitherRoseListener.class, getBoolean("settings.mobs.skeleton.give-wither-rose-for-wither-skeleton", false));
 
+        boolean openIronDoorsWithHand = getBoolean("settings.gameplay-settings.open-iron-doors-with-hand", false);
+        boolean openIronTrapdoorsWithHand = getBoolean("settings.gameplay-settings.open-iron-trapdoors-with-hand", false);
+
+        if (openIronDoorsWithHand || openIronTrapdoorsWithHand) {
+            plugin.getServer().getPluginManager().registerEvents(
+                    new OpenIronDoorsWithHandListener(openIronDoorsWithHand, openIronTrapdoorsWithHand), plugin
+            );
+        }
+
         saveConfig();
     }
 
