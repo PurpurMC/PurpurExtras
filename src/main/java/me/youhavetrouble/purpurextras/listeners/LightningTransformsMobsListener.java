@@ -84,8 +84,6 @@ public class LightningTransformsMobsListener implements Listener {
                 goal = Entiddy.valueOf(value.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException ignored) {}
         }
-        System.out.println(sourceKey);
-        System.out.println(goal);
         entities.put(sourceKey, goal);
     }
 
