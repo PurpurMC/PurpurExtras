@@ -202,7 +202,9 @@ public class PurpurConfig {
                 || dispenserBreakBlockShovel
                 || dispenserBreakBlockHoe
                 || dispenserBreakBlockShears
-                || dispenserShearPumpkin) {
+                || dispenserShearPumpkin
+                || dispenserActivatesJukebox
+        ) {
             plugin.registerListener(DispenserListener.class);
         }
     }
