@@ -85,8 +85,6 @@ public class PurpurConfig {
 
         enableFeature(VoidTotemListener.class, getBoolean("settings.totem.work-on-void-death", false));
 
-        enableFeature(SkeletonWitherRoseListener.class, getBoolean("settings.mobs.skeleton.give-wither-rose-for-wither-skeleton", false));
-
         boolean openIronDoorsWithHand = getBoolean("settings.gameplay-settings.open-iron-doors-with-hand", false);
         boolean openIronTrapdoorsWithHand = getBoolean("settings.gameplay-settings.open-iron-trapdoors-with-hand", false);
 
