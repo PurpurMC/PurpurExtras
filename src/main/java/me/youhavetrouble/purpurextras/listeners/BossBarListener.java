@@ -16,8 +16,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class BossBarListener implements Listener {
+    NamespacedKey dyeColor = new NamespacedKey(PurpurExtras.getInstance(), "dyedColor");
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
-    public void onBossInteract(PlayerInteractEntityEvent event){
+    public void onBossBarDye(PlayerInteractEntityEvent event){
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if(!(event.getRightClicked() instanceof Boss bossClicked)) return;
         Player player = event.getPlayer();
@@ -25,19 +26,22 @@ public class BossBarListener implements Listener {
         if (!materialName.contains("_DYE")) return;
         int index = materialName.indexOf("_DYE");
         String bossBarColor = materialName.substring(0, index);
-        try {BarColor.valueOf(bossBarColor);} catch (IllegalArgumentException e) {return;}
+        try {
+            BarColor.valueOf(bossBarColor);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
         bossClicked.getBossBar().setColor(BarColor.valueOf(bossBarColor));
         PersistentDataContainer pdc = bossClicked.getPersistentDataContainer();
-        pdc.set(new NamespacedKey(PurpurExtras.getPlugin(PurpurExtras.class), "dyedColor"), PersistentDataType.STRING, bossBarColor);
+        pdc.set(dyeColor, PersistentDataType.STRING, bossBarColor);
     }
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
-    public void onBossLoad(EntityAddToWorldEvent event) {
+    public void onBossBarDyeOnLoad(EntityAddToWorldEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Boss boss)) return;
         PersistentDataContainer pdc = boss.getPersistentDataContainer();
-        if (!pdc.has(new NamespacedKey(PurpurExtras.getInstance(), "dyedColor"), PersistentDataType.STRING)) return;
-        String color = pdc.get(new NamespacedKey(PurpurExtras.getPlugin(PurpurExtras.class), "dyedColor"), PersistentDataType.STRING);
+        if (!pdc.has(dyeColor, PersistentDataType.STRING)) return;
+        String color = pdc.get(dyeColor, PersistentDataType.STRING);
         boss.getBossBar().setColor(BarColor.valueOf(color));
     }
-
 }
