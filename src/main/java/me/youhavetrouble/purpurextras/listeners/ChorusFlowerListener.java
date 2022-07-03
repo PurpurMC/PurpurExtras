@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 public class ChorusFlowerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-
     public void entityHitChorusFlower(ProjectileHitEvent event){
         if(event.getHitBlock() == null) return;
         if (event.getHitBlock().getType().equals(Material.CHORUS_FLOWER)){
@@ -24,9 +23,7 @@ public class ChorusFlowerListener implements Listener {
         }
     }
 
-
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-
     public void chorusFlowerBreak(BlockDestroyEvent event){
         Block block = event.getBlock();
         if(!(block.getType().equals(Material.CHORUS_FLOWER))) return;
