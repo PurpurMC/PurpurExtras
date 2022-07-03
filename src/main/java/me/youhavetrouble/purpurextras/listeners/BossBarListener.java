@@ -16,8 +16,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class BossBarListener implements Listener {
+
     NamespacedKey dyeColor = new NamespacedKey(PurpurExtras.getInstance(), "dyedColor");
+
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
+
     public void onBossBarDye(PlayerInteractEntityEvent event){
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if(!(event.getRightClicked() instanceof Boss bossClicked)) return;
@@ -35,7 +38,10 @@ public class BossBarListener implements Listener {
         PersistentDataContainer pdc = bossClicked.getPersistentDataContainer();
         pdc.set(dyeColor, PersistentDataType.STRING, bossBarColor);
     }
+
+
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
+
     public void onBossBarDyeOnLoad(EntityAddToWorldEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Boss boss)) return;
