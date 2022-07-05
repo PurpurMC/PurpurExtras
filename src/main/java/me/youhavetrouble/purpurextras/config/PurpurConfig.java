@@ -52,6 +52,8 @@ public class PurpurConfig {
 
         enableFeature(NetherRoofBuildListener.class, getBoolean("settings.blocks.prevent-building-above-nether", false));
 
+        enableFeature(DispenserCauldronListener.class, getBoolean("settings.blocks.dispense-filled-buckets-in-cauldrons", false));
+
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
         enableFeature(FarmingListener.class, getBoolean("settings.gameplay-settings.right-click-autoreplant", false));
