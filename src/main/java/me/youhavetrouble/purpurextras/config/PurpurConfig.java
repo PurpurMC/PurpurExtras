@@ -48,7 +48,15 @@ public class PurpurConfig {
 
         enableFeature(ChorusFlowerListener.class, getBoolean("settings.blocks.chorus-flowers-always-drop", false));
 
+        enableFeature(SpawnerPlacementListener.class, getBoolean("settings.blocks.use-spawner-placement-permission", false));
+
+        enableFeature(NetherRoofBuildListener.class, getBoolean("settings.blocks.prevent-building-above-nether", false));
+
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
+
+        enableFeature(FarmingListener.class, getBoolean("settings.gameplay-settings.right-click-autoreplant", false));
+
+        enableFeature(ItemFrameListener.class, getBoolean("settings.blocks.shift-right-click-for-invisible-item-frames", false));
 
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
 
@@ -61,9 +69,8 @@ public class PurpurConfig {
 
         enableFeature(MobNoTargetListener.class, getBoolean("settings.use-notarget-permissions", false));
 
+
         enableFeature(BossBarListener.class, getBoolean("settings.dye-boss-bars", false));
-
-
 
         boolean lightningTransformEntities = getBoolean("settings.lightning-transforms-entities.enabled", false);
         handleLightningTransformedEntities(lightningTransformEntities);
