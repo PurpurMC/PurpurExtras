@@ -26,6 +26,9 @@ public interface PurpurExtrasModule {
 
         modules.add(new BeeHiveLoreModule());
         modules.add(new AnvilChangesBlocksModule());
+        modules.add(new ChorusFlowerAlwaysDropsModule());
+        modules.add(new MobNoTargetModule());
+        modules.add(new StonecutterDamageModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) module.enable();
