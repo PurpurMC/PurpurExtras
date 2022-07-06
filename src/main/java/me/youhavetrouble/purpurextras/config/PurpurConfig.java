@@ -48,6 +48,8 @@ public class PurpurConfig {
 
         enableFeature(ChorusFlowerListener.class, getBoolean("settings.blocks.chorus-flowers-always-drop", false));
 
+        enableFeature(DispenserCauldronListener.class, getBoolean("settings.blocks.dispense-filled-buckets-in-cauldrons", false));
+
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
