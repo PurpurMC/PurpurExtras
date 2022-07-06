@@ -17,11 +17,10 @@ public class ItemFrameListener implements Listener {
         Entity entity = event.getRightClicked();
         if(event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if(!player.isSneaking()) return;
-        if(entity instanceof ItemFrame itemFrame){
-            if (itemFrame.getItem().getType().equals(Material.AIR)) return;
+        if(!(entity instanceof ItemFrame itemFrame)) return;
+        if(itemFrame.getItem().getType().equals(Material.AIR)) return;
         event.setCancelled(true);
         itemFrame.setVisible(!itemFrame.isVisible());
         itemFrame.setFixed(!itemFrame.isFixed());
-        }
     }
 }
