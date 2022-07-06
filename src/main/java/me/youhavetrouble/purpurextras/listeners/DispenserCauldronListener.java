@@ -7,6 +7,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,7 +28,7 @@ public class DispenserCauldronListener implements Listener {
     List<Material> cauldronTypes = Arrays.asList(Material.CAULDRON, Material.LAVA_CAULDRON, Material.WATER_CAULDRON, Material.POWDER_SNOW_CAULDRON);
     List<Material> bucketTypes = Arrays.asList(Material.BUCKET, Material.LAVA_BUCKET, Material.WATER_BUCKET, Material.POWDER_SNOW_BUCKET);
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPreDispense(BlockPreDispenseEvent event) {
         if (!event.getBlock().getType().equals(Material.DISPENSER)) return;
         Dispenser dispenser = (Dispenser) event.getBlock().getBlockData();
