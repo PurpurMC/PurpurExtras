@@ -50,6 +50,8 @@ public class PurpurConfig {
 
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
+        enableFeature(FarmingListener.class, getBoolean("settings.gameplay-settings.right-click-autoreplant", false));
+
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
 
         getAnvilCrushIndex();
