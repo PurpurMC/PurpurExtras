@@ -50,6 +50,8 @@ public class PurpurConfig {
 
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
+        enableFeature(SpawnerPlacementListener.class, getBoolean("settings.blocks.use-spawner-placement-permission", false));
+
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
 
         getAnvilCrushIndex();
