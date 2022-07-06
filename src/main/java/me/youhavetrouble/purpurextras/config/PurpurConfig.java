@@ -27,6 +27,7 @@ public class PurpurConfig {
     public final boolean upgradeStoneToIronTools;
     public final boolean upgradeIronToDiamondTools;
     public final String beeHiveLoreBees, beeHiveLoreHoney;
+    public final double netherBuildBlockHeight;
     public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
     public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
     public final HashMap<String, String> lightningTransformEntities = new HashMap<>();
@@ -47,6 +48,8 @@ public class PurpurConfig {
         this.beeHiveLoreHoney = getString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
 
         enableFeature(ChorusFlowerListener.class, getBoolean("settings.blocks.chorus-flowers-always-drop", false));
+
+        this.netherBuildBlockHeight = getDouble("settings.blocks.prevent-building-above-nether.max-build-height", 128.0);
 
         enableFeature(NetherRoofBuildListener.class, getBoolean("settings.blocks.prevent-building-above-nether", false));
 

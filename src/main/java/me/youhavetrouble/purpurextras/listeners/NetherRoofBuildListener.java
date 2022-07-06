@@ -8,10 +8,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class NetherRoofBuildListener implements Listener {
 
     @EventHandler
-    public void onBuild(BlockPlaceEvent event){
+    public void onNetherRoofBuild(BlockPlaceEvent event){
         Block block = event.getBlock();
         if(!(block.getWorld().hasCeiling())) return;
-        if(block.getLocation().getBlockY() < 128) return;
+        if(block.getLocation().getBlockY() < PurpurExtras.getPurpurConfig().netherBuildBlockHeight) return;
         event.setCancelled(true);
     }
 }
