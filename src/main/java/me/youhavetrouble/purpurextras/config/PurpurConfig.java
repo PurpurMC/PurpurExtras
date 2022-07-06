@@ -48,6 +48,8 @@ public class PurpurConfig {
 
         enableFeature(ChorusFlowerListener.class, getBoolean("settings.blocks.chorus-flowers-always-drop", false));
 
+        enableFeature(ItemFrameListener.class, getBoolean("settings.blocks.shift-right-click-for-invisible-item-frames", false));
+
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
