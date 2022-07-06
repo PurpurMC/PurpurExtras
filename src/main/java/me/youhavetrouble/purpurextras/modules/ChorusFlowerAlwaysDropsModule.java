@@ -1,6 +1,7 @@
-package me.youhavetrouble.purpurextras.listeners;
+package me.youhavetrouble.purpurextras.modules;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import me.youhavetrouble.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,7 +11,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ChorusFlowerListener implements Listener {
+public class ChorusFlowerAlwaysDropsModule implements PurpurExtrasModule, Listener {
+
+    protected ChorusFlowerAlwaysDropsModule() {}
+
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.blocks.chorus-flowers-always-drop", false);
+    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void entityHitChorusFlower(ProjectileHitEvent event){

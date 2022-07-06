@@ -4,8 +4,6 @@ import me.youhavetrouble.purpurextras.command.FancyCommand;
 import me.youhavetrouble.purpurextras.config.PurpurConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -19,18 +17,7 @@ public final class PurpurExtras extends JavaPlugin {
 
     private static PurpurConfig config;
     private static PurpurExtras instance;
-
-    public final MiniMessage miniMessage = MiniMessage.builder().tags(
-            TagResolver.builder()
-                    .resolver(StandardTags.color())
-                    .resolver(StandardTags.decorations())
-                    .resolver(StandardTags.gradient())
-                    .resolver(StandardTags.font())
-                    .resolver(StandardTags.reset())
-                    .resolver(StandardTags.rainbow())
-                    .resolver(StandardTags.translatable())
-                    .build()
-    ).build();
+    public final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     @Override
     public void onEnable() {

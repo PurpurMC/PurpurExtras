@@ -3,7 +3,6 @@ package me.youhavetrouble.purpurextras.config;
 import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.*;
 import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -26,9 +25,8 @@ public class PurpurConfig {
     public final boolean upgradeWoodToStoneTools;
     public final boolean upgradeStoneToIronTools;
     public final boolean upgradeIronToDiamondTools;
-    public final String beeHiveLoreBees, beeHiveLoreHoney;
-    public final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
-    public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
+
+
     public final HashMap<String, String> lightningTransformEntities = new HashMap<>();
     public final double furnaceBurnTimeMultiplier;
 
@@ -41,29 +39,15 @@ public class PurpurConfig {
         // Make sure that no listeners are registered from the plugin
         HandlerList.unregisterAll(plugin);
 
-        enableFeature(BeehiveLoreListener.class, getBoolean("settings.items.beehive-lore.enabled", false));
-
-        this.beeHiveLoreBees = getString("settings.items.beehive-lore.bees", "<reset><gray>Bees: <bees>/<maxbees>");
-        this.beeHiveLoreHoney = getString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
-
-        enableFeature(ChorusFlowerListener.class, getBoolean("settings.blocks.chorus-flowers-always-drop", false));
-
         enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
 
         enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
-
-        getAnvilCrushIndex();
-        enableFeature(AnvilMakesSandListener.class, getBoolean("settings.anvil-crushes-blocks.enabled", false));
 
         enableFeature(GrindstoneEnchantsBooksListener.class, getBoolean("settings.grindstone.gives-enchants-back", false));
 
         enableFeature(ForceNametaggedForRidingListener.class, getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false));
 
-        enableFeature(MobNoTargetListener.class, getBoolean("settings.use-notarget-permissions", false));
-
         enableFeature(BossBarListener.class, getBoolean("settings.dye-boss-bars", false));
-
-
 
         boolean lightningTransformEntities = getBoolean("settings.lightning-transforms-entities.enabled", false);
         handleLightningTransformedEntities(lightningTransformEntities);
@@ -79,11 +63,6 @@ public class PurpurConfig {
                 upgradeStoneToIronTools,
                 upgradeIronToDiamondTools
         );
-
-        List<String> stonecutterDamageblacklist = getList("settings.stonecutter-damage-filter.blacklist", List.of("player"));
-        if (getBoolean("settings.stonecutter-damage-filter.enabled", false)) {
-            handleStonecutterDamageBlacklist(stonecutterDamageblacklist, plugin);
-        }
 
         enableFeature(FurnaceBurnTimeListener.class, getBoolean("settings.furnace.burn-time.enabled", false));
         this.furnaceBurnTimeMultiplier = getDouble("settings.furnace.burn-time.multiplier", 1.0);
@@ -102,7 +81,7 @@ public class PurpurConfig {
         saveConfig();
     }
 
-    public void saveConfig() {
+    private void saveConfig() {
         try {
             config.save(configPath);
         } catch (IOException e) {
@@ -110,21 +89,21 @@ public class PurpurConfig {
         }
     }
 
-    private boolean getBoolean(String path, boolean def) {
+    public boolean getBoolean(String path, boolean def) {
         if (config.isSet(path))
             return config.getBoolean(path, def);
         config.set(path, def);
         return def;
     }
 
-    private String getString(String path, String def) {
+    public String getString(String path, String def) {
         if (config.isSet(path))
             return config.getString(path, def);
         config.set(path, def);
         return def;
     }
 
-    private double getDouble(String path, double def) {
+    public double getDouble(String path, double def) {
         if (config.isSet(path))
             return config.getDouble(path, def);
         config.set(path, def);
@@ -134,7 +113,7 @@ public class PurpurConfig {
     /**
      * @param defKV Default key-value map
      */
-    private ConfigurationSection getConfigSection(String path, Map<String, Object> defKV) {
+    public ConfigurationSection getConfigSection(String path, Map<String, Object> defKV) {
         if (config.isConfigurationSection(path))
             return config.getConfigurationSection(path);
         return config.createSection(path, defKV);
@@ -143,7 +122,7 @@ public class PurpurConfig {
     /**
      * @return List of strings or empty list if list doesn't exist in configuration file
      */
-    private List<String> getList(String path, List<String> def) {
+    public List<String> getList(String path, List<String> def) {
         if (config.isSet(path))
             return config.getStringList(path);
         config.set(path, def);
@@ -163,40 +142,6 @@ public class PurpurConfig {
         if (lightningTransformEntities.isEmpty()) return;
 
         plugin.getServer().getPluginManager().registerEvents(new LightningTransformsMobsListener(lightningTransformEntities), plugin);
-    }
-
-    private void getAnvilCrushIndex() {
-        Map<String, Object> defaults = new HashMap<>();
-        defaults.put("cobblestone", "sand");
-        ConfigurationSection section = getConfigSection("settings.anvil-crushes-blocks.blocks", defaults);
-        for (String key : section.getKeys(false)) {
-            String matString = section.getString(key);
-            if (matString == null) continue;
-            Material materialFrom = Material.getMaterial(key.toUpperCase());
-            if (materialFrom == null || !materialFrom.isBlock()) {
-                logger.warning(key + " is not valid block material.");
-                continue;
-            }
-            Material materialTo = Material.getMaterial(matString.toUpperCase());
-            if (materialTo == null || !materialTo.isBlock()) {
-                logger.warning(matString + " is not valid block material.");
-                continue;
-            }
-            anvilCrushBlocksIndex.put(materialFrom, materialTo);
-        }
-    }
-
-    private void handleStonecutterDamageBlacklist(List<String> blacklist, PurpurExtras plugin) {
-        if (blacklist.isEmpty()) return;
-        for (EntityType entityType : EntityType.values()) {
-            if (!entityType.isAlive()) continue;
-            for (String str : blacklist) {
-                if (entityType.getKey().getKey().equals(str.toLowerCase(Locale.ROOT)))
-                    stonecutterDamageBlacklist.add(entityType);
-            }
-        }
-        if (stonecutterDamageBlacklist.isEmpty()) return;
-        plugin.registerListener(StonecutterDamageListener.class);
     }
 
     private void handleBetterDispenser() {
