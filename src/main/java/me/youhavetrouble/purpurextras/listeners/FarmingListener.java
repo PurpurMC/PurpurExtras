@@ -10,6 +10,7 @@ import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.Cocoa;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -24,7 +25,7 @@ public class FarmingListener implements Listener {
 
     List<Material> farmables = Arrays.asList(Material.CARROTS, Material.COCOA, Material.NETHER_WART, Material.POTATOES, Material.WHEAT, Material.BEETROOTS);
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void rightClickFarmables(PlayerInteractEvent event) {
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if(!(event.getAction().isRightClick())) return;
