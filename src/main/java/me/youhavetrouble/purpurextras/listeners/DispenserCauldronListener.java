@@ -38,9 +38,6 @@ public class DispenserCauldronListener implements Listener {
             Levelled cauldron = (Levelled) blockData;
             cauldron.setLevel(3);
         });
-        ItemStack waterBucket = new ItemStack(Material.WATER_BUCKET);
-        ItemStack lavaBucket = new ItemStack(Material.LAVA_BUCKET);
-        ItemStack powderSnowBucket = new ItemStack(Material.POWDER_SNOW_BUCKET);
         Location dispenserLocation = blockDispenser.getLocation();
         Location cauldronLocation = block.getLocation();
         Sound lavaDispense = Sound.ITEM_BUCKET_EMPTY_LAVA;
@@ -89,6 +86,7 @@ public class DispenserCauldronListener implements Listener {
                 if(!(dispensedItemMaterial.equals(Material.BUCKET))) return;
                 block.setType(Material.CAULDRON);
                 if(dispensedItem.getAmount() > 1) {
+                    ItemStack lavaBucket = new ItemStack(Material.LAVA_BUCKET);
                     dispensedItem.setAmount(dispensedItem.getAmount() - 1);
                     if (emptySlot == -1) {
                         block.getWorld().dropItem(cauldronLocation, lavaBucket);
@@ -114,6 +112,7 @@ public class DispenserCauldronListener implements Listener {
                 }
                 block.setType(Material.CAULDRON);
                 if(dispensedItem.getAmount() > 1){
+                    ItemStack waterBucket = new ItemStack(Material.WATER_BUCKET);
                     dispensedItem.setAmount(dispensedItem.getAmount() - 1);
                     if(emptySlot == -1){
                         block.getWorld().dropItem(cauldronLocation, waterBucket);
@@ -139,6 +138,7 @@ public class DispenserCauldronListener implements Listener {
                 }
                 block.setType(Material.CAULDRON);
                 if(dispensedItem.getAmount() > 1){
+                    ItemStack powderSnowBucket = new ItemStack(Material.POWDER_SNOW_BUCKET);
                     dispensedItem.setAmount(dispensedItem.getAmount() - 1);
                     if(emptySlot == -1){
                         block.getWorld().dropItem(cauldronLocation, powderSnowBucket);
