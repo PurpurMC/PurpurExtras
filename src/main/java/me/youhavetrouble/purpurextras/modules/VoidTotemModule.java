@@ -1,5 +1,6 @@
-package me.youhavetrouble.purpurextras.listeners;
+package me.youhavetrouble.purpurextras.modules;
 
+import me.youhavetrouble.purpurextras.PurpurExtras;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,17 +15,31 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.UUID;
 
-public class VoidTotemListener implements Listener {
+public class VoidTotemModule implements PurpurExtrasModule, Listener {
 
     private final Collection<PotionEffect> totemEffects = new ArrayList<>();
     private final HashMap<UUID, Location> lastGroundedLocations = new HashMap<>();
 
-    public VoidTotemListener() {
+    protected VoidTotemModule() {
         totemEffects.add(new PotionEffect(PotionEffectType.REGENERATION, 20*45, 1));
         totemEffects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20*40, 0));
         totemEffects.add(new PotionEffect(PotionEffectType.ABSORPTION, 20*5, 1));
+    }
+
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.totem.work-on-void-death", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -74,5 +89,4 @@ public class VoidTotemListener implements Listener {
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         player.addPotionEffects(this.totemEffects);
     }
-
 }

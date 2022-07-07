@@ -1,4 +1,4 @@
-package me.youhavetrouble.purpurextras.listeners;
+package me.youhavetrouble.purpurextras.modules;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import me.youhavetrouble.purpurextras.PurpurExtras;
@@ -15,9 +15,21 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-public class BossBarListener implements Listener {
+public class ColoredBossBarsModule implements PurpurExtrasModule, Listener {
 
-    NamespacedKey dyeColor = new NamespacedKey(PurpurExtras.getInstance(), "dyedColor");
+    private final NamespacedKey dyeColor = new NamespacedKey(PurpurExtras.getInstance(), "dyedColor");
+
+    protected ColoredBossBarsModule() {}
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.dye-boss-bars", false);
+    }
 
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
     public void onBossBarDye(PlayerInteractEntityEvent event){

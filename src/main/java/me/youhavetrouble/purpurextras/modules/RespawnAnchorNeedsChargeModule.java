@@ -1,4 +1,4 @@
-package me.youhavetrouble.purpurextras.listeners;
+package me.youhavetrouble.purpurextras.modules;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
 import org.bukkit.Bukkit;
@@ -13,7 +13,19 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.util.BoundingBox;
 
-public class RespawnAnchorNeedsChargeListener implements Listener {
+public class RespawnAnchorNeedsChargeModule implements PurpurExtrasModule, Listener {
+
+    protected RespawnAnchorNeedsChargeModule() {}
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return !(PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
+    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
@@ -42,11 +54,9 @@ public class RespawnAnchorNeedsChargeListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerPlaceAnchor(BlockPlaceEvent event) {
-        if (!event.getBlockPlaced().getType().equals(Material.RESPAWN_ANCHOR))
-            return;
+        if (!event.getBlockPlaced().getType().equals(Material.RESPAWN_ANCHOR)) return;
         RespawnAnchor anchor = (RespawnAnchor) event.getBlockPlaced().getBlockData();
         anchor.setCharges(anchor.getMaximumCharges());
         event.getBlockPlaced().setBlockData(anchor);
     }
-
 }

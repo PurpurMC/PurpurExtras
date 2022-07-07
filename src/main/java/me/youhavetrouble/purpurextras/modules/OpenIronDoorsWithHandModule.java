@@ -1,5 +1,7 @@
-package me.youhavetrouble.purpurextras.listeners;
+package me.youhavetrouble.purpurextras.modules;
 
+import me.youhavetrouble.purpurextras.PurpurExtras;
+import me.youhavetrouble.purpurextras.config.PurpurConfig;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
@@ -12,13 +14,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class OpenIronDoorsWithHandListener implements Listener {
+public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener {
 
     private final boolean doors, trapdoors;
 
-    public OpenIronDoorsWithHandListener(boolean doors, boolean trapdoors) {
-        this.doors = doors;
-        this.trapdoors = trapdoors;
+    protected OpenIronDoorsWithHandModule() {
+        PurpurConfig config = PurpurExtras.getPurpurConfig();
+        doors = config.getBoolean("settings.gameplay-settings.open-iron-doors-with-hand", false);
+        trapdoors = config.getBoolean("settings.gameplay-settings.open-iron-trapdoors-with-hand", false);
+    }
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return doors || trapdoors;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -31,7 +44,7 @@ public class OpenIronDoorsWithHandListener implements Listener {
         World world = block.getWorld();
         switch (block.getType()) {
             case IRON_DOOR -> {
-                if (!this.doors) return;
+                if (!doors) return;
                 event.setCancelled(true);
                 if (open(block, event.getPlayer())) {
                     world.playSound(block.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
@@ -40,7 +53,7 @@ public class OpenIronDoorsWithHandListener implements Listener {
                 }
             }
             case IRON_TRAPDOOR -> {
-                if (!this.trapdoors) return;
+                if (!trapdoors) return;
                 event.setCancelled(true);
                 if (open(block, event.getPlayer())) {
                     world.playSound(block.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
@@ -59,5 +72,6 @@ public class OpenIronDoorsWithHandListener implements Listener {
         player.swingMainHand();
         return !isOpen;
     }
+
 
 }

@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class StonecutterDamageModule implements PurpurExtrasModule, Listener {
 
-    public final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
+    private final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
 
     protected StonecutterDamageModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();

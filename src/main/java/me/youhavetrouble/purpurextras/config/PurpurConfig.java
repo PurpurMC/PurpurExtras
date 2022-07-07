@@ -28,7 +28,6 @@ public class PurpurConfig {
 
 
     public final HashMap<String, String> lightningTransformEntities = new HashMap<>();
-    public final double furnaceBurnTimeMultiplier;
 
     public PurpurConfig() {
         plugin.reloadConfig();
@@ -36,18 +35,7 @@ public class PurpurConfig {
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
 
-        // Make sure that no listeners are registered from the plugin
-        HandlerList.unregisterAll(plugin);
-
-        enableFeature(RespawnAnchorNeedsChargeListener.class, !getBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
-
-        enableFeature(EscapeCommandSlashListener.class, getBoolean("settings.chat.escape-commands", false));
-
         enableFeature(GrindstoneEnchantsBooksListener.class, getBoolean("settings.grindstone.gives-enchants-back", false));
-
-        enableFeature(ForceNametaggedForRidingListener.class, getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false));
-
-        enableFeature(BossBarListener.class, getBoolean("settings.dye-boss-bars", false));
 
         boolean lightningTransformEntities = getBoolean("settings.lightning-transforms-entities.enabled", false);
         handleLightningTransformedEntities(lightningTransformEntities);
@@ -63,20 +51,6 @@ public class PurpurConfig {
                 upgradeStoneToIronTools,
                 upgradeIronToDiamondTools
         );
-
-        enableFeature(FurnaceBurnTimeListener.class, getBoolean("settings.furnace.burn-time.enabled", false));
-        this.furnaceBurnTimeMultiplier = getDouble("settings.furnace.burn-time.multiplier", 1.0);
-
-        enableFeature(VoidTotemListener.class, getBoolean("settings.totem.work-on-void-death", false));
-
-        boolean openIronDoorsWithHand = getBoolean("settings.gameplay-settings.open-iron-doors-with-hand", false);
-        boolean openIronTrapdoorsWithHand = getBoolean("settings.gameplay-settings.open-iron-trapdoors-with-hand", false);
-
-        if (openIronDoorsWithHand || openIronTrapdoorsWithHand) {
-            plugin.getServer().getPluginManager().registerEvents(
-                    new OpenIronDoorsWithHandListener(openIronDoorsWithHand, openIronTrapdoorsWithHand), plugin
-            );
-        }
 
         saveConfig();
     }

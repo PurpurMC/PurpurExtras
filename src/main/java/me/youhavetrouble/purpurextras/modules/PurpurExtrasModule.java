@@ -24,11 +24,20 @@ public interface PurpurExtrasModule {
         modules.clear();
         HandlerList.unregisterAll(PurpurExtras.getInstance());
 
+        // TODO annotation scanner maybe
+
         modules.add(new BeeHiveLoreModule());
         modules.add(new AnvilChangesBlocksModule());
         modules.add(new ChorusFlowerAlwaysDropsModule());
         modules.add(new MobNoTargetModule());
         modules.add(new StonecutterDamageModule());
+        modules.add(new ColoredBossBarsModule());
+        modules.add(new RespawnAnchorNeedsChargeModule());
+        modules.add(new VoidTotemModule());
+        modules.add(new FurnaceBurnTimeModule());
+        modules.add(new ForceNametaggedForRidingModule());
+        modules.add(new EscapeCommandSlashModule());
+        modules.add(new OpenIronDoorsWithHandModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) module.enable();
