@@ -1,7 +1,7 @@
-package me.youhavetrouble.purpurextras.modules;
+package org.purpurmc.purpurextras.modules;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;

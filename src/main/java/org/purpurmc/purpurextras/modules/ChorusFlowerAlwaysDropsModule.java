@@ -1,7 +1,7 @@
-package me.youhavetrouble.purpurextras.modules;
+package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

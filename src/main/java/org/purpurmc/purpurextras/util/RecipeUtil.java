@@ -1,6 +1,6 @@
-package me.youhavetrouble.purpurextras.util;
+package org.purpurmc.purpurextras.util;
 
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.SmithingRecipe;

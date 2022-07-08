@@ -1,7 +1,7 @@
-package me.youhavetrouble.purpurextras.modules;
+package org.purpurmc.purpurextras.modules;
 
-import me.youhavetrouble.purpurextras.PurpurExtras;
-import me.youhavetrouble.purpurextras.util.RecipeUtil;
+import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.util.RecipeUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;

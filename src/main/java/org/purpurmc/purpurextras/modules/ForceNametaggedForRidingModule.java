@@ -1,7 +1,7 @@
-package me.youhavetrouble.purpurextras.modules;
+package org.purpurmc.purpurextras.modules;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

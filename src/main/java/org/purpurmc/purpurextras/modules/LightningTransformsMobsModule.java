@@ -1,8 +1,8 @@
-package me.youhavetrouble.purpurextras.modules;
+package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import me.youhavetrouble.entiddy.Entiddy;
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;

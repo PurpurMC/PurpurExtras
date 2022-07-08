@@ -1,7 +1,7 @@
-package me.youhavetrouble.purpurextras.modules;
+package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Boss;

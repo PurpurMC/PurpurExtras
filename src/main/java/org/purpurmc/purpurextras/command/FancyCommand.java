@@ -1,4 +1,4 @@
-package me.youhavetrouble.purpurextras.command;
+package org.purpurmc.purpurextras.command;
 
 import com.destroystokyo.paper.brigadier.BukkitBrigadierCommandSource;
 import com.destroystokyo.paper.event.brigadier.CommandRegisteredEvent;

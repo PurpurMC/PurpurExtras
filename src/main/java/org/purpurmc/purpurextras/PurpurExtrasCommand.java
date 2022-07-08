@@ -1,4 +1,4 @@
-package me.youhavetrouble.purpurextras;
+package org.purpurmc.purpurextras;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

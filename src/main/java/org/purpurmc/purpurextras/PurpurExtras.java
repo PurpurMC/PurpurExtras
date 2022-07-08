@@ -1,7 +1,7 @@
-package me.youhavetrouble.purpurextras;
+package org.purpurmc.purpurextras;
 
-import me.youhavetrouble.purpurextras.command.FancyCommand;
-import me.youhavetrouble.purpurextras.modules.PurpurExtrasModule;
+import org.purpurmc.purpurextras.command.FancyCommand;
+import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;

@@ -1,8 +1,9 @@
-package me.youhavetrouble.purpurextras;
+package org.purpurmc.purpurextras;
 
 import me.youhavetrouble.purpurextras.listeners.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.purpurmc.purpurextras.listeners.DispenserListener;
 
 import java.io.File;
 import java.io.IOException;

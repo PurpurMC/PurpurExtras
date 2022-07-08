@@ -1,6 +1,6 @@
 name: PurpurExtras
 version: ${project.version}
-main: me.youhavetrouble.purpurextras.PurpurExtras
+main: org.purpurmc.purpurextras.PurpurExtras
 api-version: 1.18
 authors: [ YouHaveTrouble ]
 description: "\"This should be a plugin\" features from Purpur"

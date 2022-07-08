@@ -1,8 +1,8 @@
-package me.youhavetrouble.purpurextras.listeners;
+package org.purpurmc.purpurextras.listeners;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
