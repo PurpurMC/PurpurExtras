@@ -19,31 +19,31 @@ public class UpgradeWoodToStoneToolsModule implements PurpurExtrasModule {
                 new ItemStack(Material.STONE_PICKAXE),
                 new RecipeChoice.MaterialChoice(Material.WOODEN_PICKAXE),
                 new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.BLACKSTONE), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("axe_wood_to_stone"),
                 new ItemStack(Material.STONE_AXE),
                 new RecipeChoice.MaterialChoice(Material.WOODEN_AXE),
                 new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.BLACKSTONE), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("shovel_wood_to_stone"),
                 new ItemStack(Material.STONE_SHOVEL),
                 new RecipeChoice.MaterialChoice(Material.WOODEN_SHOVEL),
                 new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.BLACKSTONE), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("hoe_wood_to_stone"),
                 new ItemStack(Material.STONE_HOE),
                 new RecipeChoice.MaterialChoice(Material.WOODEN_HOE),
                 new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.BLACKSTONE), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("sword_wood_to_stone"),
                 new ItemStack(Material.STONE_SWORD),
                 new RecipeChoice.MaterialChoice(Material.WOODEN_SWORD),
                 new RecipeChoice.MaterialChoice(Material.COBBLESTONE, Material.BLACKSTONE), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
     }
 
     @Override

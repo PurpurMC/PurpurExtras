@@ -19,31 +19,31 @@ public class UpgradeStoneToIronToolsModule implements PurpurExtrasModule {
                 new ItemStack(Material.IRON_PICKAXE),
                 new RecipeChoice.MaterialChoice(Material.STONE_PICKAXE),
                 new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("axe_stone_to_iron"),
                 new ItemStack(Material.IRON_AXE),
                 new RecipeChoice.MaterialChoice(Material.STONE_AXE),
                 new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("shovel_stone_to_iron"),
                 new ItemStack(Material.IRON_SHOVEL),
                 new RecipeChoice.MaterialChoice(Material.STONE_SHOVEL),
                 new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("hoe_stone_to_iron"),
                 new ItemStack(Material.IRON_HOE),
                 new RecipeChoice.MaterialChoice(Material.STONE_HOE),
                 new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
         recipe = new SmithingRecipe(
                 PurpurExtras.key("sword_stone_to_iron"),
                 new ItemStack(Material.IRON_SWORD),
                 new RecipeChoice.MaterialChoice(Material.STONE_SWORD),
                 new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
-        RecipeUtil.addRecipe(recipe);
+        RecipeUtil.addSmithingRecipe(recipe);
     }
 
     @Override
