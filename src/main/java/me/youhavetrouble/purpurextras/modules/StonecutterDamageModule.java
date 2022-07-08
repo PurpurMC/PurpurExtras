@@ -1,7 +1,7 @@
 package me.youhavetrouble.purpurextras.modules;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
-import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import me.youhavetrouble.purpurextras.PurpurConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

@@ -17,7 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class ColoredBossBarsModule implements PurpurExtrasModule, Listener {
 
-    private final NamespacedKey dyeColor = new NamespacedKey(PurpurExtras.getInstance(), "dyedColor");
+    private final NamespacedKey dyeColor = PurpurExtras.key("dyedColor");
 
     protected ColoredBossBarsModule() {}
     @Override

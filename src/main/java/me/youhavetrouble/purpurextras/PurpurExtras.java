@@ -1,11 +1,12 @@
 package me.youhavetrouble.purpurextras;
 
 import me.youhavetrouble.purpurextras.command.FancyCommand;
-import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import me.youhavetrouble.purpurextras.modules.PurpurExtrasModule;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
@@ -33,11 +34,15 @@ public final class PurpurExtras extends JavaPlugin {
 
         instance = this;
         config = new PurpurConfig();
+
         PluginCommand command = getCommand("purpurextras");
         if (command != null) {
             command.setExecutor(new PurpurExtrasCommand());
             getServer().getPluginManager().registerEvents(new FancyCommand(), this);
         }
+
+        PurpurExtrasModule.reloadModules();
+        getPurpurConfig().saveConfig();
 
     }
 
@@ -51,9 +56,14 @@ public final class PurpurExtras extends JavaPlugin {
 
     protected void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            config = new PurpurConfig();
+            PurpurExtrasModule.reloadModules();
+            getPurpurConfig().saveConfig();
             commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
         });
+    }
+
+    public static NamespacedKey key(String string) {
+        return new NamespacedKey(PurpurExtras.getInstance(), string);
     }
 
     public void registerListener(Class<?> clazz) {

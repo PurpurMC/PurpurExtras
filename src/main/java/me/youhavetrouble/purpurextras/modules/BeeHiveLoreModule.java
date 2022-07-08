@@ -1,7 +1,7 @@
 package me.youhavetrouble.purpurextras.modules;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
-import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import me.youhavetrouble.purpurextras.PurpurConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -20,11 +20,10 @@ import java.util.List;
 public class BeeHiveLoreModule implements PurpurExtrasModule, Listener {
 
     private final String beeHiveLoreBees, beeHiveLoreHoney;
-    private final MiniMessage miniMessage= PurpurExtras.getInstance().miniMessage;
+    private final MiniMessage miniMessage = PurpurExtras.getInstance().miniMessage;
 
     protected BeeHiveLoreModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
-
         this.beeHiveLoreBees = config.getString("settings.items.beehive-lore.bees", "<reset><gray>Bees: <bees>/<maxbees>");
         this.beeHiveLoreHoney = config.getString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
     }
@@ -45,9 +44,7 @@ public class BeeHiveLoreModule implements PurpurExtrasModule, Listener {
 
         BlockState blockState = event.getBlockState();
 
-        if (!blockState.getType().equals(Material.BEE_NEST)
-                && !blockState.getType().equals(Material.BEEHIVE))
-            return;
+        if (!blockState.getType().equals(Material.BEE_NEST) && !blockState.getType().equals(Material.BEEHIVE)) return;
 
         org.bukkit.block.Beehive beehive = (org.bukkit.block.Beehive) blockState;
         org.bukkit.block.data.type.Beehive beehiveData = (org.bukkit.block.data.type.Beehive) blockState.getBlockData();

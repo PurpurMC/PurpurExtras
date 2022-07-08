@@ -1,12 +1,8 @@
-package me.youhavetrouble.purpurextras.config;
+package me.youhavetrouble.purpurextras;
 
-import me.youhavetrouble.purpurextras.PurpurExtras;
 import me.youhavetrouble.purpurextras.listeners.*;
-import me.youhavetrouble.purpurextras.recipes.ToolUpgradesRecipes;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.HandlerList;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,47 +11,24 @@ import java.util.logging.Logger;
 
 public class PurpurConfig {
 
-    Logger logger;
-    FileConfiguration config;
-    File configPath;
+    private final Logger logger;
+    private final FileConfiguration config;
+    private final File configPath;
 
     private final PurpurExtras plugin = PurpurExtras.getInstance();
     public boolean dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe,
             dispenserBreakBlockShears, dispenserBreakBlockAxe, dispenserShearPumpkin, dispenserActivatesJukebox;
-    public final boolean upgradeWoodToStoneTools;
-    public final boolean upgradeStoneToIronTools;
-    public final boolean upgradeIronToDiamondTools;
 
-
-    public final HashMap<String, String> lightningTransformEntities = new HashMap<>();
-
-    public PurpurConfig() {
+    protected PurpurConfig() {
         plugin.reloadConfig();
         logger = plugin.getLogger();
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
 
-        enableFeature(GrindstoneEnchantsBooksListener.class, getBoolean("settings.grindstone.gives-enchants-back", false));
-
-        boolean lightningTransformEntities = getBoolean("settings.lightning-transforms-entities.enabled", false);
-        handleLightningTransformedEntities(lightningTransformEntities);
-
         handleBetterDispenser();
-
-        this.upgradeWoodToStoneTools = getBoolean("settings.smithing-table.tools.wood-to-stone", false);
-        this.upgradeStoneToIronTools = getBoolean("settings.smithing-table.tools.stone-to-iron", false);
-        this.upgradeIronToDiamondTools = getBoolean("settings.smithing-table.tools.iron-to-diamond", false);
-
-        ToolUpgradesRecipes.addUpgradeRecipes(
-                upgradeWoodToStoneTools,
-                upgradeStoneToIronTools,
-                upgradeIronToDiamondTools
-        );
-
-        saveConfig();
     }
 
-    private void saveConfig() {
+    protected void saveConfig() {
         try {
             config.save(configPath);
         } catch (IOException e) {
@@ -103,21 +76,6 @@ public class PurpurConfig {
         return def;
     }
 
-    private void handleLightningTransformedEntities(boolean enable) {
-        Map<String, Object> defaults = new HashMap<>();
-        defaults.put("villager", "witch");
-        defaults.put("pig", "zombie_piglin");
-        ConfigurationSection section = getConfigSection("settings.lightning-transforms-entities.entities", defaults);
-        if (!enable) return;
-        for (String key : section.getKeys(false)) {
-            String value = section.getString(key);
-            lightningTransformEntities.put(key, value);
-        }
-        if (lightningTransformEntities.isEmpty()) return;
-
-        plugin.getServer().getPluginManager().registerEvents(new LightningTransformsMobsListener(lightningTransformEntities), plugin);
-    }
-
     private void handleBetterDispenser() {
         this.dispenserBreakBlockPickaxe = getBoolean("settings.dispenser.break-blocks.pickaxe", false);
         this.dispenserBreakBlockShovel = getBoolean("settings.dispenser.break-blocks.shovel", false);
@@ -140,8 +98,4 @@ public class PurpurConfig {
         }
     }
 
-    private void enableFeature(Class<?> listenerClass, boolean enable) {
-        if (enable)
-            plugin.registerListener(listenerClass);
-    }
 }

@@ -1,7 +1,7 @@
 package me.youhavetrouble.purpurextras.modules;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
-import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import me.youhavetrouble.purpurextras.PurpurConfig;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;

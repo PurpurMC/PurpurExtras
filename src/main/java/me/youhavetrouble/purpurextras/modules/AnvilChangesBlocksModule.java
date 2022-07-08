@@ -1,7 +1,7 @@
 package me.youhavetrouble.purpurextras.modules;
 
 import me.youhavetrouble.purpurextras.PurpurExtras;
-import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import me.youhavetrouble.purpurextras.PurpurConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -34,7 +35,7 @@ public class AnvilChangesBlocksModule implements PurpurExtrasModule, Listener {
         for (String key : section.getKeys(false)) {
             String matString = section.getString(key);
             if (matString == null) continue;
-            Material materialFrom = Material.getMaterial(key.toUpperCase());
+            Material materialFrom = Material.getMaterial(key.toUpperCase(Locale.ENGLISH));
 
             if (materialFrom == null || !materialFrom.isBlock()) {
                 logger.warning(key + " is not valid block material.");
