@@ -23,8 +23,6 @@ public interface PurpurExtrasModule {
         modules.clear();
         HandlerList.unregisterAll(PurpurExtras.getInstance());
 
-        // TODO annotation scanner maybe
-
         modules.add(new BeeHiveLoreModule());
         modules.add(new AnvilChangesBlocksModule());
         modules.add(new ChorusFlowerAlwaysDropsModule());
@@ -47,7 +45,6 @@ public interface PurpurExtrasModule {
 
         modules.forEach(module -> {
             if (module.shouldEnable()) {
-                PurpurExtras.getInstance().getLogger().info("Enabling module "+module);
                 module.enable();
             }
         });
