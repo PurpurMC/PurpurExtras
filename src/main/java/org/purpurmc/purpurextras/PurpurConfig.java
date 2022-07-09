@@ -1,10 +1,7 @@
 package org.purpurmc.purpurextras;
 
-import me.youhavetrouble.purpurextras.listeners.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.purpurmc.purpurextras.listeners.DispenserListener;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -13,25 +10,21 @@ import java.util.logging.Logger;
 public class PurpurConfig {
 
     private final Logger logger;
-    private final FileConfiguration config;
+    private FileConfiguration config;
     private final File configPath;
 
-    private final PurpurExtras plugin = PurpurExtras.getInstance();
-    public boolean dispenserBreakBlockPickaxe, dispenserBreakBlockShovel, dispenserBreakBlockHoe,
-            dispenserBreakBlockShears, dispenserBreakBlockAxe, dispenserShearPumpkin, dispenserActivatesJukebox;
-
     protected PurpurConfig() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.reloadConfig();
         logger = plugin.getLogger();
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
-
-        handleBetterDispenser();
     }
 
     protected void saveConfig() {
         try {
             config.save(configPath);
+            config = PurpurExtras.getInstance().getConfig();
         } catch (IOException e) {
             logger.severe("Failed to save configuration file! - " + e.getLocalizedMessage());
         }
@@ -75,28 +68,6 @@ public class PurpurConfig {
             return config.getStringList(path);
         config.set(path, def);
         return def;
-    }
-
-    private void handleBetterDispenser() {
-        this.dispenserBreakBlockPickaxe = getBoolean("settings.dispenser.break-blocks.pickaxe", false);
-        this.dispenserBreakBlockShovel = getBoolean("settings.dispenser.break-blocks.shovel", false);
-        this.dispenserBreakBlockHoe = getBoolean("settings.dispenser.break-blocks.hoe", false);
-        this.dispenserBreakBlockAxe = getBoolean("settings.dispenser.break-blocks.axe", false);
-        this.dispenserBreakBlockShears = getBoolean("settings.dispenser.break-blocks.shears", false);
-
-        this.dispenserShearPumpkin = getBoolean("settings.dispenser.shears-shear-pumpkin", false);
-        this.dispenserActivatesJukebox = getBoolean("settings.dispenser.puts-discs-in-jukebox", false);
-
-        if (dispenserBreakBlockPickaxe
-                || dispenserBreakBlockAxe
-                || dispenserBreakBlockShovel
-                || dispenserBreakBlockHoe
-                || dispenserBreakBlockShears
-                || dispenserShearPumpkin
-                || dispenserActivatesJukebox
-        ) {
-            plugin.registerListener(DispenserListener.class);
-        }
     }
 
 }

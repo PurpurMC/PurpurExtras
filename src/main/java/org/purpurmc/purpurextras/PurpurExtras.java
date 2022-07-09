@@ -9,10 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.InvocationTargetException;
 
 public final class PurpurExtras extends JavaPlugin {
 
@@ -42,8 +40,7 @@ public final class PurpurExtras extends JavaPlugin {
         }
 
         PurpurExtrasModule.reloadModules();
-        getPurpurConfig().saveConfig();
-
+        config.saveConfig();
     }
 
     public static PurpurConfig getPurpurConfig() {
@@ -54,25 +51,17 @@ public final class PurpurExtras extends JavaPlugin {
         return instance;
     }
 
-    protected void reloadPurpurExtrasConfig(CommandSender commandSender) {
+    void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            reloadConfig();
+            config.saveConfig();
             PurpurExtrasModule.reloadModules();
-            getPurpurConfig().saveConfig();
             commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
         });
     }
 
     public static NamespacedKey key(String string) {
         return new NamespacedKey(PurpurExtras.getInstance(), string);
-    }
-
-    public void registerListener(Class<?> clazz) {
-        try {
-            Listener listener = (org.bukkit.event.Listener) clazz.getConstructor().newInstance();
-            getServer().getPluginManager().registerEvents(listener, this);
-        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 
 }

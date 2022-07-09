@@ -20,7 +20,6 @@ public interface PurpurExtrasModule {
     HashSet<PurpurExtrasModule> modules = new HashSet<>();
 
     static void reloadModules() {
-        PurpurExtras.getInstance().reloadConfig();
         modules.clear();
         HandlerList.unregisterAll(PurpurExtras.getInstance());
 
@@ -44,9 +43,13 @@ public interface PurpurExtrasModule {
         modules.add(new UpgradeWoodToStoneToolsModule());
         modules.add(new UpgradeStoneToIronToolsModule());
         modules.add(new UpgradeIronToDiamondsToolsModule());
+        modules.add(new DispenserBlocksModule());
 
         modules.forEach(module -> {
-            if (module.shouldEnable()) module.enable();
+            if (module.shouldEnable()) {
+                PurpurExtras.getInstance().getLogger().info("Enabling module "+module);
+                module.enable();
+            }
         });
 
     }
