@@ -1,8 +1,10 @@
-package me.youhavetrouble.purpurextras.listeners;
+package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import me.youhavetrouble.entiddy.Entiddy;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -16,14 +18,35 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class LightningTransformsMobsListener implements Listener {
+public class LightningTransformsMobsModule implements PurpurExtrasModule, Listener {
 
-    private static final HashMap<String, Object> entities = new HashMap<>();
+    private final HashMap<String, Object> entities = new HashMap<>();
 
-    public LightningTransformsMobsListener(Map<String, String> lightningTransformEntities) {
+    protected LightningTransformsMobsModule() {
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put("villager", "witch");
+        defaults.put("pig", "zombie_piglin");
+        ConfigurationSection section = PurpurExtras.getPurpurConfig().getConfigSection("settings.lightning-transforms-entities.entities", defaults);
+        HashMap<String, String> lightningTransformEntities = new HashMap<>();
+        for (String key : section.getKeys(false)) {
+            String value = section.getString(key);
+            lightningTransformEntities.put(key, value);
+        }
         for (Map.Entry<String, String> entry : lightningTransformEntities.entrySet()) {
             getEntityTypeOrSpecial(entry.getKey(), entry.getValue());
         }
+    }
+
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        if (entities.isEmpty()) return false;
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.lightning-transforms-entities.enabled", false);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -34,7 +57,7 @@ public class LightningTransformsMobsListener implements Listener {
         if (entity.getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.LIGHTNING)) {
             event.setCancelled(true);
             return;
-        };
+        }
         Location location = entity.getLocation();
         Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
         if (specialEntity != null) {

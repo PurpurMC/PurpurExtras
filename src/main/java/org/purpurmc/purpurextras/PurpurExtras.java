@@ -1,36 +1,22 @@
-package me.youhavetrouble.purpurextras;
+package org.purpurmc.purpurextras;
 
-import me.youhavetrouble.purpurextras.command.FancyCommand;
-import me.youhavetrouble.purpurextras.config.PurpurConfig;
+import org.purpurmc.purpurextras.command.FancyCommand;
+import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.InvocationTargetException;
 
 public final class PurpurExtras extends JavaPlugin {
 
     private static PurpurConfig config;
     private static PurpurExtras instance;
-
-    public final MiniMessage miniMessage = MiniMessage.builder().tags(
-            TagResolver.builder()
-                    .resolver(StandardTags.color())
-                    .resolver(StandardTags.decorations())
-                    .resolver(StandardTags.gradient())
-                    .resolver(StandardTags.font())
-                    .resolver(StandardTags.reset())
-                    .resolver(StandardTags.rainbow())
-                    .resolver(StandardTags.translatable())
-                    .build()
-    ).build();
+    public final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     @Override
     public void onEnable() {
@@ -46,12 +32,15 @@ public final class PurpurExtras extends JavaPlugin {
 
         instance = this;
         config = new PurpurConfig();
+
         PluginCommand command = getCommand("purpurextras");
         if (command != null) {
             command.setExecutor(new PurpurExtrasCommand());
             getServer().getPluginManager().registerEvents(new FancyCommand(), this);
         }
 
+        PurpurExtrasModule.reloadModules();
+        config.saveConfig();
     }
 
     public static PurpurConfig getPurpurConfig() {
@@ -62,20 +51,17 @@ public final class PurpurExtras extends JavaPlugin {
         return instance;
     }
 
-    protected void reloadPurpurExtrasConfig(CommandSender commandSender) {
+    void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            config = new PurpurConfig();
+            reloadConfig();
+            config.saveConfig();
+            PurpurExtrasModule.reloadModules();
             commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
         });
     }
 
-    public void registerListener(Class<?> clazz) {
-        try {
-            Listener listener = (org.bukkit.event.Listener) clazz.getConstructor().newInstance();
-            getServer().getPluginManager().registerEvents(listener, this);
-        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    public static NamespacedKey key(String string) {
+        return new NamespacedKey(PurpurExtras.getInstance(), string);
     }
 
 }

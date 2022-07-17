@@ -1,5 +1,6 @@
-package me.youhavetrouble.purpurextras.listeners;
+package org.purpurmc.purpurextras.modules;
 
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,10 +18,23 @@ import org.purpurmc.purpur.event.inventory.GrindstoneTakeResultEvent;
 
 import java.util.Map;
 
-// Yoinked from https://gist.github.com/BillyGalbreath/de0f899a27b39daad5f5bf7c00e11045
-public class GrindstoneEnchantsBooksListener implements Listener {
+// Listeners yoinked from https://gist.github.com/BillyGalbreath/de0f899a27b39daad5f5bf7c00e11045
+public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule, Listener {
 
-    public static final ItemStack BOOK = new ItemStack(Material.BOOK);
+    private final ItemStack BOOK = new ItemStack(Material.BOOK);
+
+    protected GrindstoneEnchantsBooksModule() {}
+
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.grindstone.gives-enchants-back", false);
+    }
 
     @EventHandler
     public void on(GrindstoneTakeResultEvent event) {
@@ -39,18 +53,18 @@ public class GrindstoneEnchantsBooksListener implements Listener {
         Map<Enchantment, Integer> enchants;
         if (upperItem.getType() == Material.ENCHANTED_BOOK) {
             if (!upperItem.hasItemMeta()) {
-                return; // no enchants to extract
+                return;
             }
             enchants = ((EnchantmentStorageMeta) upperItem.getItemMeta()).getStoredEnchants();
         } else {
             if (!upperItem.hasEnchants()) {
-                return; // no enchants to extract
+                return;
             }
             enchants = upperItem.getEnchants();
         }
 
         if (enchants.isEmpty()) {
-            return; // no enchants to extract
+            return;
         }
 
         Player player = event.getPlayer();
@@ -62,7 +76,6 @@ public class GrindstoneEnchantsBooksListener implements Listener {
             if (entry.getKey().isCursed()) {
                 continue; // grindstones don't remove curses
             }
-
             if (player.getGameMode() != GameMode.CREATIVE) {
                 if (!playerInventory.containsAtLeast(BOOK, 1)) {
                     return; // no more books to extract to
@@ -73,22 +86,16 @@ public class GrindstoneEnchantsBooksListener implements Listener {
                 }
             }
 
-            // create enchanted book
             ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
             meta.addStoredEnchant(entry.getKey(), entry.getValue(), true);
             book.setItemMeta(meta);
 
-            // add enchanted book to player inventory
             playerInventory.addItem(book).forEach((index, stack) -> {
-                // drop on ground if didn't fit in inventory
                 Item drop = world.dropItemNaturally(location, stack);
                 drop.setPickupDelay(0);
             });
-
             event.setExperienceAmount(0);
         }
     }
 }
-
-

@@ -1,6 +1,7 @@
-package me.youhavetrouble.purpurextras.listeners;
+package org.purpurmc.purpurextras.modules;
 
-import me.youhavetrouble.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.PurpurConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -13,20 +14,37 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import java.util.List;
 
-public class BeehiveLoreListener implements Listener {
+public class BeeHiveLoreModule implements PurpurExtrasModule, Listener {
 
+    private final String beeHiveLoreBees, beeHiveLoreHoney;
     private final MiniMessage miniMessage = PurpurExtras.getInstance().miniMessage;
+
+    protected BeeHiveLoreModule() {
+        PurpurConfig config = PurpurExtras.getPurpurConfig();
+        this.beeHiveLoreBees = config.getString("settings.items.beehive-lore.bees", "<reset><gray>Bees: <bees>/<maxbees>");
+        this.beeHiveLoreHoney = config.getString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
+    }
+
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.items.beehive-lore.enabled", false);
+    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBeehiveDrop(BlockDropItemEvent event) {
 
         BlockState blockState = event.getBlockState();
 
-        if (!blockState.getType().equals(Material.BEE_NEST)
-                && !blockState.getType().equals(Material.BEEHIVE))
-            return;
+        if (!blockState.getType().equals(Material.BEE_NEST) && !blockState.getType().equals(Material.BEEHIVE)) return;
 
         org.bukkit.block.Beehive beehive = (org.bukkit.block.Beehive) blockState;
         org.bukkit.block.data.type.Beehive beehiveData = (org.bukkit.block.data.type.Beehive) blockState.getBlockData();
@@ -63,17 +81,16 @@ public class BeehiveLoreListener implements Listener {
     }
 
     private Component getBeesComponent(int bees, int maxBees) {
-        String beeHiveLoreBeesString = PurpurExtras.getPurpurConfig().beeHiveLoreBees;
+        String beeHiveLoreBeesString = beeHiveLoreBees;
         beeHiveLoreBeesString = beeHiveLoreBeesString.replaceAll("<bees>", String.valueOf(bees));
         beeHiveLoreBeesString = beeHiveLoreBeesString.replaceAll("<maxbees>", String.valueOf(maxBees));
         return miniMessage.deserializeOrNull(beeHiveLoreBeesString);
     }
 
     private Component getHoneyComponent(int honey, int maxHoney) {
-        String beeHiveLoreHoneyString = PurpurExtras.getPurpurConfig().beeHiveLoreHoney;
+        String beeHiveLoreHoneyString = beeHiveLoreHoney;
         beeHiveLoreHoneyString = beeHiveLoreHoneyString.replaceAll("<honey>", String.valueOf(honey));
         beeHiveLoreHoneyString = beeHiveLoreHoneyString.replaceAll("<maxhoney>", String.valueOf(maxHoney));
         return miniMessage.deserializeOrNull(beeHiveLoreHoneyString);
     }
-
 }

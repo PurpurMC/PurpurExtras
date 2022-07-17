@@ -1,13 +1,26 @@
-package me.youhavetrouble.purpurextras.listeners;
+package org.purpurmc.purpurextras.modules;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.spigotmc.event.entity.EntityMountEvent;
 
-public class ForceNametaggedForRidingListener implements Listener {
+public class ForceNametaggedForRidingModule implements PurpurExtrasModule, Listener {
+
+    protected ForceNametaggedForRidingModule() {}
+    @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.rideables.mob-needs-to-be-nametagged-to-ride", false);
+    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onMount(EntityMountEvent event) {
@@ -38,5 +51,4 @@ public class ForceNametaggedForRidingListener implements Listener {
         if (vehicle.getCustomName() != null && player.hasPermission("allow.ride."+vehicle.getType().getKey().getKey())) return;
         event.setCancelled(true);
     }
-
 }
