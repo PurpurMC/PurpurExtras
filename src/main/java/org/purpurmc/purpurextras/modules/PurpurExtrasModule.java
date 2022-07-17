@@ -37,7 +37,7 @@ public interface PurpurExtrasModule {
         modules.add(new OpenIronDoorsWithHandModule());
         modules.add(new LightningTransformsMobsModule());
         modules.add(new GrindstoneEnchantsBooksModule());
-
+        modules.add(new InvisibleItemFrameModule());
         modules.add(new UpgradeWoodToStoneToolsModule());
         modules.add(new UpgradeStoneToIronToolsModule());
         modules.add(new UpgradeIronToDiamondsToolsModule());
