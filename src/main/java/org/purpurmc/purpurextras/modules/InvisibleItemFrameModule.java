@@ -18,11 +18,13 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
 
     protected InvisibleItemFrameModule() {}
 
+    private final String invisFramePermission = "purpurextras.invisibleframes";
+
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        registerPermission("purpurextras.invisibleframes", "Allows player to shift-right-click an item frame to turn it invisible", PermissionDefault.OP);
+        registerPermission(invisFramePermission, "Allows player to shift-right-click an item frame to turn it invisible", PermissionDefault.OP);
     }
 
     @Override
