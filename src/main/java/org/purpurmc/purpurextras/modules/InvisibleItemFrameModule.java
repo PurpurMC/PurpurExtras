@@ -40,7 +40,7 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
         if(!player.isSneaking()) return;
         if(!(entity instanceof ItemFrame itemFrame)) return;
         if(itemFrame.getItem().getType().equals(Material.AIR)) return;
-        if(!player.hasPermission("purpurextras.invisibleframes")) return;
+        if(!player.hasPermission(invisFramePermission)) return;
         event.setCancelled(true);
         itemFrame.setVisible(!itemFrame.isVisible());
         itemFrame.setFixed(!itemFrame.isFixed());
