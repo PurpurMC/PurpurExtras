@@ -20,6 +20,7 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
     private final int configBuildHeight;
     private final String noPermissionMessageContent;
     private final boolean noPermissionMessage;
+    private final String netherBuildHeightBypassPermission = "purpurextras.netherbuildheightbypass";
 
     protected NetherBuildHeightModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
@@ -32,7 +33,7 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        registerPermission("purpurextras.netherbypass", "Allows player to bypass the configured max nether build height", PermissionDefault.OP);
+        registerPermission(netherBuildHeightBypassPermission, "Allows player to bypass the configured max nether build height", PermissionDefault.OP);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
         Player player = event.getPlayer();
         if(!(block.getWorld().getEnvironment().equals(World.Environment.NETHER))) return;
         if(block.getLocation().getBlockY() < configBuildHeight) return;
-        if(player.hasPermission("purpurextras.netherbypass")) return;
+        if(player.hasPermission(netherBuildHeightBypassPermission)) return;
         if(noPermissionMessage){
             player.sendActionBar(MiniMessage.miniMessage().deserialize(noPermissionMessageContent, Placeholder.unparsed("height", String.valueOf(configBuildHeight))));
         }
