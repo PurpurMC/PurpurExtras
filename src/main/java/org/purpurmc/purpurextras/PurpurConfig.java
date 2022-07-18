@@ -51,6 +51,13 @@ public class PurpurConfig {
         return def;
     }
 
+    public int getInt(String path, int def) {
+        if (config.isSet(path))
+            return config.getInt(path, def);
+        config.set(path, def);
+        return def;
+    }
+
     /**
      * @param defKV Default key-value map
      */
