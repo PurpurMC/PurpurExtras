@@ -42,7 +42,7 @@ public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule, Li
 
     @Override
     public boolean shouldEnable() {
-        return PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay-settings.spawner-placement-requires-specific-pemission", false);
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay-settings.spawner-placement-requires-specific-permission", false);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
