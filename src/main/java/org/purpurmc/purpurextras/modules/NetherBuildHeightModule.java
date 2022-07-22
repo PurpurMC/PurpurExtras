@@ -18,14 +18,12 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
 
     private final int configBuildHeight;
     private final String noPermissionMessageContent;
-    private final boolean noPermissionMessage;
     private final String netherBuildHeightBypassPermission = "purpurextras.netherbuildheightbypass";
 
     protected NetherBuildHeightModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
         this.configBuildHeight = config.getInt("settings.block-building-above-nether.height-limit", 128);
-        this.noPermissionMessage = config.getBoolean("settings.block-building-above-nether.no-permission-message.enabled", false);
-        this.noPermissionMessageContent = config.getString("settings.block-building-above-nether.no-permission-message.message", "<red>Max build height in this world is: <gold><height>");
+        this.noPermissionMessageContent = config.getString("settings.block-building-above-nether.no-permission-message", "<red>Max build height in this world is: <gold><height>");
     }
 
     @Override
@@ -47,7 +45,7 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
         if (!(block.getWorld().getEnvironment().equals(World.Environment.NETHER))) return;
         if (block.getLocation().getBlockY() < configBuildHeight) return;
         if (player.hasPermission(netherBuildHeightBypassPermission)) return;
-        if (noPermissionMessage) {
+        if (!"".equals(noPermissionMessageContent)) {
             player.sendActionBar(PurpurExtras.getInstance().miniMessage.deserialize(noPermissionMessageContent, Placeholder.unparsed("height", String.valueOf(configBuildHeight))));
         }
         event.setCancelled(true);
