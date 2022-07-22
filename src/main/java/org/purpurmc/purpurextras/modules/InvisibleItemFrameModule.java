@@ -10,9 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurExtras;
-
-import static org.bukkit.util.permissions.DefaultPermissions.registerPermission;
 
 public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
 
@@ -28,19 +27,22 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        registerPermission(invisFramePermission, "Allows player to shift-right-click an item frame to turn it invisible", PermissionDefault.OP);
+        DefaultPermissions.registerPermission(invisFramePermission, "Allows player to shift-right-click an item frame to turn it invisible", PermissionDefault.OP);
         return PurpurExtras.getPurpurConfig().getBoolean("settings.blocks.shift-right-click-for-invisible-item-frames", false);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onItemFrameInteract(PlayerInteractEntityEvent event){
+        if (event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
+
         Player player = event.getPlayer();
+        if (!player.isSneaking()) return;
+
         Entity entity = event.getRightClicked();
-        if(event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
-        if(!player.isSneaking()) return;
-        if(!(entity instanceof ItemFrame itemFrame)) return;
-        if(itemFrame.getItem().getType().equals(Material.AIR)) return;
-        if(!player.hasPermission(invisFramePermission)) return;
+        if (!(entity instanceof ItemFrame itemFrame)) return;
+        if (itemFrame.getItem().getType().equals(Material.AIR)) return;
+        if (!player.hasPermission(invisFramePermission)) return;
+
         event.setCancelled(true);
         itemFrame.setVisible(!itemFrame.isVisible());
         itemFrame.setFixed(!itemFrame.isFixed());
