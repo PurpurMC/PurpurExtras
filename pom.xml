@@ -6,7 +6,7 @@
 
     <groupId>me.youhavetrouble</groupId>
     <artifactId>PurpurExtras</artifactId>
-    <version>1.19.0</version>
+    <version>1.19.1</version>
     <packaging>jar</packaging>
 
     <name>PurpurExtras</name>

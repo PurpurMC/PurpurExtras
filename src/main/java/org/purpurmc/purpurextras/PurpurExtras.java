@@ -53,9 +53,9 @@ public final class PurpurExtras extends JavaPlugin {
 
     void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            reloadConfig();
-            config.saveConfig();
+            config = new PurpurConfig();
             PurpurExtrasModule.reloadModules();
+            config.saveConfig();
             commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
         });
     }
