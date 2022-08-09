@@ -7,6 +7,7 @@ import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
 import org.bukkit.permissions.PermissionDefault;
@@ -24,7 +25,7 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
     protected SleepPercentageMessageModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
         this.playerSleepMessage = config.getString("settings.chat.send-sleep-percentage-message.player-sleeping", "<grey><playername> has fallen asleep. <sleeping> out of <needed> required players in <worldname> are sleeping.");
-        this.nightSkipMessage  = config.getString("settings.chat.send-sleep-percentage-message.skipping-night", "<grey>Enough players have slept! Skipping through the night in <worldname>.");
+        this.nightSkipMessage = config.getString("settings.chat.send-sleep-percentage-message.skipping-night", "<grey>Enough players have slept! Skipping through the night in <worldname>.");
     }
 
     @Override
@@ -36,12 +37,14 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
     @Override
     public boolean shouldEnable() {
         DefaultPermissions.registerPermission(sleepMessageBypass, "Allows player to not display a message in chat when they sleep", PermissionDefault.OP);
+        if ((playerSleepMessage == null || playerSleepMessage.isBlank()) && (nightSkipMessage == null || nightSkipMessage.isBlank()))
+            return false;
         return PurpurExtras.getPurpurConfig().getBoolean("settings.chat.send-sleep-percentage-message.enabled", false);
     }
 
-    @EventHandler
-    public void onPlayerDeepSleep(PlayerDeepSleepEvent event){
-        if (playerSleepMessage == null || playerSleepMessage.isEmpty()) return;
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerDeepSleep(PlayerDeepSleepEvent event) {
+        if (playerSleepMessage == null || playerSleepMessage.isBlank()) return;
         if (event.getPlayer().hasPermission(sleepMessageBypass)) return;
         World world = event.getPlayer().getWorld();
         String playerName = event.getPlayer().getName();
@@ -61,10 +64,10 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
                 Placeholder.unparsed("worldname", worldName)));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void nightSkip(TimeSkipEvent event) {
         if (!event.getSkipReason().equals(TimeSkipEvent.SkipReason.NIGHT_SKIP)) return;
-        if (nightSkipMessage == null || nightSkipMessage.isEmpty()) return;
+        if (nightSkipMessage == null || nightSkipMessage.isBlank()) return;
         String worldName = event.getWorld().getName();
         event.getWorld().sendMessage(MiniMessage.miniMessage().deserialize(nightSkipMessage, Placeholder.unparsed("worldname", worldName)));
     }
