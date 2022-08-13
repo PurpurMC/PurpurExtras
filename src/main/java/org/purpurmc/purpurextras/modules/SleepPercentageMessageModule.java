@@ -18,6 +18,7 @@ import org.purpurmc.purpurextras.PurpurExtras;
 import java.util.List;
 
 public class SleepPercentageMessageModule implements PurpurExtrasModule, Listener {
+    MiniMessage miniMsg = PurpurExtras.getInstance().miniMessage;
     private final String playerSleepMessage;
     private final String nightSkipMessage;
     private final String sleepMessageBypass = "purpurextras.sleepmessagebypass";
@@ -50,14 +51,14 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
         String playerName = event.getPlayer().getName();
         String worldName = world.getName();
         int currentSleepCount = 0;
-        int worldOnlineTotal = world.getPlayerCount();
+        int worldOnlineTotal = world.getPlayers().size();
         Integer worldSleepPercent = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
         Integer neededSleepers = (int) Math.ceil((worldSleepPercent / 100.0) * worldOnlineTotal);
         List<Player> playerList = world.getPlayers();
         for (Player player : playerList) {
             if (player.isDeeplySleeping()) currentSleepCount += 1;
         }
-        world.sendMessage(MiniMessage.miniMessage().deserialize(playerSleepMessage,
+        world.sendMessage(miniMsg.deserialize(playerSleepMessage,
                 Placeholder.unparsed("playername", playerName),
                 Placeholder.unparsed("sleeping", String.valueOf(currentSleepCount)),
                 Placeholder.unparsed("needed", String.valueOf(neededSleepers)),
@@ -69,6 +70,6 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
         if (!event.getSkipReason().equals(TimeSkipEvent.SkipReason.NIGHT_SKIP)) return;
         if (nightSkipMessage == null || nightSkipMessage.isBlank()) return;
         String worldName = event.getWorld().getName();
-        event.getWorld().sendMessage(MiniMessage.miniMessage().deserialize(nightSkipMessage, Placeholder.unparsed("worldname", worldName)));
+        event.getWorld().sendMessage(miniMsg.deserialize(nightSkipMessage, Placeholder.unparsed("worldname", worldName)));
     }
 }
