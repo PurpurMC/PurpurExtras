@@ -18,9 +18,8 @@ import org.purpurmc.purpurextras.PurpurExtras;
 import java.util.List;
 
 public class SleepPercentageMessageModule implements PurpurExtrasModule, Listener {
-    MiniMessage miniMsg = PurpurExtras.getInstance().miniMessage;
-    private final String playerSleepMessage;
-    private final String nightSkipMessage;
+    private final MiniMessage miniMsg = PurpurExtras.getInstance().miniMessage;
+    private final String playerSleepMessage, nightSkipMessage;
     private final String sleepMessageBypass = "purpurextras.sleepmessagebypass";
 
     protected SleepPercentageMessageModule() {
@@ -48,13 +47,13 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
         if (playerSleepMessage == null || playerSleepMessage.isBlank()) return;
         if (event.getPlayer().hasPermission(sleepMessageBypass)) return;
         World world = event.getPlayer().getWorld();
+        List<Player> playerList = world.getPlayers();
         String playerName = event.getPlayer().getName();
         String worldName = world.getName();
         int currentSleepCount = 0;
-        int worldOnlineTotal = world.getPlayers().size();
+        int worldOnlineTotal = playerList.size();
         Integer worldSleepPercent = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
         Integer neededSleepers = (int) Math.ceil((worldSleepPercent / 100.0) * worldOnlineTotal);
-        List<Player> playerList = world.getPlayers();
         for (Player player : playerList) {
             if (player.isDeeplySleeping()) currentSleepCount += 1;
         }
