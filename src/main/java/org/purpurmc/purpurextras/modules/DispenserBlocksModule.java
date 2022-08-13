@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+import java.util.Map;
+
 public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
 
     private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(new NamespacedKey(PurpurExtras.getInstance(), "cauldron_buckets"))
@@ -47,7 +49,6 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
         breakBlockShears = config.getBoolean("settings.dispenser.break-blocks.shears", false);
         shearPumpkin = config.getBoolean("settings.dispenser.shears-shear-pumpkin", false);
         activateJukebox = config.getBoolean("settings.dispenser.puts-discs-in-jukebox", false);
-        //here goes a second try
         interactWithCauldron = config.getBoolean("settings.dispenser.interact-with-cauldron", false);
 
     }
@@ -123,47 +124,50 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
             return;
         }
 
-        //aa
+        //Dispense liquid in and from cauldrons
         if (interactWithCauldron && Tag.CAULDRONS.isTagged(block.getType()) && CAULDRON_BUCKETS.isTagged(item)){
             Material dispensedItemType = item.getType();
             Levelled cauldronLevel;
             if(block.getType().equals(Material.CAULDRON)){
-
-                if(dispensedItemType.equals(Material.BUCKET)) return;
-                if(dispensedItemType.equals(Material.LAVA_BUCKET)){
-                    emptyCauldronHandler(block, lavaCauldron, item, blockDispenser.getLocation(), Sound.ITEM_BUCKET_EMPTY_LAVA);
-                    event.setCancelled(true);
-                    return;
-                }
-                if (dispensedItemType.equals(Material.WATER_BUCKET)){
-                    emptyCauldronHandler(block, waterCauldron, item, blockDispenser.getLocation(), Sound.ITEM_BUCKET_EMPTY);
-                    event.setCancelled(true);
-                    return;
-                }
-                if(dispensedItemType.equals(Material.POWDER_SNOW_BUCKET)){
-                    emptyCauldronHandler(block, powderSnowCauldron, item, blockDispenser.getLocation(), Sound.ITEM_BUCKET_EMPTY_POWDER_SNOW);
-                    event.setCancelled(true);
-                    return;
+                switch(dispensedItemType){
+                    case BUCKET -> { return; }
+                    case LAVA_BUCKET -> {
+                        emptyCauldronHandler(block, lavaCauldron, item, blockDispenser.getLocation(), Sound.ITEM_BUCKET_EMPTY_LAVA);
+                        event.setCancelled(true);
+                        return;
+                    }
+                    case WATER_BUCKET -> {
+                        emptyCauldronHandler(block, waterCauldron, item, blockDispenser.getLocation(), Sound.ITEM_BUCKET_EMPTY);
+                        event.setCancelled(true);
+                        return;
+                    }
+                    case POWDER_SNOW_BUCKET -> {
+                        emptyCauldronHandler(block, powderSnowCauldron, item, blockDispenser.getLocation(), Sound.ITEM_BUCKET_EMPTY_POWDER_SNOW);
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
             }
             if(!dispensedItemType.equals(Material.BUCKET)) return;
-            if(block.getType().equals(Material.LAVA_CAULDRON)){
-                fullCauldronHandler(block, item, blockDispenser, Material.LAVA_BUCKET, Sound.ITEM_BUCKET_FILL_LAVA);
-                event.setCancelled(true);
-                return;
-            }
-            if(block.getType().equals(Material.WATER_CAULDRON)){
-                cauldronLevel = (Levelled) block.getBlockData();
-                if (cauldronLevel.getLevel() < 3) return;
-                fullCauldronHandler(block, item, blockDispenser, Material.WATER_BUCKET, Sound.ITEM_BUCKET_FILL);
-                event.setCancelled(true);
-                return;
-            }
-            if(block.getType().equals(Material.POWDER_SNOW_CAULDRON)){
-                cauldronLevel = (Levelled) block.getBlockData();
-                if (cauldronLevel.getLevel() < 3) return;
-                fullCauldronHandler(block, item, blockDispenser, Material.POWDER_SNOW_BUCKET, Sound.ITEM_BUCKET_FILL_POWDER_SNOW);
-                event.setCancelled(true);
+            cauldronLevel = (Levelled) block.getBlockData();
+            switch (block.getType()) {
+                case LAVA_CAULDRON -> {
+                    fullCauldronHandler(block, item, blockDispenser, Material.LAVA_BUCKET, Sound.ITEM_BUCKET_FILL_LAVA);
+                    event.setCancelled(true);
+                    return;
+                }
+                case WATER_CAULDRON -> {
+                    if (cauldronLevel.getLevel() < 3) return;
+                    fullCauldronHandler(block, item, blockDispenser, Material.WATER_BUCKET, Sound.ITEM_BUCKET_FILL);
+                    event.setCancelled(true);
+                    return;
+                }
+                case POWDER_SNOW_CAULDRON -> {
+                    cauldronLevel = (Levelled) block.getBlockData();
+                    if (cauldronLevel.getLevel() < 3) return;
+                    fullCauldronHandler(block, item, blockDispenser, Material.POWDER_SNOW_BUCKET, Sound.ITEM_BUCKET_FILL_POWDER_SNOW);
+                    event.setCancelled(true);
+                }
             }
         }
     }
@@ -211,14 +215,16 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
                                     Material newItem,
                                     Sound uniqueSound){
         cauldron.setType(Material.CAULDRON);
+        Inventory inv = dispenserBlock.getInventory();
         ItemStack newItemDrop = new ItemStack(newItem);
-        int emptySlot = dispenserBlock.getInventory().firstEmpty();
+        Map<Integer, ItemStack> map = inv.addItem(newItemDrop);
+        //handling for stacked buckets
         if(items.getAmount() > 1){
             items.setAmount(items.getAmount() - 1);
-            if(emptySlot == -1){
-                cauldron.getWorld().dropItem(cauldron.getLocation(), newItemDrop);
+            if(map.isEmpty()) {
+                inv.addItem(newItemDrop);
             } else {
-                dispenserBlock.getInventory().setItem(emptySlot, newItemDrop);
+                cauldron.getWorld().dropItem(cauldron.getLocation(), newItemDrop);
             }
         } else {
             items.setType(newItem);
