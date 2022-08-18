@@ -44,6 +44,7 @@ public interface PurpurExtrasModule {
         modules.add(new UpgradeStoneToIronToolsModule());
         modules.add(new UpgradeIronToDiamondsToolsModule());
         modules.add(new DispenserBlocksModule());
+        modules.add(new SleepPercentageMessageModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) {
