@@ -149,18 +149,16 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
                 }
             }
             if(!dispensedItemType.equals(Material.BUCKET)) return;
-            cauldronLevel = (Levelled) block.getBlockData();
             switch (block.getType()) {
                 case LAVA_CAULDRON -> {
                     fullCauldronHandler(block, item, blockDispenser, Material.LAVA_BUCKET, Sound.ITEM_BUCKET_FILL_LAVA);
                     event.setCancelled(true);
-                    return;
                 }
                 case WATER_CAULDRON -> {
+                    cauldronLevel = (Levelled) block.getBlockData();
                     if (cauldronLevel.getLevel() < 3) return;
                     fullCauldronHandler(block, item, blockDispenser, Material.WATER_BUCKET, Sound.ITEM_BUCKET_FILL);
                     event.setCancelled(true);
-                    return;
                 }
                 case POWDER_SNOW_CAULDRON -> {
                     cauldronLevel = (Levelled) block.getBlockData();
@@ -217,13 +215,12 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
         cauldron.setType(Material.CAULDRON);
         Inventory inv = dispenserBlock.getInventory();
         ItemStack newItemDrop = new ItemStack(newItem);
-        Map<Integer, ItemStack> map = inv.addItem(newItemDrop);
+
         //handling for stacked buckets
         if(items.getAmount() > 1){
             items.setAmount(items.getAmount() - 1);
-            if(map.isEmpty()) {
-                inv.addItem(newItemDrop);
-            } else {
+            Map<Integer, ItemStack> map = inv.addItem(newItemDrop);
+            if(!map.isEmpty()) {
                 cauldron.getWorld().dropItem(cauldron.getLocation(), newItemDrop);
             }
         } else {
