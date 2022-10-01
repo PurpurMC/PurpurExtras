@@ -34,7 +34,7 @@ public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule, Liste
             if (!(shooter instanceof Player playerShooter)) return;
             if (playerShooter != owner) return;
             damageEvent.setCancelled(true);
-            if ((projectile instanceof Arrow) || (projectile instanceof SpectralArrow)){
+            if ((projectile instanceof AbstractArrow && !projectile.getType().equals(EntityType.TRIDENT))){
                 projectile.remove();
             }
             return;
