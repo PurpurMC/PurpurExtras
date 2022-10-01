@@ -45,6 +45,7 @@ public interface PurpurExtrasModule {
         modules.add(new UpgradeIronToDiamondsToolsModule());
         modules.add(new DispenserBlocksModule());
         modules.add(new SleepPercentageMessageModule());
+        modules.add(new CancelPetDamageFromOwnerModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) {
