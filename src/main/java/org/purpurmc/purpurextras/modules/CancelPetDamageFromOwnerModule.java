@@ -20,7 +20,7 @@ public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule, Liste
 
     @Override
     public boolean shouldEnable() {
-        return PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay.cancel-damage-from-pet-owner", false);
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay-settings.cancel-damage-from-pet-owner", false);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
