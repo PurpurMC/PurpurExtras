@@ -112,6 +112,32 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onLightningStrike(EntityZapEvent event) {
+        if (event.getBolt().isEffect()) return;
+        Entity entity = event.getEntity();
+        if (!(entity instanceof LivingEntity livingEntity)) return;
+        if (entity.getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.LIGHTNING)) {
+            event.setCancelled(true);
+            return;
+        }
+        Location location = entity.getLocation();
+        Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
+        if (specialEntity != null) {
+            event.setCancelled(true);
+            entity.remove();
+            String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
+            Object targetEntity = entities.get(specialEntityKey);
+            spawnEntity(targetEntity, location);
+            return;
+        }
+        Object targetEntity = entities.get(entity.getType().getKey().getKey());
+        if (targetEntity == null) {
+            livingEntity.damage(5, event.getBolt());
+            event.setCancelled(true);
+            return;
+        }
+        entity.remove();
+        spawnEntity(targetEntity, location);
         event.setCancelled(true);
     }
+
 }
