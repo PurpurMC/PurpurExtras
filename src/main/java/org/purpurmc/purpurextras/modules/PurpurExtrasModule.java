@@ -46,6 +46,7 @@ public interface PurpurExtrasModule {
         modules.add(new DispenserBlocksModule());
         modules.add(new SleepPercentageMessageModule());
         modules.add(new CancelPetDamageFromOwnerModule());
+        modules.add(new ShieldSettingsModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) {
