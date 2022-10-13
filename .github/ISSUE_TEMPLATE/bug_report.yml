@@ -1,0 +1,71 @@
+name: Bug Report
+description: File a bug report
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before reporting a crash here, please make sure you use the latest version of PurpurExtras.
+  - type: input
+    attributes:
+      label: Spark link
+      description: We ask that Spark profilings are shared through a link, not a screenshot. Screenshots inhibit our ability to figure out the real cause of the issue.
+      placeholder: Output of /spark profiler --timeout 300
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: What you expected to see.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Observed/Actual behavior
+      description: What you actually saw.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps/models to reproduce
+      description: This may include a build schematic, a video, or detailed instructions to help reconstruct the issue.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: PurpurExtras version
+      description: |
+        Run `/purpurextras version` on your server and **paste** the full, unmodified output here.
+        "latest" is *not* a version; we require the output of `/purpurextras version` so we can adequately track down the issue.
+        Additionally, do NOT provide a screenshot, you MUST paste the entire output.
+        <details>
+        <summary>Example</summary>
+
+        ```
+        > purpurextras version
+        [18:58:15 INFO]: PurpurExtras version 1.22.0
+        ```
+
+        </details>
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Agreements
+      description: Please agree to the following.
+      options:
+        - label: I am running the latest version of PurpurExtras available to download from [modrinth.com/plugin/purpurextras/versions](https://modrinth.com/plugin/purpurextras/versions).
+          required: true
+        - label: I have searched for and ensured there isn't already an open issue regarding this.
+          required: true
+        - label: My version of Minecraft is supported by PurpurExtras.
+          required: true
+        - label: I am using the latest or recommended version of Purpur available from [purpurmc.org/downloads](https://purpurmc.org/downloads).
+          required: true  
+  - type: textarea
+    attributes:
+      label: Other
+      description: |
+        Please include other helpful information below.
+        The more information we receive, the quicker and more effective we can be at finding the solution to the issue.
+    validations:
+      required: false
