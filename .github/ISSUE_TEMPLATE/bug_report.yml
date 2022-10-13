@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Before reporting a crash here, please make sure you use the latest version of PurpurExtras.
+        Before reporting a crash here, please make sure you use the latest version of [PurpurExtras](https://modrinth.com/plugin/purpurextras/versions) and [Purpur](https://purpurmc.org/downloads).
   - type: input
     attributes:
       label: Spark link
