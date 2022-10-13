@@ -60,7 +60,7 @@ body:
         - label: My version of Minecraft is supported by PurpurExtras.
           required: true
         - label: I am using the latest or recommended version of Purpur available from [purpurmc.org/downloads](https://purpurmc.org/downloads).
-          required: true  
+          required: true
   - type: textarea
     attributes:
       label: Other
