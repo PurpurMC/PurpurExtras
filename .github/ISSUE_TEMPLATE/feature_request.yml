@@ -27,8 +27,7 @@ body:
 - type: textarea
   attributes:
     label: Describe alternatives you've considered.
-    description: |
-      List any alternatives you might have tried to get the feature you want.
+    description: List any alternatives you might have tried to get the feature you want.
       Also explain why these are not preferable to the solution you suggest.
   validations:
     required: false
