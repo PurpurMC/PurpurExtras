@@ -4,7 +4,6 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
-import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Material;
@@ -58,7 +57,7 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
         RegionContainer regionContainer = platform.getRegionContainer();
         RegionQuery query = regionContainer.createQuery();
         boolean canBypass = platform.getSessionManager().hasBypass(localPlayer, localPlayer.getWorld());
-        if (!query.testState(loc, localPlayer, Flags.BUILD) && !canBypass) return;
+        if (!query.testBuild(loc, localPlayer) && !canBypass) return;
 
         event.setCancelled(true);
         itemFrame.setVisible(!itemFrame.isVisible());
