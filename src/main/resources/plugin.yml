@@ -4,6 +4,7 @@ main: org.purpurmc.purpurextras.PurpurExtras
 api-version: 1.18
 authors: [ YouHaveTrouble ]
 description: "\"This should be a plugin\" features from Purpur"
+softdepend: [WorldGuard]
 commands:
   purpurextras:
     description: Command controlling PurpurExtras

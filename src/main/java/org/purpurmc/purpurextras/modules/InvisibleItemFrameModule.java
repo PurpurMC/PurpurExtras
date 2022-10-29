@@ -1,9 +1,17 @@
 package org.purpurmc.purpurextras.modules;
 
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import com.sk89q.worldedit.util.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,6 +31,7 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
     }
 
     @Override
@@ -42,6 +51,14 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
         if (!(entity instanceof ItemFrame itemFrame)) return;
         if (itemFrame.getItem().getType().equals(Material.AIR)) return;
         if (!player.hasPermission(invisFramePermission)) return;
+
+        LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
+        Location loc = localPlayer.getLocation();
+        WorldGuardPlatform platform = WorldGuard.getInstance().getPlatform();
+        RegionContainer regionContainer = platform.getRegionContainer();
+        RegionQuery query = regionContainer.createQuery();
+        boolean canBypass = platform.getSessionManager().hasBypass(localPlayer, localPlayer.getWorld());
+        if (!query.testState(loc, localPlayer, Flags.BUILD) && !canBypass) return;
 
         event.setCancelled(true);
         itemFrame.setVisible(!itemFrame.isVisible());
