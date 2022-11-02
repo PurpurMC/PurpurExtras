@@ -21,7 +21,7 @@ public class MobNoTargetModule implements PurpurExtrasModule, Listener {
         return PurpurExtras.getPurpurConfig().getBoolean("settings.use-notarget-permissions", false);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onMobTarget(EntityTargetEvent event) {
         if (!(event.getTarget() instanceof Player player)) return;
         if (!player.hasPermission("target.bypass." + event.getEntityType().getKey().getKey())) return;

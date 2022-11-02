@@ -31,7 +31,7 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
         return PurpurExtras.getPurpurConfig().getBoolean("settings.blocks.shift-right-click-for-invisible-item-frames", false);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemFrameInteract(PlayerInteractEntityEvent event){
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
 

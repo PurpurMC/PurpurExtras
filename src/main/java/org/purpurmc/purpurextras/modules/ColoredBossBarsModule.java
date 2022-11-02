@@ -31,7 +31,7 @@ public class ColoredBossBarsModule implements PurpurExtrasModule, Listener {
         return PurpurExtras.getPurpurConfig().getBoolean("settings.dye-boss-bars", false);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
     public void onBossBarDye(PlayerInteractEntityEvent event){
         if (event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if(!(event.getRightClicked() instanceof Boss bossClicked)) return;
