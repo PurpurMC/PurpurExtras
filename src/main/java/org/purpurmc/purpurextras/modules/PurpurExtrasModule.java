@@ -48,6 +48,7 @@ public interface PurpurExtrasModule {
         modules.add(new CancelPetDamageFromOwnerModule());
         modules.add(new ShieldSettingsModule());
         modules.add(new NoFallDamageWhileHavingJumpBoostModule());
+        modules.add(new AnvilSplitsMinecartsAndBoatsModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) {
