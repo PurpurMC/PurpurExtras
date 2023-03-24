@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.youhavetrouble</groupId>
+    <groupId>org.purpurmc.purpurextras</groupId>
     <artifactId>PurpurExtras</artifactId>
-    <version>1.23.0</version>
+    <version>1.24.0</version>
     <packaging>jar</packaging>
 
     <name>PurpurExtras</name>
 
-    <description>"This should be a plugin" features from Purpur</description>
+    <description>\"This should be a plugin\" features from Purpur</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

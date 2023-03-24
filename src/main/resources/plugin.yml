@@ -1,9 +1,9 @@
-name: PurpurExtras
-version: ${project.version}
-main: org.purpurmc.purpurextras.PurpurExtras
-api-version: 1.18
+name: "${project.name}"
+version: "${project.version}"
+main: "${project.groupId}.${project.artifactId}"
+api-version: 1.19
 authors: [ YouHaveTrouble ]
-description: "\"This should be a plugin\" features from Purpur"
+description: "${project.description}"
 commands:
   purpurextras:
     description: Command controlling PurpurExtras
