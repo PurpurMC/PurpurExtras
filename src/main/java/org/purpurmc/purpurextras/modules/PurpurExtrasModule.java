@@ -50,6 +50,7 @@ public interface PurpurExtrasModule {
         modules.add(new NoFallDamageWhileHavingJumpBoostModule());
         modules.add(new AnvilSplitsMinecartsAndBoatsModule());
         modules.add(new UnlockAllRecipesModule());
+        modules.add(new RunFasterOnPathsModule());
 
         modules.forEach(module -> {
             if (module.shouldEnable()) {
