@@ -2,10 +2,14 @@ package org.purpurmc.purpurextras.modules;
 
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.event.HandlerList;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
-import java.util.HashSet;
+import java.util.*;
 
 public interface PurpurExtrasModule {
+
+    Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
 
     /**
      * Enables the feature, registers the listeners.
@@ -17,44 +21,20 @@ public interface PurpurExtrasModule {
      */
     boolean shouldEnable();
 
-    HashSet<PurpurExtrasModule> modules = new HashSet<>();
-
     static void reloadModules() {
-        modules.clear();
+
         HandlerList.unregisterAll(PurpurExtras.getInstance());
 
-        modules.add(new BeeHiveLoreModule());
-        modules.add(new AnvilChangesBlocksModule());
-        modules.add(new ChorusFlowerAlwaysDropsModule());
-        modules.add(new MobNoTargetModule());
-        modules.add(new StonecutterDamageModule());
-        modules.add(new ColoredBossBarsModule());
-        modules.add(new RespawnAnchorNeedsChargeModule());
-        modules.add(new VoidTotemModule());
-        modules.add(new FurnaceBurnTimeModule());
-        modules.add(new ForceNametaggedForRidingModule());
-        modules.add(new EscapeCommandSlashModule());
-        modules.add(new OpenIronDoorsWithHandModule());
-        modules.add(new LightningTransformsMobsModule());
-        modules.add(new GrindstoneEnchantsBooksModule());
-        modules.add(new SpawnerPlacementPermissionsModule());
-        modules.add(new NetherBuildHeightModule());
-        modules.add(new InvisibleItemFrameModule());
-        modules.add(new UpgradeWoodToStoneToolsModule());
-        modules.add(new UpgradeStoneToIronToolsModule());
-        modules.add(new UpgradeIronToDiamondsToolsModule());
-        modules.add(new DispenserBlocksModule());
-        modules.add(new SleepPercentageMessageModule());
-        modules.add(new CancelPetDamageFromOwnerModule());
-        modules.add(new ShieldSettingsModule());
-        modules.add(new NoFallDamageWhileHavingJumpBoostModule());
-        modules.add(new AnvilSplitsMinecartsAndBoatsModule());
-        modules.add(new UnlockAllRecipesModule());
-        modules.add(new RunFasterOnPathsModule());
+        Set<Class<?>> subTypes = reflections.get(Scanners.SubTypes.of(PurpurExtrasModule.class).asClass());
 
-        modules.forEach(module -> {
-            if (module.shouldEnable()) {
-                module.enable();
+        subTypes.forEach(clazz -> {
+            try {
+                PurpurExtrasModule module = (PurpurExtrasModule) clazz.getDeclaredConstructor().newInstance();
+                if (module.shouldEnable()) {
+                    module.enable();
+                }
+            } catch (Exception e) {
+                PurpurExtras.getInstance().getSLF4JLogger().warn("Failed to load module " + clazz.getSimpleName());
             }
         });
 
