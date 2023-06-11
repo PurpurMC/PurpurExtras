@@ -31,7 +31,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -40,6 +40,16 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>me.youhavetrouble.entiddy</pattern>
+                                    <shadedPattern>org.purpurextras.entiddy</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.reflections</pattern>
+                                    <shadedPattern>org.purpurextras.reflections</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -81,19 +91,20 @@
         <dependency>
             <groupId>org.purpurmc.purpur</groupId>
             <artifactId>purpur-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-mojangapi</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <version>1.20-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.YouHaveTrouble</groupId>
             <artifactId>Entiddy</artifactId>
             <version>v2.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
