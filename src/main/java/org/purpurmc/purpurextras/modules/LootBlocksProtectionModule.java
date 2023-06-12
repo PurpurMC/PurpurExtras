@@ -22,7 +22,7 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
     private MessageType messageType;
     private final boolean allowBreakingInSneak;
 
-    private final String permission = "purpurextras.unlockallrecipesonjoin";
+    private final String permission = "purpurextras.lootblockprotectionbypass";
 
     protected LootBlocksProtectionModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
