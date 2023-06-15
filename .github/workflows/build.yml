@@ -1,0 +1,15 @@
+name: Build
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-java@master
+        name: Setup JDK
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      - name: Build with Gradle
+        run: gradle shadowJar
