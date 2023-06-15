@@ -76,6 +76,7 @@ tasks {
     }
 
     shadowJar {
+        archiveFileName.set("PurpurExtras-${version}.jar")
         relocate("org.reflections", "org.purpurmc.purpurextras.reflections")
         relocate("me.youhavetrouble.entiddy", "org.purpurmc.purpurextras.entiddy")
     }
@@ -100,7 +101,7 @@ tasks {
         doFirst {
             pluginDir.resolve("PurpurExtras.jar").delete()
             Files.copy(
-                buildDir.resolve("libs").resolve("PurpurExtras-${version}-all.jar").toPath(),
+                buildDir.resolve("libs").resolve("PurpurExtras-${version}.jar").toPath(),
                 pluginDir.resolve("PurpurExtras.jar").toPath()
             )
         }
