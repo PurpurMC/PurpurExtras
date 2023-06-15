@@ -76,8 +76,8 @@ tasks {
     }
 
     shadowJar {
-        relocate("org.reflections", "org.purpurextras.reflections")
-        relocate("me.youhavetrouble.entiddy", "org.purpurextras.entiddy")
+        relocate("org.reflections", "org.purpurmc.purpurextras.reflections")
+        relocate("me.youhavetrouble.entiddy", "org.purpurmc.purpurextras.entiddy")
     }
 
     register("downloadServer") {
