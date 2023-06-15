@@ -69,7 +69,7 @@ tasks {
                 mapOf(
                     "name" to project.name,
                     "version" to project.version,
-                    "description" to (project.description!!.replace('"'.toString(), "\\\""))
+                    "description" to project.description!!.replace('"'.toString(), "\\\"")
                 )
             )
         }
