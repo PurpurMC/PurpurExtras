@@ -14,6 +14,10 @@ import org.purpurmc.purpurextras.PurpurExtras;
 
 import java.util.Iterator;
 
+/**
+ * Unlocks all available recipes on join.
+ * Players can be exempt from this by denying them purpurextras.unlockallrecipesonjoin permission.
+ */
 public class UnlockAllRecipesModule implements PurpurExtrasModule, Listener {
 
     private final String permission = "purpurextras.unlockallrecipesonjoin";

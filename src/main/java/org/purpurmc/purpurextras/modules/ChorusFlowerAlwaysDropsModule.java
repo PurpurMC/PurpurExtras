@@ -11,6 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Makes it so chorus flowers always drop, no matter if they were destroyed directly or not.
+ */
 public class ChorusFlowerAlwaysDropsModule implements PurpurExtrasModule, Listener {
 
     protected ChorusFlowerAlwaysDropsModule() {}

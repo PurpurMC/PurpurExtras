@@ -15,6 +15,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+/**
+ * If enabled, allows players to dye boss health bars by right-clicking the boss with a dye item.
+ */
 public class ColoredBossBarsModule implements PurpurExtrasModule, Listener {
 
     private final NamespacedKey dyeColor = PurpurExtras.key("dyedColor");

@@ -18,6 +18,16 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * If enabled, entities with type on the left will be transformed into entity of type on the right.
+ * This overrides vanilla transformations. Vanilla mob ids are used to identify mobs.
+ * There are also special cases:
+ *
+ * `killer_bunny` - a killer bunny
+ * `jeb_sheep` - rainbow sheep
+ * `johhny` - vindicator aggressive to most mobs
+ * `toast` - special variant of rabbit
+ */
 public class LightningTransformsMobsModule implements PurpurExtrasModule, Listener {
 
     private final HashMap<String, Object> entities = new HashMap<>();

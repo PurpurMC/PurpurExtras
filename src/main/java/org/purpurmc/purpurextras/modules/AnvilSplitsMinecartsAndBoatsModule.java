@@ -12,6 +12,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+/**
+ * If enabled, dropping an anvil from significant height onto minecart with content
+ * (chest minecart, furnace minecart, etc.) in its item form, it will not destroy the item,
+ * but split the minecart and the content and drop them both. Does the same to chest boats
+ */
 public class AnvilSplitsMinecartsAndBoatsModule implements PurpurExtrasModule, Listener {
 
     private final boolean splitBoats, splitMinecarts;

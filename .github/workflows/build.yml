@@ -9,7 +9,7 @@ jobs:
       - uses: actions/setup-java@master
         name: Setup JDK
         with:
-          distribution: 'zulu'
+          distribution: 'microsoft'
           java-version: 17
       - name: Build with Gradle
         run: gradle shadowJar

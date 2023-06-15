@@ -19,6 +19,23 @@ import org.purpurmc.purpurextras.PurpurExtras;
 
 import java.util.Map;
 
+/**
+ * Dispenser modifications
+ *
+ * **break-blocks**
+ * If a tool category is enabled, that tool dispensed from dispenser will destroy the block in front of it.
+ * It will only destroy blocks that tool can destroy and it will destroy them like that tool was used on it,
+ * so wooden pickaxe will destroy diamond ore, but will not drop any items.
+ *
+ * **shears-shear-pumpkin**
+ * If enabled, when shears are dispensed and there's a pumpkin in front of a dispenser, shears will be used, making carved pumpkin.
+ *
+ * **interact-with-cauldron**
+ * If enabled, will allow dispensers fill and empty cauldrons.
+ *
+ * **put-discs-in-jukebox**
+ * If enabled, dispensers will be able to insert into or swap music discs in jukeboxes.
+ */
 public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
 
     private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(new NamespacedKey(PurpurExtras.getInstance(), "cauldron_buckets"))

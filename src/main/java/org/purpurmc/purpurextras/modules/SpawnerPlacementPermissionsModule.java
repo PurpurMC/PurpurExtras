@@ -18,6 +18,9 @@ import java.util.Map;
 
 import static org.bukkit.util.permissions.DefaultPermissions.registerPermission;
 
+/**
+ * Players will need purpurextras.spawnerplace.<mobtype> permission to place spawners of that mob.
+ */
 public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule, Listener {
 
     protected SpawnerPlacementPermissionsModule() {}

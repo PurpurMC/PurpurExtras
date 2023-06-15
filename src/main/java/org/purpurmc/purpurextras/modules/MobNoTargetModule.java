@@ -7,6 +7,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 
+/**
+ * If enabled, players having target.bypass.<mojang_mob_name> permission won't be targetted by that type of mob.
+ */
 public class MobNoTargetModule implements PurpurExtrasModule, Listener {
 
     protected MobNoTargetModule() {}

@@ -17,6 +17,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
+/**
+ * If true, will add lore with amount of bees and honey to the picked up hives.
+ */
 public class BeeHiveLoreModule implements PurpurExtrasModule, Listener {
 
     private final String beeHiveLoreBees, beeHiveLoreHoney;
