@@ -53,7 +53,7 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
     //good chunk of this logic pulled directly from nms
     private final class SquidGoal implements Goal<Squid> {
 
-        private static final GoalKey<Squid> goalKey = GoalKey.of(Squid.class, new NamespacedKey(PurpurExtras.getInstance(), "squidgoal"));
+        private static final GoalKey<Squid> goalKey = GoalKey.of(Squid.class, PurpurExtras.key("squidgoal"));
         private static final Predicate<Player> playerPredicate = player -> !player.hasPotionEffect(PotionEffectType.INVISIBILITY) &&
                 !player.isInvisible() && player.isValid() && (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE);
         private final Squid squid;
