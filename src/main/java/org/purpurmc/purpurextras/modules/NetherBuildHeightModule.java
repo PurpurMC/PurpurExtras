@@ -13,6 +13,19 @@ import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+/**
+ * Adds a build height limit to the nether
+ * Configuration:
+ *
+ * **enabled**
+ * Enables the feature.
+ *
+ * **height-limit**
+ * Maximum height players without purpurextras.netherbuildheightbypass permission can build in nether worlds.
+ *
+ * **no-permission-message**
+ * Message to display in action bar when trying to build above set limit in nether worlds.
+ */
 public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
 
     private final int configBuildHeight;

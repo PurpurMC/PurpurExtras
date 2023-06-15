@@ -14,6 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+/**
+ * Allows opening iron doors and trapdoors with a hand, just like wooden doors.
+ */
 public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener {
 
     private final boolean doors, trapdoors;

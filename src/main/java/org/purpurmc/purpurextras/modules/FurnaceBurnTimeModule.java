@@ -6,6 +6,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 
+/**
+ * If enabled, multiplier field will be used to modify fuel burn time in furnaces.
+ */
 public class FurnaceBurnTimeModule implements PurpurExtrasModule, Listener {
 
     private final double furnaceBurnTimeMultiplier;

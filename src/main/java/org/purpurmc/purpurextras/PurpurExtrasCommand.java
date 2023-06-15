@@ -4,11 +4,15 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class PurpurExtrasCommand implements CommandExecutor {
+import java.util.Collections;
+import java.util.List;
+
+public class PurpurExtrasCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
@@ -34,5 +38,16 @@ public class PurpurExtrasCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> cmds = List.of("reload", "version");
+        if(args.length == 1) {
+            return cmds.stream().filter(s -> s.toLowerCase().startsWith(args[0])).toList();
+        }else {
+            return Collections.emptyList();
+        }
     }
 }

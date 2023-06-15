@@ -1,9 +1,9 @@
-name: "${project.name}"
-version: "${project.version}"
-main: "${project.groupId}.${project.artifactId}"
-api-version: 1.19
+name: "${name}"
+version: ${version}
+main: "org.purpurmc.purpurextras.PurpurExtras"
+api-version: '1.20'
 authors: [ YouHaveTrouble ]
-description: "${project.description}"
+description: "${description}"
 commands:
   purpurextras:
     description: Command controlling PurpurExtras

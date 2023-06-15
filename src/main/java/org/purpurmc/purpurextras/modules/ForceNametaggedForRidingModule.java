@@ -8,6 +8,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.spigotmc.event.entity.EntityMountEvent;
 
+/**
+ * If enabled, only nametagged mobs can be mounted/steered using purpur's rideable option.
+ */
 public class ForceNametaggedForRidingModule implements PurpurExtrasModule, Listener {
 
     protected ForceNametaggedForRidingModule() {}

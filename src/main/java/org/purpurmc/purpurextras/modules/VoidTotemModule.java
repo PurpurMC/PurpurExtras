@@ -20,6 +20,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * If enabled, totem of undying will save players from death in the void and will
+ * teleport them to the last place their feet touched the ground.
+ * If for any reason that position is not found, they will be teleported to world spawn.
+ */
 public class VoidTotemModule implements PurpurExtrasModule, Listener {
 
     private final Collection<PotionEffect> totemEffects = new ArrayList<>();

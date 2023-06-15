@@ -13,6 +13,10 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+/**
+ * Right click when sneaking on an item frame with item inside of it will make the item frame invisible.
+ * Requires purpurextras.invisibleframes permission.
+ */
 public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
 
     protected InvisibleItemFrameModule() {}

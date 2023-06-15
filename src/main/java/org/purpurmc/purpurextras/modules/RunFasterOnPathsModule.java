@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+/**
+ * If speed-multiplier value is higher than 0, player will gain speed potion effect of the level of that value.
+ * This only accepts integer values. Which blocks count as paths can be configured by listing them in path-blocks list.
+ */
 public class RunFasterOnPathsModule implements PurpurExtrasModule, Listener {
 
     private final HashSet<Material> pathBlocks = new HashSet<>();

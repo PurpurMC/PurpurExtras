@@ -8,6 +8,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+/**
+ * Toggles if entities with jump boost effect will take fall damage
+ */
 public class NoFallDamageWhileHavingJumpBoostModule implements PurpurExtrasModule, Listener {
 
     protected NoFallDamageWhileHavingJumpBoostModule() {}

@@ -7,6 +7,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.SmithingRecipe;
 
+/**
+ * Allows upgrading tools from wood to stone in the smithing table
+ */
 public class UpgradeWoodToStoneToolsModule implements PurpurExtrasModule {
 
     protected UpgradeWoodToStoneToolsModule() {}
