@@ -12,6 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * If enabled, allows filtering which entity types don't get damaged by stonecutters if
+ * <a href="https://purpurmc.org/docs/Configuration/stonecutter_1"> stonecutter dealing damage</a> Purpur feature is
+ * enabled.
+ */
 public class StonecutterDamageModule implements PurpurExtrasModule, Listener {
 
     private final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();

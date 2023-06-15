@@ -8,6 +8,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+/**
+ * If enabled, pet owners will not be able to harm their own pets.
+ */
 public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule, Listener {
 
     protected CancelPetDamageFromOwnerModule() {}

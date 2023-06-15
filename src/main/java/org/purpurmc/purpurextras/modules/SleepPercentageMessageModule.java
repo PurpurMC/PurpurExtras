@@ -17,6 +17,9 @@ import org.purpurmc.purpurextras.PurpurExtras;
 
 import java.util.List;
 
+/**
+ * If enabled, sends messages in chat containing amount of players required to sleep based on playersSleepingPercentage gamerule.
+ */
 public class SleepPercentageMessageModule implements PurpurExtrasModule, Listener {
     private final MiniMessage miniMsg = PurpurExtras.getInstance().miniMessage;
     private final String playerSleepMessage, nightSkipMessage;
