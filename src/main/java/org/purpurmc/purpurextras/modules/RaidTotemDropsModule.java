@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Raider;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.raid.RaidSpawnWaveEvent;
@@ -29,12 +30,12 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
         random = new SplittableRandom();
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onRaidSpawn(RaidSpawnWaveEvent ev) {
         ev.getRaiders().forEach(r -> raiders.put(r.getUniqueId(), r));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onRaidDeath(EntityDeathEvent ev) {
         if(raiders.get(ev.getEntity().getUniqueId()) == null) return;
         raiders.remove(ev.getEntity().getUniqueId());
@@ -49,7 +50,7 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
         });
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onRaidEnd(RaidStopEvent ev) {
         ev.getRaid().getRaiders().stream().map(Entity::getUniqueId).forEach(raiders::remove);
     }
