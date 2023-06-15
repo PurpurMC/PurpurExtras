@@ -32,7 +32,9 @@ public final class PurpurExtras extends JavaPlugin {
 
         PluginCommand command = getCommand("purpurextras");
         if (command != null) {
-            command.setExecutor(new PurpurExtrasCommand());
+            PurpurExtrasCommand cmd = new PurpurExtrasCommand();
+            command.setExecutor(cmd);
+            command.setTabCompleter(cmd);
         }
 
         PurpurExtrasModule.reloadModules();
