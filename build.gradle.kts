@@ -57,6 +57,12 @@ tasks {
         options.encoding = "UTF-8"
     }
 
+    clean {
+        doLast {
+            serverDir.deleteRecursively()
+        }
+    }
+
     processResources {
         filesMatching("plugin.yml") {
             expand(
