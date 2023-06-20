@@ -30,3 +30,9 @@ listeners, will end up with PR not being merged and changes being requested.
 We'll accept changes that make sense. You should be able to justify their existence,
 along with any maintenance costs that come with them. Remember that these changes
 will affect everyone who runs Purpur, not just you and your server.
+
+## Creating a PurpurExtras Module
+
+Creating a module for PurpurExtras is extremely easy! All you have to do is new class
+in the package `org.purpurmc.purpurextras.modules.impl`, write your Listeners, give it an
+`@ModuleInfo` annotation, and you're set! PurpurExtras internally handles all module registration

@@ -1,43 +1,65 @@
 package org.purpurmc.purpurextras.modules;
 
-import org.purpurmc.purpurextras.PurpurExtras;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.HandlerList;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
+import org.bukkit.event.Listener;
+import org.purpurmc.purpurextras.PurpurExtras;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-public interface PurpurExtrasModule {
-
-    Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
+public interface PurpurExtrasModule extends Listener {
 
     /**
      * Enables the feature, registers the listeners.
      */
-    void enable();
+    default void enable() {
+        Bukkit.getPluginManager().registerEvents(this, PurpurExtras.getInstance());
+    }
 
     /**
-     * @return true if the feature should be enabled
+     * Disables the feature, primarily just unregistering listeners
      */
-    boolean shouldEnable();
+    default void disable() {
+        HandlerList.unregisterAll(this);
+    }
 
-    static void reloadModules() {
+    /**
+     * @return true if the feature should be enabled on startup
+     */
+    default boolean shouldEnable() {
+        return getConfigBoolean("enabled", false);
+    }
 
-        HandlerList.unregisterAll(PurpurExtras.getInstance());
+    default ModuleInfo anno() {
+        return getClass().getAnnotation(ModuleInfo.class);
+    }
 
-        Set<Class<?>> subTypes = reflections.get(Scanners.SubTypes.of(PurpurExtrasModule.class).asClass());
+    String getConfigPath();
 
-        subTypes.forEach(clazz -> {
-            try {
-                PurpurExtrasModule module = (PurpurExtrasModule) clazz.getDeclaredConstructor().newInstance();
-                if (module.shouldEnable()) {
-                    module.enable();
-                }
-            } catch (Exception e) {
-                PurpurExtras.getInstance().getSLF4JLogger().warn("Failed to load module " + clazz.getSimpleName());
-            }
-        });
+    default ConfigurationSection getConfigSection(String section, Map<String, Object> def) {
+        return PurpurExtras.getPurpurConfig().getConfigSection(section, def);
+    }
 
+    default String getConfigString(String section, String def) {
+        return PurpurExtras.getPurpurConfig().getString(section, def);
+    }
+
+    default boolean getConfigBoolean(String section, boolean def) {
+        return PurpurExtras.getPurpurConfig().getBoolean(getConfigPath() + "." + section, def);
+    }
+
+    default double getConfigDouble(String section, double def) {
+        return PurpurExtras.getPurpurConfig().getDouble(section, def);
+    }
+
+    default int getConfigInt(String section, int def) {
+        return PurpurExtras.getPurpurConfig().getInt(section, def);
+    }
+
+    default List<String> getConfigList(String section, List<String> def) {
+        return PurpurExtras.getPurpurConfig().getList(section, def);
     }
 
 }

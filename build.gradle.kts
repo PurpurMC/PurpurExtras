@@ -39,6 +39,10 @@ dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
     compileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    testCompileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.9.2")
 }
 
 group = "org.purpurmc.purpurextras"
@@ -48,6 +52,9 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
 
     compileJava {
         options.encoding = "UTF-8"
