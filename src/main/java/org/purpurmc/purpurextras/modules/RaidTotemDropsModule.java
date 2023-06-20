@@ -19,6 +19,9 @@ import java.util.SplittableRandom;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Modifies the drop rate of totems from Evokers spawned in a raid
+ */
 public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
 
     private final SplittableRandom random;
@@ -31,28 +34,28 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onRaidSpawn(RaidSpawnWaveEvent ev) {
-        ev.getRaiders().forEach(r -> raiders.put(r.getUniqueId(), r));
+    public void onRaidSpawn(RaidSpawnWaveEvent event) {
+        event.getRaiders().forEach(r -> raiders.put(r.getUniqueId(), r));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onRaidDeath(EntityDeathEvent ev) {
-        if(raiders.get(ev.getEntity().getUniqueId()) == null) return;
-        raiders.remove(ev.getEntity().getUniqueId());
-        if(ev.getEntityType() != EntityType.EVOKER) return;
+    public void onRaidDeath(EntityDeathEvent event) {
+        if (raiders.get(event.getEntity().getUniqueId()) == null) return;
+        raiders.remove(event.getEntity().getUniqueId());
+        if (event.getEntityType() != EntityType.EVOKER) return;
         boolean totem = dropChance >= 100 || random.nextInt(1, 101) <= dropChance;
-        ev.getDrops().stream().filter(i -> i.getType() == Material.TOTEM_OF_UNDYING).findFirst().ifPresentOrElse(i -> {
-            if(!totem)
-                ev.getDrops().remove(i);
+        event.getDrops().stream().filter(i -> i.getType() == Material.TOTEM_OF_UNDYING).findFirst().ifPresentOrElse(i -> {
+            if (!totem)
+                event.getDrops().remove(i);
         }, () -> {
-            if(totem)
-                ev.getDrops().add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            if (totem)
+                event.getDrops().add(new ItemStack(Material.TOTEM_OF_UNDYING));
         });
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onRaidEnd(RaidStopEvent ev) {
-        ev.getRaid().getRaiders().stream().map(Entity::getUniqueId).forEach(raiders::remove);
+    public void onRaidEnd(RaidStopEvent event) {
+        event.getRaid().getRaiders().stream().map(Entity::getUniqueId).forEach(raiders::remove);
     }
 
     @Override
