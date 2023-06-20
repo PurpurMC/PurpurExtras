@@ -6,7 +6,9 @@ import com.destroystokyo.paper.entity.ai.GoalType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Squid;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,6 +22,11 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
+/**
+ * Allows squids to act as Creepers - they will explode if within {@link #maxDistance} after a fuse of {@link #maxSwell}
+ * ticks, as well as moving towards you at a velocity of {@link #velocity}
+ * Explosion power / radius is also configurable through {@link #explosionPower}
+ */
 public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
 
     private int maxSwell = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.fuse-ticks", 30);
@@ -42,9 +49,9 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onSquidSpawn(EntitySpawnEvent ev) {
-        if(ev.getEntityType() != EntityType.SQUID) return;
-        Squid squid = (Squid) ev.getEntity();
+    public void onSquidSpawn(EntitySpawnEvent event) {
+        if (event.getEntityType() != EntityType.SQUID) return;
+        Squid squid = (Squid) event.getEntity();
         Bukkit.getMobGoals().removeAllGoals(squid, GoalType.TARGET);
         Bukkit.getMobGoals().addGoal(squid, 3, new SquidGoal(squid));
     }
@@ -66,15 +73,15 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
 
         @Override
         public boolean shouldActivate() {
-            if(!squid.isValid()) return false;
-            if(currentTarget == null || currentTarget.getLocation().distance(squid.getLocation()) > maxDistance)
+            if (!squid.isValid()) return false;
+            if (currentTarget == null || currentTarget.getLocation().distance(squid.getLocation()) > maxDistance)
                 currentTarget = getClosestPlayer();
-            if(currentTarget == null) {
+            if (currentTarget == null) {
                 swellDir = -1;
-                if(currentSwell > 0) currentSwell += swellDir;
+                if (currentSwell > 0) currentSwell += swellDir;
                 squid.setGlowing(false);
                 return false;
-            }else {
+            } else {
                 return true;
             }
         }
@@ -88,15 +95,15 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
         @Override
         public void tick() {
             squid.setGlowing(!squid.isGlowing());
-            if(currentTarget != null) {
-                if(swellDir == -1)
+            if (currentTarget != null) {
+                if (swellDir == -1)
                     squid.getWorld().playSound(squid.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1F, 0.5F);
                 swellDir = 1;
-                squid.setVelocity(squid.getLocation().toVector().subtract(currentTarget.getLocation().toVector()).normalize().multiply(-1*velocity));
+                squid.setVelocity(squid.getLocation().toVector().subtract(currentTarget.getLocation().toVector()).normalize().multiply(-1 * velocity));
                 squid.lookAt(currentTarget.getEyeLocation());
             }
             this.currentSwell += swellDir;
-            if(this.currentSwell >= maxSwell) {
+            if (this.currentSwell >= maxSwell) {
                 explode();
             }
         }
@@ -114,7 +121,7 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
         private void explode() {
             ExplosionPrimeEvent ev = new ExplosionPrimeEvent(squid, 3, true);
             ev.callEvent();
-            if(!ev.isCancelled()) {
+            if (!ev.isCancelled()) {
                 squid.remove();
                 squid.getWorld().createExplosion(squid, squid.getLocation(), explosionPower);
                 Bukkit.getScheduler().runTaskLater(PurpurExtras.getInstance(),
@@ -128,14 +135,14 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
             Collection<Player> players = squid.getWorld().getNearbyEntitiesByType(Player.class, squid.getLocation(), maxDistance, playerPredicate);
             double playerDistance = -1;
             Player closestPlayer = null;
-            for(Player p : players) {
-                if(closestPlayer == null) {
+            for (Player p : players) {
+                if (closestPlayer == null) {
                     closestPlayer = p;
                     playerDistance = p.getLocation().distance(squid.getLocation());
                     continue;
                 }
                 double dist = p.getLocation().distance(squid.getLocation());
-                if(dist < playerDistance) {
+                if (dist < playerDistance) {
                     closestPlayer = p;
                     playerDistance = p.getLocation().distance(squid.getLocation());
                 }
