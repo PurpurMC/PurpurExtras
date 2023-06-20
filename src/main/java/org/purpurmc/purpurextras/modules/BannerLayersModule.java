@@ -28,19 +28,15 @@ public class BannerLayersModule implements PurpurExtrasModule, Listener {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
         Map<String, Object> defaults = new HashMap<>();
 
-        defaults.put("layers", 10);
+        defaults.put("layers", 6);
         ConfigurationSection section = config.getConfigSection("settings.banner-layers", defaults);
         Logger logger = PurpurExtras.getInstance().getLogger();
-        if (section.getInt("layers") < 6) {
-            logger.warning("Banner layers is set to less than 6, this is not currently supported.");
-        }
+        if (!section.isInt("layers")) logger.warning("banner-layers.layers is not a valid integer.");
     }
 
-    // predefined arraylist
     private static final List<Material> bannertypes = new ArrayList<>();
-
-
-    public static HashMap<Player, List<Pattern>> plpett = new HashMap<>();
+    
+    public static HashMap<Player, List<Pattern>> playerBannerData = new HashMap<>();
 
     @Override
     public void enable() {
@@ -63,6 +59,9 @@ public class BannerLayersModule implements PurpurExtrasModule, Listener {
         bannertypes.add(Material.WHITE_BANNER);
         bannertypes.add(Material.YELLOW_BANNER);
     }
+    public static boolean isMaterialBanner(Material banner) {
+        return bannertypes.contains(banner);
+    }
 
     @Override
     public boolean shouldEnable() {
@@ -72,57 +71,52 @@ public class BannerLayersModule implements PurpurExtrasModule, Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         Player p = (Player) event.getWhoClicked();
-        if (event.getInventory() instanceof LoomInventory) {
-            if (isMaterialBanner(Objects.requireNonNull(event.getCurrentItem()).getType())) {
-                if (cantSetLayer(event.getCurrentItem())) {
-                    p.sendPlainMessage("You cannot add another layer to this banner.");
-                    return;
+        if (!(event.getInventory() instanceof LoomInventory)) return;
+        if (isMaterialBanner(Objects.requireNonNull(event.getCurrentItem()).getType())) {
+            if (cantSetLayer(event.getCurrentItem())) {
+                p.sendPlainMessage("You cannot add another layer to this banner.");
+                return;
+            }
+            if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING)) {
+                if ((event.getAction().equals(InventoryAction.PLACE_SOME)) ||
+                        (event.getAction().equals(InventoryAction.PLACE_ALL))
+                        || (event.getAction().equals(InventoryAction.PLACE_ONE))) {
+                    save(p, event.getCurrentItem());
+                } else {
+                    back(p, event.getCurrentItem());
                 }
-                if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING)) {
-                    if ((event.getAction().equals(InventoryAction.PLACE_SOME)) ||
-                            (event.getAction().equals(InventoryAction.PLACE_ALL))
-                            || (event.getAction().equals(InventoryAction.PLACE_ONE))) {
-                        Save(p, event.getCurrentItem());
-                    } else {
-                        back(p, event.getCurrentItem());
-                    }
-                } else if (event.getSlotType().equals(InventoryType.SlotType.CONTAINER)) {
-                    if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
-                        Save(p, event.getCurrentItem());
-                    }
-                } else if (event.getSlotType().equals(InventoryType.SlotType.RESULT)) {
-                    craftload(p, event.getCurrentItem());
-                } else if (event.getSlotType().equals(InventoryType.SlotType.QUICKBAR)) {
-                    if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
-                        Save(p, event.getCurrentItem());
-                    }
+            } else if (event.getSlotType().equals(InventoryType.SlotType.CONTAINER)) {
+                if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
+                    save(p, event.getCurrentItem());
                 }
-            } else if (isMaterialBanner(Objects.requireNonNull(event.getCursor()).getType())) {
-                if (cantSetLayer(event.getCursor())) {
-                    p.sendPlainMessage("You cannot add another layer to this banner.");
-                    return;
+            } else if (event.getSlotType().equals(InventoryType.SlotType.RESULT)) {
+                craftLoad(p, event.getCurrentItem());
+            } else if (event.getSlotType().equals(InventoryType.SlotType.QUICKBAR)) {
+                if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
+                    save(p, event.getCurrentItem());
                 }
-                if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING) && (event.getAction().equals(InventoryAction.PLACE_SOME) || event.getAction().equals(InventoryAction.PLACE_ALL) || event.getAction().equals(InventoryAction.PLACE_ONE))) {
-                    Save(p, event.getCursor());
-                }
+            }
+        } else if (isMaterialBanner(Objects.requireNonNull(event.getCursor()).getType())) {
+            if (cantSetLayer(event.getCursor())) {
+                p.sendPlainMessage("You cannot add another layer to this banner.");
+                return;
+            }
+            if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING) && (event.getAction().equals(InventoryAction.PLACE_SOME) || event.getAction().equals(InventoryAction.PLACE_ALL) || event.getAction().equals(InventoryAction.PLACE_ONE))) {
+                save(p, event.getCursor());
             }
         }
     }
 
-    public static boolean isMaterialBanner(Material banner) {
-        return bannertypes.contains(banner);
-    }
-
-    public static void Save(Player p, ItemStack Banner) {
+    public static void save(Player p, ItemStack Banner) {
         BannerMeta meta = (BannerMeta) Banner.getItemMeta();
         List<Pattern> list = meta.getPatterns();
         if ((list.size() <= 5)) return;
-        plpett.remove(p);
-        plpett.put(p, list);
-        changestack(Banner);
+        playerBannerData.remove(p);
+        playerBannerData.put(p, list);
+        changeStack(Banner);
     }
 
-    public static void changestack(ItemStack Banner) {
+    public static void changeStack(ItemStack Banner) {
         BannerMeta meta = (BannerMeta) Banner.getItemMeta();
         List<Pattern> list = meta.getPatterns();
         while (list.size() > 5) {
@@ -133,18 +127,18 @@ public class BannerLayersModule implements PurpurExtrasModule, Listener {
     }
 
     public static void back(Player p, ItemStack Banner) {
-        if (!plpett.containsKey(p)) return;
-        List<Pattern> oldpatterns = plpett.get(p);
+        if (!playerBannerData.containsKey(p)) return;
+        List<Pattern> oldpatterns = playerBannerData.get(p);
         BannerMeta meta = (BannerMeta) Banner.getItemMeta();
 
         meta.setPatterns(oldpatterns);
         Banner.setItemMeta(meta);
-        plpett.remove(p);
+        playerBannerData.remove(p);
     }
 
-    public static void craftload(Player p, ItemStack Banner) {
-        if (!plpett.containsKey(p)) return;
-        List<Pattern> oldpatterns = plpett.get(p);
+    public static void craftLoad(Player p, ItemStack Banner) {
+        if (!playerBannerData.containsKey(p)) return;
+        List<Pattern> oldpatterns = playerBannerData.get(p);
         BannerMeta meta = (BannerMeta) Banner.getItemMeta();
 
         List<Pattern> newpatterns = meta.getPatterns();
@@ -152,7 +146,7 @@ public class BannerLayersModule implements PurpurExtrasModule, Listener {
 
         meta.setPatterns(oldpatterns);
         Banner.setItemMeta(meta);
-        plpett.remove(p);
+        playerBannerData.remove(p);
     }
 
     public static int getMaxLayers() {
