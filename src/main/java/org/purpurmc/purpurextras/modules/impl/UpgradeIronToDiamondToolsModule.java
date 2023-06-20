@@ -2,6 +2,7 @@ package org.purpurmc.purpurextras.modules.impl;
 
 import org.bukkit.inventory.SmithingTransformRecipe;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import org.purpurmc.purpurextras.util.RecipeUtil;
 import org.bukkit.Material;
@@ -12,7 +13,8 @@ import org.bukkit.inventory.SmithingRecipe;
 /**
  * Allows upgrading tools from iron to diamond in the smithing table
  */
-public class UpgradeIronToDiamondsToolsModule implements PurpurExtrasModule {
+@ModuleInfo(name = "Upgrade Iron to Diamond", description = "Allows for upgrading from iron to diamond tools in the smithing table")
+public class UpgradeIronToDiamondToolsModule extends PurpurExtrasModule {
 
     @Override
     public void enable() {
@@ -55,15 +57,13 @@ public class UpgradeIronToDiamondsToolsModule implements PurpurExtrasModule {
     }
 
     @Override
-    public boolean shouldEnable() {
-        boolean shouldEnable = getConfigBoolean("settings.smithing-table.tools.iron-to-diamond", false);
-        if (shouldEnable) return true;
+    public void disable() {
+        super.disable();
         RecipeUtil.removeRecipe("sword_iron_to_diamond");
         RecipeUtil.removeRecipe("pick_iron_to_diamond");
         RecipeUtil.removeRecipe("axe_iron_to_diamond");
         RecipeUtil.removeRecipe("shovel_iron_to_diamond");
         RecipeUtil.removeRecipe("hoe_iron_to_diamond");
-        return false;
     }
 
     @Override

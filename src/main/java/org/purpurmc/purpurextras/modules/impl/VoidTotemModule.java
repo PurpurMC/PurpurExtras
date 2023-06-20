@@ -1,19 +1,18 @@
 package org.purpurmc.purpurextras.modules.impl;
 
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 import java.util.ArrayList;
@@ -26,31 +25,21 @@ import java.util.UUID;
  * teleport them to the last place their feet touched the ground.
  * If for any reason that position is not found, they will be teleported to world spawn.
  */
-public class VoidTotemModule implements PurpurExtrasModule {
+@ModuleInfo(name = "Totem Void Deaths", description = "Totems will prevent dying in the void!")
+public class VoidTotemModule extends PurpurExtrasModule {
 
     private final Collection<PotionEffect> totemEffects = new ArrayList<>();
     private final HashMap<UUID, Location> lastGroundedLocations = new HashMap<>();
 
-    protected VoidTotemModule() {
+    public VoidTotemModule() {
         totemEffects.add(new PotionEffect(PotionEffectType.REGENERATION, 20*45, 1));
         totemEffects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20*40, 0));
         totemEffects.add(new PotionEffect(PotionEffectType.ABSORPTION, 20*5, 1));
     }
 
     @Override
-    public void enable() {
-        PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    @Override
-    public boolean shouldEnable() {
-        return getConfigBoolean("settings.totem.work-on-void-death", false);
-    }
-
-    @Override
     public String getConfigPath() {
-        return "";
+        return "settings.totem.work-on-void-death";
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

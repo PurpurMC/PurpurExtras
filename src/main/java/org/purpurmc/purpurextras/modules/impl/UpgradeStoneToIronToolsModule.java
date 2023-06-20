@@ -2,6 +2,7 @@ package org.purpurmc.purpurextras.modules.impl;
 
 import org.bukkit.inventory.SmithingTransformRecipe;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import org.purpurmc.purpurextras.util.RecipeUtil;
 import org.bukkit.Material;
@@ -12,7 +13,8 @@ import org.bukkit.inventory.SmithingRecipe;
 /**
  * Allows upgrading tools from stone to iron in the smithing table
  */
-public class UpgradeStoneToIronToolsModule implements PurpurExtrasModule {
+@ModuleInfo(name = "Upgrade stone to iron", description = "Allows for upgrading from stone to iron tools in the smithing table")
+public class UpgradeStoneToIronToolsModule extends PurpurExtrasModule {
 
     @Override
     public void enable() {
@@ -55,15 +57,13 @@ public class UpgradeStoneToIronToolsModule implements PurpurExtrasModule {
     }
 
     @Override
-    public boolean shouldEnable() {
-        boolean shouldEnable = getConfigBoolean("settings.smithing-table.tools.stone-to-iron", false);
-        if (shouldEnable) return true;
+    public void disable() {
+        super.disable();
         RecipeUtil.removeRecipe("sword_stone_to_iron");
         RecipeUtil.removeRecipe("pick_stone_to_iron");
         RecipeUtil.removeRecipe("axe_stone_to_iron");
         RecipeUtil.removeRecipe("shovel_stone_to_iron");
         RecipeUtil.removeRecipe("hoe_stone_to_iron");
-        return false;
     }
 
     @Override

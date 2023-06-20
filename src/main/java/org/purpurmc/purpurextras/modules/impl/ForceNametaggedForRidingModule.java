@@ -6,10 +6,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Steerable;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Player;
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import org.spigotmc.event.entity.EntityMountEvent;
@@ -18,7 +16,7 @@ import org.spigotmc.event.entity.EntityMountEvent;
  * If enabled, only nametagged mobs can be mounted/steered using purpur's rideable option.
  */
 @ModuleInfo(name = "Mounts need a name", description = "Rideable mobs need a nametag to be ridden!")
-public class ForceNametaggedForRidingModule implements PurpurExtrasModule {
+public class ForceNametaggedForRidingModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {

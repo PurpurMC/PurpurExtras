@@ -1,13 +1,11 @@
 package org.purpurmc.purpurextras.modules.impl;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import org.purpurmc.purpurextras.PurpurExtras;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -16,7 +14,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * (\/command that will appear as /command in chat).
  */
 @ModuleInfo(name = "Escape Chat Slashes", description = "Allows you to start messages with a /!")
-public class EscapeCommandSlashModule implements PurpurExtrasModule {
+public class EscapeCommandSlashModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {

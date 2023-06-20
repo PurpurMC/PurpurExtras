@@ -1,6 +1,5 @@
 package org.purpurmc.purpurextras.modules.impl;
 
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,7 +8,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -24,11 +22,11 @@ import java.util.Map;
  * If enabled and player has books in their inventory while disenchanting item in a grindstone,
  * books will be consumed to return the enchantments removed from the item to the player.
  * No exp will drop when doing this.
- *
+ * <p>
  * Listeners yoinked from <a href="https://gist.github.com/BillyGalbreath/de0f899a27b39daad5f5bf7c00e11045">here</a>}
  */
 @ModuleInfo(name = "Grindstone Books", description = "Attaches lost Grindstone enchantments to any books in your inventory!")
-public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule {
+public class GrindstoneEnchantsBooksModule extends PurpurExtrasModule {
 
     private final ItemStack BOOK = new ItemStack(Material.BOOK);
 

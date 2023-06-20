@@ -23,11 +23,11 @@ import java.util.logging.Logger;
  * cobblestone block, that cobblestone will be converted to sand.
  */
 @ModuleInfo(name = "Anvil Crushes Blocks", description = "Change certain blocks when an anvil falls on them!")
-public class AnvilChangesBlocksModule implements PurpurExtrasModule {
+public class AnvilChangesBlocksModule extends PurpurExtrasModule {
 
     private final HashSet<Material> anvils = new HashSet<>();
     private final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
-    protected AnvilChangesBlocksModule() {
+    public AnvilChangesBlocksModule() {
         Map<String, Object> defaults = new HashMap<>();
 
         anvils.add(Material.ANVIL);
@@ -35,7 +35,7 @@ public class AnvilChangesBlocksModule implements PurpurExtrasModule {
         anvils.add(Material.DAMAGED_ANVIL);
 
         defaults.put("cobblestone", "sand");
-        ConfigurationSection section = getConfigSection("settings.anvil-crushes-blocks.blocks", defaults);
+        ConfigurationSection section = getConfigSection("blocks", defaults);
         Logger logger = PurpurExtras.getInstance().getLogger();
         for (String key : section.getKeys(false)) {
             String matString = section.getString(key);

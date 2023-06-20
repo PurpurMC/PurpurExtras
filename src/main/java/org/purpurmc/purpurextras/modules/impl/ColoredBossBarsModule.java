@@ -20,7 +20,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * If enabled, allows players to dye boss health bars by right-clicking the boss with a dye item.
  */
 @ModuleInfo(name = "Dye Boss Bars", description = "Allows you to dye your own boss bars!")
-public class ColoredBossBarsModule implements PurpurExtrasModule {
+public class ColoredBossBarsModule extends PurpurExtrasModule {
 
     private final NamespacedKey dyeColor = PurpurExtras.key("dyedColor");
 

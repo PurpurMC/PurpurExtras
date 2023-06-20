@@ -8,12 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -23,7 +21,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * inside the suspicious block. Only one item can be added per block.
  */
 @ModuleInfo(name = "Create Suspicious Blocks", description = "Right click a block to make it a suspicious block!")
-public class CreateSusBlocksModule implements PurpurExtrasModule {
+public class CreateSusBlocksModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {

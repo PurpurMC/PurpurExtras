@@ -2,6 +2,7 @@ package org.purpurmc.purpurextras.modules.impl;
 
 import org.bukkit.inventory.SmithingTransformRecipe;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import org.purpurmc.purpurextras.util.RecipeUtil;
 import org.bukkit.Material;
@@ -12,7 +13,8 @@ import org.bukkit.inventory.SmithingRecipe;
 /**
  * Allows upgrading tools from wood to stone in the smithing table
  */
-public class UpgradeWoodToStoneToolsModule implements PurpurExtrasModule {
+@ModuleInfo(name = "Upgrade wood to stone", description = "Allows for upgrading from wood to stone tools in the smithing table")
+public class UpgradeWoodToStoneToolsModule extends PurpurExtrasModule {
 
     @Override
     public void enable() {
@@ -55,20 +57,18 @@ public class UpgradeWoodToStoneToolsModule implements PurpurExtrasModule {
     }
 
     @Override
-    public boolean shouldEnable() {
-        boolean shouldEnable = getConfigBoolean("settings.smithing-table.tools.wood-to-stone", false);
-        if (shouldEnable) return true;
+    public void disable() {
+        super.disable();
         RecipeUtil.removeRecipe("sword_wood_to_stone");
         RecipeUtil.removeRecipe("pick_wood_to_stone");
         RecipeUtil.removeRecipe("axe_wood_to_stone");
         RecipeUtil.removeRecipe("shovel_wood_to_stone");
         RecipeUtil.removeRecipe("hoe_wood_to_stone");
-        return false;
     }
 
     @Override
     public String getConfigPath() {
-        return "";
+        return "settings.smithing-table.tools.wood-to-stone";
     }
 
 }

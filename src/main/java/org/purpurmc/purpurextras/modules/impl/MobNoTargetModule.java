@@ -1,10 +1,8 @@
 package org.purpurmc.purpurextras.modules.impl;
 
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -13,7 +11,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * If enabled, players having target.bypass.<mojang_mob_name> permission won't be targetted by that type of mob.
  */
 @ModuleInfo(name = "Prevent Mob Targetting", description = "Prevents certain mobs from targetting players!")
-public class MobNoTargetModule implements PurpurExtrasModule, Listener {
+public class MobNoTargetModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {

@@ -18,7 +18,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * content and drop them both.
  */
 @ModuleInfo(name = "Anvil Breaks Minecarts", description = "Anvils can fall and break Minecarts with Chests in them!")
-public class AnvilSplitsMinecartsModule implements PurpurExtrasModule {
+public class AnvilSplitsMinecartsModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {

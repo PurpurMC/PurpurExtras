@@ -17,16 +17,11 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * If enabled, pet owners will not be able to harm their own pets.
  */
 @ModuleInfo(name = "Cancel Pet Owner Damage", description = "Your pets cannot damage you!")
-public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule {
+public class CancelPetDamageFromOwnerModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {
-        return "settings.gameplay-settings.cancel-damage-from-pet-owner";
-    }
-
-    @Override
-    public boolean shouldEnable() {
-        return getConfigBoolean("settings.gameplay-settings.cancel-damage-from-pet-owner", false);
+        return "settings.cancel-damage-from-pet-owner";
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

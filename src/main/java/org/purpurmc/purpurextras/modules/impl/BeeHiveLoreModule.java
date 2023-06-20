@@ -21,14 +21,14 @@ import java.util.List;
  * If true, will add lore with amount of bees and honey to the picked up hives.
  */
 @ModuleInfo(name = "Bee Hives Lore", description = "Adds lore of hive information to dropped bee hives!")
-public class BeeHiveLoreModule implements PurpurExtrasModule {
+public class BeeHiveLoreModule extends PurpurExtrasModule {
 
     private final String beeHiveLoreBees, beeHiveLoreHoney;
     private final MiniMessage miniMessage = PurpurExtras.getInstance().miniMessage;
 
-    protected BeeHiveLoreModule() {
-        this.beeHiveLoreBees = getConfigString("settings.items.beehive-lore.bees", "<reset><gray>Bees: <bees>/<maxbees>");
-        this.beeHiveLoreHoney = getConfigString("settings.items.beehive-lore.honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
+    public BeeHiveLoreModule() {
+        this.beeHiveLoreBees = getConfigString("bees", "<reset><gray>Bees: <bees>/<maxbees>");
+        this.beeHiveLoreHoney = getConfigString("honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
     }
 
     @Override

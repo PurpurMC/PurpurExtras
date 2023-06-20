@@ -1,13 +1,11 @@
 package org.purpurmc.purpurextras.modules.impl;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
@@ -17,7 +15,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * Makes it so chorus flowers always drop, no matter if they were destroyed directly or not.
  */
 @ModuleInfo(name = "Chorus Flowers Drop", description = "Chorus Flowers will always drop their item!")
-public class ChorusFlowerAlwaysDropsModule implements PurpurExtrasModule {
+public class ChorusFlowerAlwaysDropsModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {

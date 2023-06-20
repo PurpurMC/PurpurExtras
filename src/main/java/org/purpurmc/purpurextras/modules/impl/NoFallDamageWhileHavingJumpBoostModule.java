@@ -5,21 +5,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 /**
  * Toggles if entities with jump boost effect will take fall damage
  */
-public class NoFallDamageWhileHavingJumpBoostModule implements PurpurExtrasModule {
-
-    @Override
-    public boolean shouldEnable() {
-        return !getConfigBoolean("settings.gameplay-settings.fall-damage-when-jump-boost-applied", true);
-    }
+@ModuleInfo(name = "No Fall Jump Boost", description = "Stops fall damage when you have jump boost!")
+public class NoFallDamageWhileHavingJumpBoostModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {
-        return "settings.gameplay-settings.fall-damage-when-jump-boost-applied";
+        return "settings.fall-damage-when-jump-boost-applied";
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

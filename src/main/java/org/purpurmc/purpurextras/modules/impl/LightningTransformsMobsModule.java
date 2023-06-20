@@ -2,7 +2,6 @@ package org.purpurmc.purpurextras.modules.impl;
 
 import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import me.youhavetrouble.entiddy.Entiddy;
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -10,7 +9,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
@@ -24,22 +22,22 @@ import java.util.Map;
  * If enabled, entities with type on the left will be transformed into entity of type on the right.
  * This overrides vanilla transformations. Vanilla mob ids are used to identify mobs.
  * There are also special cases:
- *
+ * <p>
  * `killer_bunny` - a killer bunny
  * `jeb_sheep` - rainbow sheep
  * `johhny` - vindicator aggressive to most mobs
  * `toast` - special variant of rabbit
  */
 @ModuleInfo(name = "Lightning Transforms Mobs", description = "Lightning hitting mobs transforms them into something special!")
-public class LightningTransformsMobsModule implements PurpurExtrasModule {
+public class LightningTransformsMobsModule extends PurpurExtrasModule {
 
     private final HashMap<String, Object> entities = new HashMap<>();
 
-    protected LightningTransformsMobsModule() {
+    public LightningTransformsMobsModule() {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("villager", "witch");
         defaults.put("pig", "zombie_piglin");
-        ConfigurationSection section = getConfigSection("settings.lightning-transforms-entities.entities", defaults);
+        ConfigurationSection section = getConfigSection("entities", defaults);
         HashMap<String, String> lightningTransformEntities = new HashMap<>();
         for (String key : section.getKeys(false)) {
             String value = section.getString(key);
@@ -52,12 +50,12 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule {
 
     @Override
     public boolean shouldEnable() {
-        return PurpurExtrasModule.super.shouldEnable() && !entities.isEmpty();
+        return super.shouldEnable() && !entities.isEmpty();
     }
 
     @Override
     public String getConfigPath() {
-        return "settings.lightning-transforms-entities.enabled";
+        return "settings.lightning-transforms-entities";
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

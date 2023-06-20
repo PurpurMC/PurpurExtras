@@ -5,12 +5,11 @@ import org.bukkit.Keyed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
-import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 import java.util.Iterator;
@@ -19,11 +18,12 @@ import java.util.Iterator;
  * Unlocks all available recipes on join.
  * Players can be exempt from this by denying them purpurextras.unlockallrecipesonjoin permission.
  */
-public class UnlockAllRecipesModule implements PurpurExtrasModule {
+@ModuleInfo(name = "Unlock All Recipes", description = "Unlock all crafting recipes on join!")
+public class UnlockAllRecipesModule extends PurpurExtrasModule {
 
     private final String permission = "purpurextras.unlockallrecipesonjoin";
 
-    protected UnlockAllRecipesModule() {
+    public UnlockAllRecipesModule() {
         DefaultPermissions.registerPermission(
                 permission,
                 "Players with this permission will have all recipes unlocked upon login if that feature is enabled in the config",

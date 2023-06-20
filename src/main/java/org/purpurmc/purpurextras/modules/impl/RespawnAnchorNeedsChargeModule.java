@@ -8,32 +8,21 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.type.RespawnAnchor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.util.BoundingBox;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 /**
  * If false, will make it so respawn anchors will never run out of charges.
  */
-public class RespawnAnchorNeedsChargeModule implements PurpurExtrasModule {
-
-    protected RespawnAnchorNeedsChargeModule() {}
-    @Override
-    public void enable() {
-        PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    @Override
-    public boolean shouldEnable() {
-        return !(getConfigBoolean("settings.gameplay-settings.respawn-anchor-needs-charges", true));
-    }
+@ModuleInfo(name = "Respawn Anchor Charge", description = "If false, respawn anchors will never run out of charges!")
+public class RespawnAnchorNeedsChargeModule extends PurpurExtrasModule {
 
     @Override
     public String getConfigPath() {
-        return "";
+        return "settings.respawn-anchor-needs-charges";
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

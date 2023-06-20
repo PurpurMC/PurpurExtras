@@ -18,7 +18,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  * content and drop them both.
  */
 @ModuleInfo(name = "Anvil Breaks Boats", description = "Anvils can fall and break Boats with Chests in them!")
-public class AnvilSplitsBoatsModule implements PurpurExtrasModule {
+public class AnvilSplitsBoatsModule extends PurpurExtrasModule {
     @Override
     public String getConfigPath() {
         return "settings.anvil-splits-boats";

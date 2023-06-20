@@ -1,16 +1,15 @@
 package org.purpurmc.purpurextras.modules.impl;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.permissions.PermissionDefault;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 import java.util.HashMap;
@@ -22,17 +21,17 @@ import static org.bukkit.util.permissions.DefaultPermissions.registerPermission;
 /**
  * Players will need purpurextras.spawnerplace.<mobtype> permission to place spawners of that mob.
  */
-public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule {
+@ModuleInfo(name = "Spawner Placement Permissions", description = "Binds the ability to place certain spawners by permission")
+public class SpawnerPlacementPermissionsModule extends PurpurExtrasModule {
 
-    protected SpawnerPlacementPermissionsModule() {}
+    public SpawnerPlacementPermissionsModule() {}
 
     private final String spawnerPlacePermission = "purpurextras.spawnerplace";
-    private final Map<String, Boolean> mobSpawners = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> mobSpawners = new HashMap<>();
 
     @Override
     public void enable() {
-        PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        super.enable();
         for (EntityType type : EntityType.values())
         {
             if (type.isAlive() && type.isSpawnable() )
@@ -45,13 +44,8 @@ public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule {
     }
 
     @Override
-    public boolean shouldEnable() {
-        return getConfigBoolean("settings.gameplay-settings.spawner-placement-requires-specific-permission", false);
-    }
-
-    @Override
     public String getConfigPath() {
-        return "";
+        return "settings.spawner-placement-requires-specific-permission";
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

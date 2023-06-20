@@ -26,22 +26,22 @@ import java.util.Map;
 
 /**
  * Dispenser modifications
- *
+ * <p>
  * **break-blocks**
  * If a tool category is enabled, that tool dispensed from dispenser will destroy the block in front of it.
  * It will only destroy blocks that tool can destroy and it will destroy them like that tool was used on it,
  * so wooden pickaxe will destroy diamond ore, but will not drop any items.
- *
+ * <p>
  * **shears-shear-pumpkin**
  * If enabled, when shears are dispensed and there's a pumpkin in front of a dispenser, shears will be used, making carved pumpkin.
- *
+ * <p>
  * **interact-with-cauldron**
  * If enabled, will allow dispensers fill and empty cauldrons.
- *
+ * <p>
  * **put-discs-in-jukebox**
  * If enabled, dispensers will be able to insert into or swap music discs in jukeboxes.
  */
-public class DispenserBlocksModule implements PurpurExtrasModule {
+public class DispenserBlocksModule extends PurpurExtrasModule {
 
     private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(new NamespacedKey(PurpurExtras.getInstance(), "cauldron_buckets"))
             .add(Material.BUCKET)
@@ -62,7 +62,7 @@ public class DispenserBlocksModule implements PurpurExtrasModule {
     private final boolean breakBlockPickaxe, breakBlockShovel, breakBlockHoe, breakBlockAxe, breakBlockShears,
             shearPumpkin, activateJukebox, interactWithCauldron;
 
-    protected DispenserBlocksModule() {
+    public DispenserBlocksModule() {
         breakBlockPickaxe = getConfigBoolean("settings.dispenser.break-blocks.pickaxe", false);
         breakBlockShovel = getConfigBoolean("settings.dispenser.break-blocks.shovel", false);
         breakBlockHoe = getConfigBoolean("settings.dispenser.break-blocks.hoe", false);
@@ -72,12 +72,6 @@ public class DispenserBlocksModule implements PurpurExtrasModule {
         activateJukebox = getConfigBoolean("settings.dispenser.puts-discs-in-jukebox", false);
         interactWithCauldron = getConfigBoolean("settings.dispenser.interact-with-cauldron", false);
 
-    }
-
-    @Override
-    public void enable() {
-        PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
