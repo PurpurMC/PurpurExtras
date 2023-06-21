@@ -7,6 +7,7 @@ val pluginDir: File = serverDir.resolve("plugins")
 plugins {
     `java-library`
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
 }
 
 repositories {
@@ -39,9 +40,7 @@ repositories {
             includeGroup("com.github.YouHaveTrouble")
         }
     }
-    maven {
-        url = uri("https://jitpack.io")
-    }
+
     exclusiveContent {
         forRepository {
             mavenCentral()
@@ -61,7 +60,7 @@ dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
     implementation("dev.jorel:commandapi-bukkit-shade:9.0.3")
 
-    testCompileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    testRuntimeOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
     testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.9.2")
@@ -72,6 +71,15 @@ version = "1.27.0"
 description = "\"This should be a plugin\" features from Purpur"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
+
+bukkit {
+    name = "PurpurExtras"
+    version = project.version.toString()
+    main = "org.purpurmc.purpurextras.PurpurExtras"
+    apiVersion = "1.20"
+    author = "YouHaveTrouble"
+    description = project.description
+}
 
 tasks {
     test {
@@ -89,18 +97,6 @@ tasks {
     clean {
         doLast {
             serverDir.deleteRecursively()
-        }
-    }
-
-    processResources {
-        filesMatching("plugin.yml") {
-            expand(
-                mapOf(
-                    "name" to project.name,
-                    "version" to project.version,
-                    "description" to project.description!!.replace('"'.toString(), "\\\"")
-                )
-            )
         }
     }
 
