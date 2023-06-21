@@ -7,14 +7,16 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.purpurmc.purpurextras.cmd.PurpurExtrasCommand;
+import org.purpurmc.purpurextras.modules.IModuleManager;
 import org.purpurmc.purpurextras.modules.ModuleManager;
 
 public final class PurpurExtras extends JavaPlugin {
 
     private static PurpurConfig config;
-    private ModuleManager moduleManager;
+
     private static PurpurExtras instance;
     public final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -37,16 +39,12 @@ public final class PurpurExtras extends JavaPlugin {
         CommandAPI.onEnable();
         instance = this;
         config = new PurpurConfig();
-        moduleManager = new ModuleManager();
+        Bukkit.getServicesManager().register(IModuleManager.class, new ModuleManager(), this, ServicePriority.High);
 
         new PurpurExtrasCommand();
 
-        moduleManager.reloadModules(config);
+        Bukkit.getServicesManager().getRegistration(IModuleManager.class).getProvider().reloadModules(config);
         config.saveConfig();
-    }
-
-    public ModuleManager getModuleManager() {
-        return moduleManager;
     }
 
     public static PurpurExtras getInstance() {
@@ -56,7 +54,7 @@ public final class PurpurExtras extends JavaPlugin {
     public void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             config = new PurpurConfig();
-            moduleManager.reloadModules(config);
+            Bukkit.getServicesManager().getRegistration(IModuleManager.class).getProvider().reloadModules(config);
             config.saveConfig();
             commandSender.sendMessage(Component.text("PurpurExtras configuration reloaded!"));
         });

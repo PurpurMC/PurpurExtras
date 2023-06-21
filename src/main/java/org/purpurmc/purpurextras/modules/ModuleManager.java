@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ModuleManager {
+public class ModuleManager implements IModuleManager {
 
     private static final Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
     private final Set<PurpurExtrasModule> modules;
