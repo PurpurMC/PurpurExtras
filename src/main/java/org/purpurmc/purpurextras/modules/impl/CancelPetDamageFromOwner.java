@@ -16,7 +16,7 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 /**
  * If enabled, pet owners will not be able to harm their own pets.
  */
-@ModuleInfo(name = "Cancel Pet Owner Damage", description = "Your pets cannot damage you!")
+@ModuleInfo(name = "Cancel Pet Damage by Owner", description = "You can't damage your pets!")
 public class CancelPetDamageFromOwner extends PurpurExtrasModule {
 
     @Override
