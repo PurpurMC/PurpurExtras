@@ -37,6 +37,7 @@ public class ModuleManager implements IModuleManager {
             try {
                 PurpurExtrasModule module = (PurpurExtrasModule) clazz.getDeclaredConstructor(PurpurConfig.class).newInstance(config);
                 if (module.shouldEnable()) {
+                    PurpurExtras.getInstance().getLogger().info("Registered module " + module.anno().name());
                     module.enable();
                 }
                 modules.add(module);

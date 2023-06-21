@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 import java.util.Map;
@@ -41,6 +42,7 @@ import java.util.Map;
  * **put-discs-in-jukebox**
  * If enabled, dispensers will be able to insert into or swap music discs in jukeboxes.
  */
+@ModuleInfo(name = "Dispenser Modifications", description = "Dispensers can now modify many blocks!")
 public class DispenserBlocks extends PurpurExtrasModule {
 
     private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(PurpurExtras.key("cauldron_buckets"))
