@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -22,7 +23,8 @@ public class InvisibleItemFrame extends PurpurExtrasModule {
 
     private static final String invisFramePermission = "purpurextras.invisibleframes";
 
-    public InvisibleItemFrame() {
+    public InvisibleItemFrame(PurpurConfig config) {
+        super(config);
         DefaultPermissions.registerPermission(invisFramePermission, "Allows player to shift-right-click an item frame to turn it invisible", PermissionDefault.OP);
     }
 

@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -33,7 +34,8 @@ public class NetherBuildHeight extends PurpurExtrasModule {
     private final String noPermissionMessageContent;
     private final String netherBuildHeightBypassPermission = "purpurextras.netherbuildheightbypass";
 
-    public NetherBuildHeight() {
+    public NetherBuildHeight(PurpurConfig config) {
+        super(config);
         this.configBuildHeight = getConfigInt("height-limit", 128);
         this.noPermissionMessageContent = getConfigString("no-permission-message", "<red>Max build height in this world is: <gold><height>");
         DefaultPermissions.registerPermission(netherBuildHeightBypassPermission, "Allows player to bypass the configured max nether build height", PermissionDefault.OP);

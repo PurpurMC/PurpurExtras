@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -19,6 +20,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Anvil Breaks Minecarts", description = "Anvils can fall and break Minecarts with Chests in them!")
 public class AnvilSplitsMinecarts extends PurpurExtrasModule {
+
+    public AnvilSplitsMinecarts(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

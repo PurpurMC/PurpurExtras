@@ -4,6 +4,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -21,7 +22,8 @@ public class StonecutterDamage extends PurpurExtrasModule {
 
     private final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
 
-    public StonecutterDamage() {
+    public StonecutterDamage(PurpurConfig config) {
+        super(config);
         List<String> entityBlacklist = getConfigList("blacklist", List.of("player"));
         if (getConfigBoolean("enabled", false)) {
             if (entityBlacklist.isEmpty()) return;

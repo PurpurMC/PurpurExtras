@@ -3,6 +3,7 @@ package org.purpurmc.purpurextras.modules.impl;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -14,7 +15,8 @@ public class FurnaceBurnTime extends PurpurExtrasModule {
 
     private final double furnaceBurnTimeMultiplier;
 
-    public FurnaceBurnTime() {
+    public FurnaceBurnTime(PurpurConfig config) {
+        super(config);
         furnaceBurnTimeMultiplier = getConfigDouble("multiplier", 1.0);
     }
 

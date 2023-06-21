@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -19,7 +20,8 @@ public class ShieldDamageReduction extends PurpurExtrasModule {
 
     private double shieldDamageReduction = DEFAULT_SHIELD_DAMAGE_REDUCTION;
 
-    public ShieldDamageReduction() {
+    public ShieldDamageReduction(PurpurConfig config) {
+        super(config);
         shieldDamageReduction = getConfigDouble("value", shieldDamageReduction);
     }
 

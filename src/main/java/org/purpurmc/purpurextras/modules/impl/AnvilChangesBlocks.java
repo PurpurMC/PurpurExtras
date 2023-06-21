@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules.impl;
 
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +28,8 @@ public class AnvilChangesBlocks extends PurpurExtrasModule {
 
     private final HashSet<Material> anvils = new HashSet<>();
     private final HashMap<Material, Material> anvilCrushBlocksIndex = new HashMap<>();
-    public AnvilChangesBlocks() {
+    public AnvilChangesBlocks(PurpurConfig config) {
+        super(config);
         Map<String, Object> defaults = new HashMap<>();
 
         anvils.add(Material.ANVIL);

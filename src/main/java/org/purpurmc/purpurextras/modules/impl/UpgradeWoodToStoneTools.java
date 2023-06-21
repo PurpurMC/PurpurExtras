@@ -1,6 +1,7 @@
 package org.purpurmc.purpurextras.modules.impl;
 
 import org.bukkit.inventory.SmithingTransformRecipe;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -15,6 +16,10 @@ import org.bukkit.inventory.SmithingRecipe;
  */
 @ModuleInfo(name = "Upgrade wood to stone", description = "Allows for upgrading from wood to stone tools in the smithing table")
 public class UpgradeWoodToStoneTools extends PurpurExtrasModule {
+
+    public UpgradeWoodToStoneTools(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public void enable() {

@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.PlayerItemCooldownEvent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -17,7 +18,8 @@ public class ShieldCooldown extends PurpurExtrasModule {
 
     private int shieldCooldown = DEFAULT_SHIELD_COOLDOWN;
 
-    public ShieldCooldown() {
+    public ShieldCooldown(PurpurConfig config) {
+        super(config);
         shieldCooldown = getConfigInt("value", shieldCooldown);
         shieldCooldown = Math.max(0, shieldCooldown);
     }

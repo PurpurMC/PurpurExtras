@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -22,6 +23,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Create Suspicious Blocks", description = "Right click a block to make it a suspicious block!")
 public class CreateSusBlocks extends PurpurExtrasModule {
+
+    public CreateSusBlocks(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

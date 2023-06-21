@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -19,6 +20,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Open Iron Doors", description = "Open Iron Doors with your hand!")
 public class OpenIronDoorsWithHand extends PurpurExtrasModule {
+
+    public OpenIronDoorsWithHand(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -62,7 +63,8 @@ public class DispenserBlocks extends PurpurExtrasModule {
     private final boolean breakBlockPickaxe, breakBlockShovel, breakBlockHoe, breakBlockAxe, breakBlockShears,
             shearPumpkin, activateJukebox, interactWithCauldron;
 
-    public DispenserBlocks() {
+    public DispenserBlocks(PurpurConfig config) {
+        super(config);
         breakBlockPickaxe = getConfigBoolean("settings.dispenser.break-blocks.pickaxe", false);
         breakBlockShovel = getConfigBoolean("settings.dispenser.break-blocks.shovel", false);
         breakBlockHoe = getConfigBoolean("settings.dispenser.break-blocks.hoe", false);

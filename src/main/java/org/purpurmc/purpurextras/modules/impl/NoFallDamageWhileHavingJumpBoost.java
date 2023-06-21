@@ -5,6 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -13,6 +14,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "No Fall Jump Boost", description = "Stops fall damage when you have jump boost!")
 public class NoFallDamageWhileHavingJumpBoost extends PurpurExtrasModule {
+
+    public NoFallDamageWhileHavingJumpBoost(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -31,7 +32,8 @@ public class VoidTotem extends PurpurExtrasModule {
     private final Collection<PotionEffect> totemEffects = new ArrayList<>();
     private final HashMap<UUID, Location> lastGroundedLocations = new HashMap<>();
 
-    public VoidTotem() {
+    public VoidTotem(PurpurConfig config) {
+        super(config);
         totemEffects.add(new PotionEffect(PotionEffectType.REGENERATION, 20*45, 1));
         totemEffects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20*40, 0));
         totemEffects.add(new PotionEffect(PotionEffectType.ABSORPTION, 20*5, 1));

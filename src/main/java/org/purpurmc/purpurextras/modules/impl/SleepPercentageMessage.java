@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.TimeSkipEvent;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -26,7 +27,8 @@ public class SleepPercentageMessage extends PurpurExtrasModule {
     private final String playerSleepMessage, nightSkipMessage;
     private final String sleepMessageBypass = "purpurextras.sleepmessagebypass";
 
-    public SleepPercentageMessage() {
+    public SleepPercentageMessage(PurpurConfig config) {
+        super(config);
         this.playerSleepMessage = getConfigString("player-sleeping", "<grey><playername> has fallen asleep. <sleeping> out of <needed> required players in <worldname> are sleeping.");
         this.nightSkipMessage = getConfigString("skipping-night", "<grey>Enough players have slept! Skipping through the night in <worldname>.");
         DefaultPermissions.registerPermission(sleepMessageBypass, "Allows player to not display a message in chat when they sleep", PermissionDefault.OP);

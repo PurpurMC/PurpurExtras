@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.permissions.PermissionDefault;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -24,10 +25,12 @@ import static org.bukkit.util.permissions.DefaultPermissions.registerPermission;
 @ModuleInfo(name = "Spawner Placement Permissions", description = "Binds the ability to place certain spawners by permission")
 public class SpawnerPlacementPermissions extends PurpurExtrasModule {
 
-    public SpawnerPlacementPermissions() {}
-
     private final String spawnerPlacePermission = "purpurextras.spawnerplace";
     private final Map<String, Boolean> mobSpawners = new HashMap<>();
+
+    public SpawnerPlacementPermissions(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public void enable() {

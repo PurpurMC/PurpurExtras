@@ -1,6 +1,7 @@
 package org.purpurmc.purpurextras.modules;
 
 import org.bukkit.event.HandlerList;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.reflections.Reflections;
 
@@ -21,7 +22,7 @@ public class ModuleManager {
         return modules.stream().filter(c -> module.isAssignableFrom(c.getClass())).findFirst().orElse(null);
     }
 
-    public void reloadModules() {
+    public void reloadModules(PurpurConfig config) {
 
         HandlerList.unregisterAll(PurpurExtras.getInstance());
 
@@ -29,7 +30,7 @@ public class ModuleManager {
 
         subTypes.forEach(clazz -> {
             try {
-                PurpurExtrasModule module = (PurpurExtrasModule) clazz.getDeclaredConstructor().newInstance();
+                PurpurExtrasModule module = (PurpurExtrasModule) clazz.getDeclaredConstructor(PurpurConfig.class).newInstance(config);
                 if (module.shouldEnable()) {
                     module.enable();
                 }

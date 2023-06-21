@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules.impl;
 
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -26,7 +27,8 @@ public class BeeHiveLore extends PurpurExtrasModule {
     private final String beeHiveLoreBees, beeHiveLoreHoney;
     private final MiniMessage miniMessage = PurpurExtras.getInstance().miniMessage;
 
-    public BeeHiveLore() {
+    public BeeHiveLore(PurpurConfig config) {
+        super(config);
         this.beeHiveLoreBees = getConfigString("bees", "<reset><gray>Bees: <bees>/<maxbees>");
         this.beeHiveLoreHoney = getConfigString("honey", "<reset><gray>Honey level: <honey>/<maxhoney>");
     }

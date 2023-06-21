@@ -111,11 +111,13 @@ tasks {
         relocate("dev.jorel.commandapi", "org.purpurmc.purpurextras.commandapi")
     }
 
-    register("downloadServer") {
+    register("downloadServer") {//TODO: Automatically check server build / version to check for download
         group = "purpur"
         doFirst {
             serverDir.mkdirs()
             pluginDir.mkdirs()
+            if(serverDir.resolve("server.jar").exists())
+                serverDir.resolve("server.jar").delete()
             URL("https://api.purpurmc.org/v2/purpur/1.20.1/latest/download").openStream().use {
                 Files.copy(it, serverDir.resolve("server.jar").toPath())
             }

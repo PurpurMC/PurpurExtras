@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.purpurmc.purpur.event.inventory.GrindstoneTakeResultEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -29,6 +30,10 @@ import java.util.Map;
 public class GrindstoneEnchantsBooks extends PurpurExtrasModule {
 
     private final ItemStack BOOK = new ItemStack(Material.BOOK);
+
+    public GrindstoneEnchantsBooks(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

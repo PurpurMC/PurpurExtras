@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -18,6 +19,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Cancel Pet Owner Damage", description = "Your pets cannot damage you!")
 public class CancelPetDamageFromOwner extends PurpurExtrasModule {
+
+    public CancelPetDamageFromOwner(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

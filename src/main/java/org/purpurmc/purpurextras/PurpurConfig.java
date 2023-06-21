@@ -13,7 +13,7 @@ public class PurpurConfig {
     private FileConfiguration config;
     private final File configPath;
 
-    protected PurpurConfig() {
+    PurpurConfig() {
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.reloadConfig();
         logger = plugin.getLogger();
@@ -34,7 +34,7 @@ public class PurpurConfig {
         }
     }
 
-    protected void saveConfig() {
+    void saveConfig() {
         try {
             config.save(configPath);
             config = PurpurExtras.getInstance().getConfig();

@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -23,7 +24,8 @@ public class UnlockAllRecipes extends PurpurExtrasModule {
 
     private final String permission = "purpurextras.unlockallrecipesonjoin";
 
-    public UnlockAllRecipes() {
+    public UnlockAllRecipes(PurpurConfig config) {
+        super(config);
         DefaultPermissions.registerPermission(
                 permission,
                 "Players with this permission will have all recipes unlocked upon login if that feature is enabled in the config",

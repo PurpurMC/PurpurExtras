@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules.impl;
 
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,6 +20,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Respawn Anchor Charge", description = "If false, respawn anchors will never run out of charges!")
 public class RespawnAnchorNeedsCharge extends PurpurExtrasModule {
+
+    public RespawnAnchorNeedsCharge(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

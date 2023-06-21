@@ -8,6 +8,7 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 import org.spigotmc.event.entity.EntityMountEvent;
@@ -17,6 +18,10 @@ import org.spigotmc.event.entity.EntityMountEvent;
  */
 @ModuleInfo(name = "Mounts need a name", description = "Rideable mobs need a nametag to be ridden!")
 public class ForceNametaggedForRiding extends PurpurExtrasModule {
+
+    public ForceNametaggedForRiding(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

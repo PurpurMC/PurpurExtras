@@ -6,6 +6,7 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -15,6 +16,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Escape Chat Slashes", description = "Allows you to start messages with a /!")
 public class EscapeCommandSlash extends PurpurExtrasModule {
+
+    public EscapeCommandSlash(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

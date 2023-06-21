@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -33,7 +34,8 @@ public class LightningTransformsMobs extends PurpurExtrasModule {
 
     private final HashMap<String, Object> entities = new HashMap<>();
 
-    public LightningTransformsMobs() {
+    public LightningTransformsMobs(PurpurConfig config) {
+        super(config);
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("villager", "witch");
         defaults.put("pig", "zombie_piglin");

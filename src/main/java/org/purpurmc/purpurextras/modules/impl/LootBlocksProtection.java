@@ -7,6 +7,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -24,7 +25,8 @@ public class LootBlocksProtection extends PurpurExtrasModule {
 
     private final String permission = "purpurextras.lootblockprotectionbypass";
 
-    public LootBlocksProtection() {
+    public LootBlocksProtection(PurpurConfig config) {
+        super(config);
         DefaultPermissions.registerPermission(
                 permission,
                 "Players with this permission will be able to break blocks with loot tables that can regenerate loot",

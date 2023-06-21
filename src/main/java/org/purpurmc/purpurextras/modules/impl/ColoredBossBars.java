@@ -1,6 +1,7 @@
 package org.purpurmc.purpurextras.modules.impl;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
@@ -23,6 +24,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 public class ColoredBossBars extends PurpurExtrasModule {
 
     private final NamespacedKey dyeColor = PurpurExtras.key("dyedColor");
+
+    public ColoredBossBars(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

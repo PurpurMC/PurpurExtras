@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -30,7 +31,8 @@ public class RunFasterOnPaths extends PurpurExtrasModule {
 
     private final PotionEffect speedEffect;
 
-    public RunFasterOnPaths() {
+    public RunFasterOnPaths(PurpurConfig config) {
+        super(config);
         List<String> defaults = new ArrayList<>();
         defaults.add(Material.DIRT_PATH.toString());
 

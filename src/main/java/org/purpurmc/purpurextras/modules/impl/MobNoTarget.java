@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -12,6 +13,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Prevent Mob Targetting", description = "Prevents certain mobs from targetting players!")
 public class MobNoTarget extends PurpurExtrasModule {
+
+    public MobNoTarget(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {

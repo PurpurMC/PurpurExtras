@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.modules.ModuleInfo;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
@@ -16,6 +17,10 @@ import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
  */
 @ModuleInfo(name = "Chorus Flowers Drop", description = "Chorus Flowers will always drop their item!")
 public class ChorusFlowerAlwaysDrops extends PurpurExtrasModule {
+
+    public ChorusFlowerAlwaysDrops(PurpurConfig config) {
+        super(config);
+    }
 
     @Override
     public String getConfigPath() {
