@@ -11,34 +11,56 @@ plugins {
 
 repositories {
     maven {
+        name = "Sonatype OSS"
         url = uri("https://oss.sonatype.org/content/groups/public/")
     }
 
     maven {
+        name = "PurpurMC"
         url = uri("https://repo.purpurmc.org/snapshots")
     }
 
     maven {
+        name = "PaperMC"
         url = uri("https://papermc.io/repo/repository/maven-public/")
     }
 
     maven {
         url = uri("https://libraries.minecraft.net")
     }
-
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Jitpack"
+                url = uri("https://jitpack.io")
+            }
+        }
+        filter {
+            includeGroup("com.github.YouHaveTrouble")
+        }
+    }
     maven {
         url = uri("https://jitpack.io")
     }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
+    exclusiveContent {
+        forRepository {
+            mavenCentral()
+        }
+        filter {
+            includeGroup("org.reflections")
+            includeGroup("org.junit.jupiter")
+            includeGroup("dev.jorel")
+        }
     }
+    mavenCentral()
 }
 
 dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
     compileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.0.3")
+
     testCompileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
@@ -86,6 +108,7 @@ tasks {
         archiveFileName.set("PurpurExtras-${version}.jar")
         relocate("org.reflections", "org.purpurmc.purpurextras.reflections")
         relocate("me.youhavetrouble.entiddy", "org.purpurmc.purpurextras.entiddy")
+        relocate("dev.jorel.commandapi", "org.purpurmc.purpurextras.commandapi")
     }
 
     register("downloadServer") {

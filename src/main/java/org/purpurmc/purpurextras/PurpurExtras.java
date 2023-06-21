@@ -1,20 +1,27 @@
 package org.purpurmc.purpurextras;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.purpurmc.purpurextras.cmd.PurpurExtrasCommand;
 import org.purpurmc.purpurextras.modules.ModuleManager;
 
 public final class PurpurExtras extends JavaPlugin {
 
     private static PurpurConfig config;
-    private static ModuleManager moduleManager;
+    private ModuleManager moduleManager;
     private static PurpurExtras instance;
     public final MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+    }
 
     @Override
     public void onEnable() {
@@ -27,17 +34,12 @@ public final class PurpurExtras extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
-
+        CommandAPI.onEnable();
         instance = this;
         config = new PurpurConfig();
         moduleManager = new ModuleManager();
 
-        PluginCommand command = getCommand("purpurextras");
-        if (command != null) {
-            PurpurExtrasCommand cmd = new PurpurExtrasCommand();
-            command.setExecutor(cmd);
-            command.setTabCompleter(cmd);
-        }
+        new PurpurExtrasCommand();
 
         moduleManager.reloadModules();
         config.saveConfig();
@@ -47,7 +49,7 @@ public final class PurpurExtras extends JavaPlugin {
         return config;
     }
 
-    public static ModuleManager getModuleManager() {
+    public ModuleManager getModuleManager() {
         return moduleManager;
     }
 
@@ -55,7 +57,7 @@ public final class PurpurExtras extends JavaPlugin {
         return instance;
     }
 
-    void reloadPurpurExtrasConfig(CommandSender commandSender) {
+    public void reloadPurpurExtrasConfig(CommandSender commandSender) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             config = new PurpurConfig();
             moduleManager.reloadModules();

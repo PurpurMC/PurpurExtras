@@ -17,6 +17,10 @@ public class ModuleManager {
         modules = new ArrayList<>();
     }
 
+    public PurpurExtrasModule getModule(Class<? extends PurpurExtrasModule> module) {
+        return modules.stream().filter(c -> module.isAssignableFrom(c.getClass())).findFirst().orElse(null);
+    }
+
     public void reloadModules() {
 
         HandlerList.unregisterAll(PurpurExtras.getInstance());

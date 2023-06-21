@@ -1,7 +1,0 @@
-- Refactored all modules, implementing `ModuleManager`
-- Split `AnvilSplitsMinecartsAndBoatsModule` into two separate modules
-- All modules now require an `@ModuleInfo` annotation 
-- `PurpurExtrasModule` now inherits `Listener`, allowing basic module registration logic to be default
-- You now need to specify a config path (`PurpurExtrasModule#getConfigPath()`) for your module 
-- Added a ton of default config methods into `PurpurExtrasModule` 
-- Fixes Smithing Tables Upgrade Modules by not requiring a smithing template to work 
