@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class DispenserBlocks extends PurpurExtrasModule {
 
-    private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(new NamespacedKey(PurpurExtras.getInstance(), "cauldron_buckets"))
+    private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(PurpurExtras.key("cauldron_buckets"))
             .add(Material.BUCKET)
             .add(Material.WATER_BUCKET)
             .add(Material.LAVA_BUCKET)

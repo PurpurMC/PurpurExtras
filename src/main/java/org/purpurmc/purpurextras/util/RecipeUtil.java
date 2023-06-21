@@ -13,7 +13,7 @@ public class RecipeUtil {
     }
 
     public static void removeRecipe(String key) {
-        Bukkit.getScheduler().runTask(PurpurExtras.getInstance(), () -> Bukkit.removeRecipe(new NamespacedKey(PurpurExtras.getInstance(), key)));
+        Bukkit.getScheduler().runTask(PurpurExtras.getInstance(), () -> Bukkit.removeRecipe(PurpurExtras.key(key)));
     }
 
 }
