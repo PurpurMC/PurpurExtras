@@ -34,5 +34,5 @@ will affect everyone who runs Purpur, not just you and your server.
 ## Creating a PurpurExtras Module
 
 Creating a module for PurpurExtras is extremely easy! All you have to do is new class
-in the package `org.purpurmc.purpurextras.modules.impl`, write your Listeners, give it an
+in the package `org.purpurmc.purpurextras.modules.implementation`, write your Listeners, give it an
 `@ModuleInfo` annotation, and you're set! PurpurExtras internally handles all module registration

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class ModuleAnnotationTest {
 
     static Stream<Class<?>> getClasses() {
-        return new Reflections("org.purpurmc.purpurextras.modules.impl").get(Scanners.SubTypes.of(PurpurExtrasModule.class).asClass()).stream();
+        return new Reflections("org.purpurmc.purpurextras.modules.implementation").get(Scanners.SubTypes.of(PurpurExtrasModule.class).asClass()).stream();
     }
 
     @ParameterizedTest
