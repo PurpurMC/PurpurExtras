@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ModuleManager implements IModuleManager {
 
-    private static final Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
+    private static final Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules.implementation");
     private final Set<PurpurExtrasModule> modules;
 
     public ModuleManager() {

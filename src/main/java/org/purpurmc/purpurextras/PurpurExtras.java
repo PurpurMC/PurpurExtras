@@ -9,7 +9,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.purpurmc.purpurextras.cmd.PurpurExtrasCommand;
+import org.purpurmc.purpurextras.command.PurpurExtrasCommand;
 import org.purpurmc.purpurextras.modules.IModuleManager;
 import org.purpurmc.purpurextras.modules.ModuleManager;
 
