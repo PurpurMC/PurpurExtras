@@ -10,7 +10,7 @@ public class PurpurExtrasCommand {
 
     public PurpurExtrasCommand() {
         new CommandAPICommand("purpurextras")
-                .withSubcommands(new ReloadCommand(), new VersionCommand())
+                .withSubcommands(new ReloadCommand(), new VersionCommand(), new EnabledModulesCommand())
                 .withPermission("purpurextras.command")
                 .executes((CommandExecutor) (sender, args) -> sender.sendMessage(
                         Component.text("PurpurExtras", NamedTextColor.DARK_PURPLE, TextDecoration.BOLD)

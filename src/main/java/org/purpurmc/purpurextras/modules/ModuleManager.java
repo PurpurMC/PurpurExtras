@@ -5,27 +5,32 @@ import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.reflections.Reflections;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
 
     private static final Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
-    private final List<PurpurExtrasModule> modules;
+    private final Set<PurpurExtrasModule> modules;
 
     public ModuleManager() {
-        modules = new ArrayList<>();
+        modules = new HashSet<>();
     }
 
     public PurpurExtrasModule getModule(Class<? extends PurpurExtrasModule> module) {
         return modules.stream().filter(c -> module.isAssignableFrom(c.getClass())).findFirst().orElse(null);
     }
 
+    public Set<PurpurExtrasModule> getModules(Predicate<PurpurExtrasModule> predicate) {
+        return modules.stream().filter(predicate).collect(Collectors.toCollection(HashSet::new));
+    }
+
     public void reloadModules(PurpurConfig config) {
 
         HandlerList.unregisterAll(PurpurExtras.getInstance());
-
+        modules.clear();
         Set<Class<?>> subTypes = reflections.getTypesAnnotatedWith(ModuleInfo.class);
 
         subTypes.forEach(clazz -> {
