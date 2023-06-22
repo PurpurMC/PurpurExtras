@@ -49,7 +49,7 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
         ItemStack cursorItem = event.getCursor();
 
         if (!(event.getInventory() instanceof LoomInventory)) return;
-        if (MaterialSetTag.BANNERS.isTagged(currentItem.getType())) {
+        if (currentItem != null && MaterialSetTag.BANNERS.isTagged(currentItem.getType())) {
             if (newLayerExceedsMaxLayers(currentItem)) return;
             switch (event.getSlotType()) {
                 case CRAFTING -> {
@@ -66,7 +66,7 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
                 }
                 case RESULT -> craftLoad(player, currentItem);
             }
-        } else if (MaterialSetTag.BANNERS.isTagged(cursorItem.getType())) {
+        } else if (cursorItem != null && MaterialSetTag.BANNERS.isTagged(cursorItem.getType())) {
             if (newLayerExceedsMaxLayers(cursorItem)) return;
             if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING) && isPlaceAction(event.getAction())) {
                 save(player, cursorItem);
