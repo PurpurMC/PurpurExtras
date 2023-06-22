@@ -50,16 +50,13 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
 
         if (!(event.getInventory() instanceof LoomInventory)) return;
         if (MaterialSetTag.BANNERS.isTagged(currentItem.getType())) {
-            if (newLayerExceedsMaxLayers(currentItem)) {
-                player.sendPlainMessage("You cannot add another layer to this banner.");
-                return;
-            }
+            if (newLayerExceedsMaxLayers(currentItem)) return;
             switch (event.getSlotType()) {
                 case CRAFTING -> {
                     if (isPlaceAction(event.getAction())) {
                         save(player, currentItem);
                     } else {
-                        back(player, currentItem);
+                        undo(player, currentItem);
                     }
                 }
                 case CONTAINER, QUICKBAR -> {
@@ -70,10 +67,7 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
                 case RESULT -> craftLoad(player, currentItem);
             }
         } else if (MaterialSetTag.BANNERS.isTagged(cursorItem.getType())) {
-            if (newLayerExceedsMaxLayers(cursorItem)) {
-                player.sendPlainMessage("You cannot add another layer to this banner.");
-                return;
-            }
+            if (newLayerExceedsMaxLayers(cursorItem)) return;
             if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING) && isPlaceAction(event.getAction())) {
                 save(player, cursorItem);
             }
@@ -103,7 +97,7 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
         banner.setItemMeta(meta);
     }
 
-    private void back(Player player, ItemStack banner) {
+    private void undo(Player player, ItemStack banner) {
         if (!playerBannerData.containsKey(player)) return;
         List<Pattern> oldPatterns = playerBannerData.get(player);
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
