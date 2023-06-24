@@ -1,5 +1,7 @@
 name: Build
-on: push
+on: 
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,5 +13,11 @@ jobs:
         with:
           distribution: 'microsoft'
           java-version: 17
+          cache: 'gradle'
       - name: Build with Gradle
-        run: gradle shadowJar
+        run: gradle shadowJar --no-daemon --stacktrace
+      - name: Delete cache on Failure
+        if: ${{ failure() }}
+        uses: TheRealRyGuy/clear-cache-action@master
+        env:
+          token: ${{ secrets.GITHUB_TOKEN }}
