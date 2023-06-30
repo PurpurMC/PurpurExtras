@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.purpurmc.purpurextras.PurpurExtras;
 
@@ -29,16 +30,16 @@ import java.util.function.Predicate;
  */
 public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
 
-    private int maxSwell = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.fuse-ticks", 30);
-    private int maxDistance = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.agro-distance", 7);
-    private int explosionPower = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.explosion-radius", 3);
-    private double velocity = PurpurExtras.getPurpurConfig().getDouble("settings.creeper-squid.velocity", 3);
+    private int maxSwell;
+    private int maxDistance;
+    private int explosionPower;
+    private double velocity;
 
     @Override
     public void enable() {
         Bukkit.getServer().getPluginManager().registerEvents(this, PurpurExtras.getInstance());
         maxSwell = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.fuse-ticks", 30);
-        maxDistance = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.agro-distance", 7);
+        maxDistance = (int) Math.pow(PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.agro-distance", 7), 2);
         explosionPower = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.explosion-radius", 3);
         velocity = PurpurExtras.getPurpurConfig().getDouble("settings.creeper-squid.velocity", 0.5);
     }
@@ -74,22 +75,26 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
         @Override
         public boolean shouldActivate() {
             if (!squid.isValid()) return false;
-            if (currentTarget == null || currentTarget.getLocation().distance(squid.getLocation()) > maxDistance)
-                currentTarget = getClosestPlayer();
-            if (currentTarget == null) {
+            if(currentTarget != null) {
+                if(currentTarget.getLocation().distanceSquared(squid.getLocation()) <= maxDistance) {
+                    return true;
+                }
+            }
+            currentTarget = getClosestPlayer();
+            if(currentTarget == null) {
                 swellDir = -1;
                 if (currentSwell > 0) currentSwell += swellDir;
                 squid.setGlowing(false);
                 return false;
-            } else {
-                return true;
             }
+            return true;
         }
 
 
         @Override
         public void stop() {
             squid.setTarget(null);
+            squid.setVelocity(Vector.getRandom());
         }
 
         @Override
@@ -119,9 +124,9 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
         }
 
         private void explode() {
-            ExplosionPrimeEvent ev = new ExplosionPrimeEvent(squid, 3, true);
-            ev.callEvent();
-            if (!ev.isCancelled()) {
+            ExplosionPrimeEvent event = new ExplosionPrimeEvent(squid, 3, true);
+            event.callEvent();
+            if (!event.isCancelled()) {
                 squid.remove();
                 squid.getWorld().createExplosion(squid, squid.getLocation(), explosionPower);
                 Bukkit.getScheduler().runTaskLater(PurpurExtras.getInstance(),
@@ -135,16 +140,16 @@ public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
             Collection<Player> players = squid.getWorld().getNearbyEntitiesByType(Player.class, squid.getLocation(), maxDistance, playerPredicate);
             double playerDistance = -1;
             Player closestPlayer = null;
-            for (Player p : players) {
+            for (Player player : players) {
                 if (closestPlayer == null) {
-                    closestPlayer = p;
-                    playerDistance = p.getLocation().distance(squid.getLocation());
+                    closestPlayer = player;
+                    playerDistance = player.getLocation().distanceSquared(squid.getLocation());
                     continue;
                 }
-                double dist = p.getLocation().distance(squid.getLocation());
+                double dist = player.getLocation().distanceSquared(squid.getLocation());
                 if (dist < playerDistance) {
-                    closestPlayer = p;
-                    playerDistance = p.getLocation().distance(squid.getLocation());
+                    closestPlayer = player;
+                    playerDistance = player.getLocation().distanceSquared(squid.getLocation());
                 }
             }
             return closestPlayer;
