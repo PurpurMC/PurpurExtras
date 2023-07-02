@@ -14,10 +14,10 @@ import org.bukkit.event.raid.RaidStopEvent;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.SplittableRandom;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Modifies the drop rate of totems from Evokers spawned in a raid
@@ -26,7 +26,7 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
 
     private final SplittableRandom random;
     private final int dropChance;
-    private final Map<UUID, Raider> raiders = new ConcurrentHashMap<>();
+    private final Map<UUID, Raider> raiders = new HashMap<>();
 
     protected RaidTotemDropsModule() {
         dropChance = PurpurExtras.getPurpurConfig().getInt("settings.raid-totem-drops.chance", 0);
