@@ -19,8 +19,8 @@ public class ModuleManager implements IModuleManager {
         modules = new HashSet<>();
     }
 
-    public PurpurExtrasModule getModule(Class<? extends PurpurExtrasModule> module) {
-        return modules.stream().filter(c -> module.isAssignableFrom(c.getClass())).findFirst().orElse(null);
+    public <T extends PurpurExtrasModule> T getModule(Class<T> module) {
+        return (T) modules.stream().filter(c -> module.isAssignableFrom(c.getClass())).findFirst().orElse(null);
     }
 
     public Set<PurpurExtrasModule> getModules(Predicate<PurpurExtrasModule> predicate) {

@@ -13,7 +13,7 @@ import org.purpurmc.purpurextras.command.PurpurExtrasCommand;
 import org.purpurmc.purpurextras.modules.IModuleManager;
 import org.purpurmc.purpurextras.modules.ModuleManager;
 
-public final class PurpurExtras extends JavaPlugin {
+public class PurpurExtras extends JavaPlugin {
 
     private static PurpurConfig config;
 

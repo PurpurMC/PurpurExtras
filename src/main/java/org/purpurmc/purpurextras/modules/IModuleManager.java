@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public interface IModuleManager {
-    PurpurExtrasModule getModule(Class<? extends PurpurExtrasModule> module);
+    <T extends PurpurExtrasModule> T getModule(Class<T> module);
 
     Set<PurpurExtrasModule> getModules(Predicate<PurpurExtrasModule> predicate);
 
