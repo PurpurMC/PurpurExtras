@@ -7,38 +7,63 @@ val pluginDir: File = serverDir.resolve("plugins")
 plugins {
     `java-library`
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
 }
 
 repositories {
     maven {
+        name = "Sonatype OSS"
         url = uri("https://oss.sonatype.org/content/groups/public/")
     }
 
     maven {
+        name = "PurpurMC"
         url = uri("https://repo.purpurmc.org/snapshots")
     }
 
     maven {
+        name = "PaperMC"
         url = uri("https://papermc.io/repo/repository/maven-public/")
     }
 
     maven {
         url = uri("https://libraries.minecraft.net")
     }
-
-    maven {
-        url = uri("https://jitpack.io")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Jitpack"
+                url = uri("https://jitpack.io")
+            }
+        }
+        filter {
+            includeGroup("com.github.YouHaveTrouble")
+        }
     }
 
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
+    exclusiveContent {
+        forRepository {
+            mavenCentral()
+        }
+        filter {
+            includeGroup("org.reflections")
+            includeGroup("org.junit.jupiter")
+            includeGroup("dev.jorel")
+        }
     }
+    mavenCentral()
 }
 
 dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
     compileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.0.3")
+
+    testRuntimeOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.9.2")
 }
 
 group = "org.purpurmc.purpurextras"
@@ -47,7 +72,19 @@ description = "\"This should be a plugin\" features from Purpur"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
+bukkit {
+    name = "PurpurExtras"
+    version = project.version.toString()
+    main = "org.purpurmc.purpurextras.PurpurExtras"
+    apiVersion = "1.20"
+    author = "YouHaveTrouble"
+    description = project.description
+}
+
 tasks {
+    test {
+        useJUnitPlatform()
+    }
 
     compileJava {
         options.encoding = "UTF-8"
@@ -63,29 +100,20 @@ tasks {
         }
     }
 
-    processResources {
-        filesMatching("plugin.yml") {
-            expand(
-                mapOf(
-                    "name" to project.name,
-                    "version" to project.version,
-                    "description" to project.description!!.replace('"'.toString(), "\\\"")
-                )
-            )
-        }
-    }
-
     shadowJar {
         archiveFileName.set("PurpurExtras-${version}.jar")
         relocate("org.reflections", "org.purpurmc.purpurextras.reflections")
         relocate("me.youhavetrouble.entiddy", "org.purpurmc.purpurextras.entiddy")
+        relocate("dev.jorel.commandapi", "org.purpurmc.purpurextras.commandapi")
     }
 
-    register("downloadServer") {
+    register("downloadServer") {//TODO: Automatically check server build / version to check for download
         group = "purpur"
         doFirst {
             serverDir.mkdirs()
             pluginDir.mkdirs()
+            if(serverDir.resolve("server.jar").exists())
+                serverDir.resolve("server.jar").delete()
             URL("https://api.purpurmc.org/v2/purpur/1.20.1/latest/download").openStream().use {
                 Files.copy(it, serverDir.resolve("server.jar").toPath())
             }

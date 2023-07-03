@@ -13,15 +13,28 @@ public class PurpurConfig {
     private FileConfiguration config;
     private final File configPath;
 
-    protected PurpurConfig() {
+    PurpurConfig() {
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.reloadConfig();
         logger = plugin.getLogger();
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
+        ConfigurationSection sec = config.getConfigurationSection("settings.gameplay-settings");
+        if(sec != null) {
+            logger.info("Running gameplay-settings config migration");
+            sec.getValues(false).forEach((name, obj) -> {
+                if(obj instanceof Boolean) {
+                    config.set("settings." + name + ".enabled", obj);
+                } else if(obj instanceof ConfigurationSection cs) {
+                    config.set("settings." + name, cs);
+                    config.set("settings." + name + ".enabled", false);
+                }
+            });
+            config.set("settings.gameplay-settings", null);
+        }
     }
 
-    protected void saveConfig() {
+    void saveConfig() {
         try {
             config.save(configPath);
             config = PurpurExtras.getInstance().getConfig();
