@@ -1,4 +1,4 @@
-package org.purpurmc.purpurextras.modules;
+package org.purpurmc.purpurextras.modules.implementation;
 
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
@@ -17,7 +17,10 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.modules.ModuleInfo;
+import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -28,25 +31,30 @@ import java.util.function.Predicate;
  * ticks, as well as moving towards you at a velocity of {@link #velocity}
  * Explosion power / radius is also configurable through {@link #explosionPower}
  */
-public class CreeperSquidsModule implements PurpurExtrasModule, Listener {
+@ModuleInfo(name = "Creeper Squids", description = "Squids will explode like Creepers!")
+public class CreeperSquidsModule extends PurpurExtrasModule implements Listener {
 
     private int maxSwell;
     private int maxDistance;
     private int explosionPower;
     private double velocity;
 
-    @Override
-    public void enable() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, PurpurExtras.getInstance());
-        maxSwell = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.fuse-ticks", 30);
-        maxDistance = (int) Math.pow(PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.agro-distance", 7), 2);
-        explosionPower = PurpurExtras.getPurpurConfig().getInt("settings.creeper-squid.explosion-radius", 3);
-        velocity = PurpurExtras.getPurpurConfig().getDouble("settings.creeper-squid.velocity", 0.5);
+    public CreeperSquidsModule(PurpurConfig config) {
+        super(config);
     }
 
     @Override
-    public boolean shouldEnable() {
-        return PurpurExtras.getPurpurConfig().getBoolean("settings.creeper-squid.enabled", false);
+    public void enable() {
+        super.enable();
+        maxSwell = getConfigInt("settings.creeper-squid.fuse-ticks", 30);
+        maxDistance = (int) Math.pow(getConfigInt("settings.creeper-squid.agro-distance", 7), 2);
+        explosionPower = getConfigInt("settings.creeper-squid.explosion-radius", 3);
+        velocity = getConfigDouble("settings.creeper-squid.velocity", 0.5);
+    }
+
+    @Override
+    public String getConfigPath() {
+        return "settings.creeper-squid";
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
