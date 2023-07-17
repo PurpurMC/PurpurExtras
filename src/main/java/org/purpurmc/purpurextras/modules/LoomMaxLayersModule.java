@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * If enabled, banners will be able to use more than the limit of 6 layers.
- * In default config up to 10 banner layers are allowed.
+ * In default config up to 6 banner layers are allowed.
  */
 public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
 
@@ -50,26 +50,26 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
 
         if (!(event.getInventory() instanceof LoomInventory)) return;
         if (currentItem != null && MaterialSetTag.BANNERS.isTagged(currentItem.getType())) {
-            if (newLayerExceedsMaxLayers(currentItem)) return;
+            if (doesNewLayerExceedMaxLayers(currentItem)) return;
             switch (event.getSlotType()) {
                 case CRAFTING -> {
                     if (isPlaceAction(event.getAction())) {
-                        save(player, currentItem);
+                        saveBannerLayers(player, currentItem);
                     } else {
-                        undo(player, currentItem);
+                        setOldPatternsToBanner(player, currentItem);
                     }
                 }
                 case CONTAINER, QUICKBAR -> {
                     if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                        save(player, currentItem);
+                        saveBannerLayers(player, currentItem);
                     }
                 }
-                case RESULT -> craftLoad(player, currentItem);
+                case RESULT -> setNewPatternsToBanner(player, currentItem);
             }
         } else if (cursorItem != null && MaterialSetTag.BANNERS.isTagged(cursorItem.getType())) {
-            if (newLayerExceedsMaxLayers(cursorItem)) return;
+            if (doesNewLayerExceedMaxLayers(cursorItem)) return;
             if (event.getSlotType().equals(InventoryType.SlotType.CRAFTING) && isPlaceAction(event.getAction())) {
-                save(player, cursorItem);
+                saveBannerLayers(player, cursorItem);
             }
         }
     }
@@ -80,24 +80,25 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
                 action == InventoryAction.PLACE_ONE;
     }
 
-    private void save(Player player, ItemStack banner) {
+    private void saveBannerLayers(Player player, ItemStack banner) {
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
         List<Pattern> patterns = meta.getPatterns();
         if (patterns.size() <= 5) return;
         playerBannerData.remove(player);
         playerBannerData.put(player, patterns);
-        changeStack(banner);
+        removeExtraLayersFromBanner(banner);
     }
 
-    private void changeStack(ItemStack banner) {
+    private void removeExtraLayersFromBanner(ItemStack banner) {
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
         List<Pattern> patterns = meta.getPatterns();
+
         while (patterns.size() > 5) patterns.remove(0);
         meta.setPatterns(patterns);
         banner.setItemMeta(meta);
     }
 
-    private void undo(Player player, ItemStack banner) {
+    private void setOldPatternsToBanner(Player player, ItemStack banner) {
         if (!playerBannerData.containsKey(player)) return;
         List<Pattern> oldPatterns = playerBannerData.get(player);
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
@@ -107,7 +108,7 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
         playerBannerData.remove(player);
     }
 
-    private void craftLoad(Player player, ItemStack banner) {
+    private void setNewPatternsToBanner(Player player, ItemStack banner) {
         if (!playerBannerData.containsKey(player)) return;
         List<Pattern> oldPatterns = playerBannerData.get(player);
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
@@ -120,7 +121,7 @@ public class LoomMaxLayersModule implements PurpurExtrasModule, Listener {
         playerBannerData.remove(player);
     }
 
-    private boolean newLayerExceedsMaxLayers(ItemStack banner) {
+    private boolean doesNewLayerExceedMaxLayers(ItemStack banner) {
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
         List<Pattern> patterns = meta.getPatterns();
         return patterns.size() == maxLayers;
