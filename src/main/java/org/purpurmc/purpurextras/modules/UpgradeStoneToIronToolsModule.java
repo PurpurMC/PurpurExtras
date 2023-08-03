@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules;
 
+import org.bukkit.inventory.SmithingTransformRecipe;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.util.RecipeUtil;
 import org.bukkit.Material;
@@ -12,40 +13,56 @@ import org.bukkit.inventory.SmithingRecipe;
  */
 public class UpgradeStoneToIronToolsModule implements PurpurExtrasModule {
 
-    protected UpgradeStoneToIronToolsModule() {}
+    protected UpgradeStoneToIronToolsModule() {
+    }
 
     @Override
     public void enable() {
-        SmithingRecipe recipe;
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("pick_stone_to_iron"),
-                new ItemStack(Material.IRON_PICKAXE),
-                new RecipeChoice.MaterialChoice(Material.STONE_PICKAXE),
-                new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
+        SmithingTransformRecipe recipe;
+        recipe =
+                new SmithingTransformRecipe(
+                        PurpurExtras.key("pick_stone_to_iron"), // key
+                        new ItemStack(Material.IRON_PICKAXE), // result
+                        new RecipeChoice.MaterialChoice(Material.STONE_PICKAXE), // template
+                        new RecipeChoice.MaterialChoice(Material.STONE_PICKAXE), // base
+                        new RecipeChoice.MaterialChoice(Material.IRON_INGOT) // addition
+                );
         RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("axe_stone_to_iron"),
-                new ItemStack(Material.IRON_AXE),
-                new RecipeChoice.MaterialChoice(Material.STONE_AXE),
-                new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
+        recipe =
+                new SmithingTransformRecipe(
+                        PurpurExtras.key("axe_stone_to_iron"), // key
+                        new ItemStack(Material.IRON_AXE), // result
+                        new RecipeChoice.MaterialChoice(Material.STONE_AXE), // template
+                        new RecipeChoice.MaterialChoice(Material.STONE_AXE), // base
+                        new RecipeChoice.MaterialChoice(Material.IRON_INGOT) // addition
+                );
         RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("shovel_stone_to_iron"),
-                new ItemStack(Material.IRON_SHOVEL),
-                new RecipeChoice.MaterialChoice(Material.STONE_SHOVEL),
-                new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
+        recipe =
+                new SmithingTransformRecipe(
+                        PurpurExtras.key("shovel_stone_to_iron"), // key
+                        new ItemStack(Material.IRON_SHOVEL), // result
+                        new RecipeChoice.MaterialChoice(Material.STONE_SHOVEL), // template
+                        new RecipeChoice.MaterialChoice(Material.STONE_SHOVEL), // base
+                        new RecipeChoice.MaterialChoice(Material.IRON_INGOT) // addition
+                );
         RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("hoe_stone_to_iron"),
-                new ItemStack(Material.IRON_HOE),
-                new RecipeChoice.MaterialChoice(Material.STONE_HOE),
-                new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
+        recipe =
+                new SmithingTransformRecipe(
+                        PurpurExtras.key("hoe_stone_to_iron"), // key
+                        new ItemStack(Material.IRON_HOE), // result
+                        new RecipeChoice.MaterialChoice(Material.STONE_HOE), // template
+                        new RecipeChoice.MaterialChoice(Material.STONE_HOE), // base
+                        new RecipeChoice.MaterialChoice(Material.IRON_INGOT) // addition
+                );
         RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("sword_stone_to_iron"),
-                new ItemStack(Material.IRON_SWORD),
-                new RecipeChoice.MaterialChoice(Material.STONE_SWORD),
-                new RecipeChoice.MaterialChoice(Material.IRON_INGOT), true);
+        recipe =
+                new SmithingTransformRecipe(
+                        PurpurExtras.key("sword_stone_to_iron"), // key
+                        new ItemStack(Material.IRON_SWORD), // result
+                        new RecipeChoice.MaterialChoice(Material.STONE_SWORD), // template
+                        new RecipeChoice.MaterialChoice(Material.STONE_SWORD), // base
+                        new RecipeChoice.MaterialChoice(Material.IRON_INGOT) // addition
+                );
         RecipeUtil.addSmithingRecipe(recipe);
     }
 
