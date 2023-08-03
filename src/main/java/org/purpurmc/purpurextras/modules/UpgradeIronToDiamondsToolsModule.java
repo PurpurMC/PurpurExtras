@@ -15,39 +15,54 @@ public class UpgradeIronToDiamondsToolsModule implements PurpurExtrasModule {
     protected UpgradeIronToDiamondsToolsModule() {}
 
     @Override
-    public void enable() {
-        SmithingRecipe recipe;
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("pick_iron_to_diamond"),
-                new ItemStack(Material.DIAMOND_PICKAXE),
-                new RecipeChoice.MaterialChoice(Material.IRON_PICKAXE),
-                new RecipeChoice.MaterialChoice(Material.DIAMOND), true);
-        RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("axe_iron_to_diamond"),
-                new ItemStack(Material.DIAMOND_AXE),
-                new RecipeChoice.MaterialChoice(Material.IRON_AXE),
-                new RecipeChoice.MaterialChoice(Material.DIAMOND), true);
-        RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("shovel_iron_to_diamond"),
-                new ItemStack(Material.DIAMOND_SHOVEL),
-                new RecipeChoice.MaterialChoice(Material.IRON_SHOVEL),
-                new RecipeChoice.MaterialChoice(Material.DIAMOND), true);
-        RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("hoe_iron_to_diamond"),
-                new ItemStack(Material.DIAMOND_HOE),
-                new RecipeChoice.MaterialChoice(Material.IRON_HOE),
-                new RecipeChoice.MaterialChoice(Material.DIAMOND), true);
-        RecipeUtil.addSmithingRecipe(recipe);
-        recipe = new SmithingRecipe(
-                PurpurExtras.key("sword_iron_to_diamond"),
-                new ItemStack(Material.DIAMOND_SWORD),
-                new RecipeChoice.MaterialChoice(Material.IRON_SWORD),
-                new RecipeChoice.MaterialChoice(Material.DIAMOND), true);
-        RecipeUtil.addSmithingRecipe(recipe);
-    }
+  public void enable() {
+    SmithingTransformRecipe recipe;
+    recipe =
+        new SmithingTransformRecipe(
+            PaperExtras.key("pick_iron_to_diamond"), // key
+            new ItemStack(Material.DIAMOND_PICKAXE), // result
+            new RecipeChoice.MaterialChoice(Material.IRON_PICKAXE), // template
+            new RecipeChoice.MaterialChoice(Material.IRON_PICKAXE), // base
+            new RecipeChoice.MaterialChoice(Material.DIAMOND) // addition
+            );
+    RecipeUtil.addSmithingRecipe(recipe);
+    recipe =
+        new SmithingTransformRecipe(
+            PaperExtras.key("axe_iron_to_diamond"), // key
+            new ItemStack(Material.DIAMOND_AXE), // result
+            new RecipeChoice.MaterialChoice(Material.IRON_AXE), // template
+            new RecipeChoice.MaterialChoice(Material.IRON_AXE), // base
+            new RecipeChoice.MaterialChoice(Material.DIAMOND) // addition
+            );
+    RecipeUtil.addSmithingRecipe(recipe);
+    recipe =
+        new SmithingTransformRecipe(
+            PaperExtras.key("shovel_iron_to_diamond"), // key
+            new ItemStack(Material.DIAMOND_SHOVEL), // result
+            new RecipeChoice.MaterialChoice(Material.IRON_SHOVEL), // template
+            new RecipeChoice.MaterialChoice(Material.IRON_SHOVEL), // base
+            new RecipeChoice.MaterialChoice(Material.DIAMOND) // addition
+            );
+    RecipeUtil.addSmithingRecipe(recipe);
+    recipe =
+        new SmithingTransformRecipe(
+            PaperExtras.key("hoe_iron_to_diamond"), // key
+            new ItemStack(Material.DIAMOND_HOE), // result
+            new RecipeChoice.MaterialChoice(Material.IRON_HOE), // template
+            new RecipeChoice.MaterialChoice(Material.IRON_HOE), // base
+            new RecipeChoice.MaterialChoice(Material.DIAMOND) // addition
+            );
+    RecipeUtil.addSmithingRecipe(recipe);
+    recipe =
+        new SmithingTransformRecipe(
+            PaperExtras.key("sword_iron_to_diamond"), // key
+            new ItemStack(Material.DIAMOND_SWORD), // result
+            new RecipeChoice.MaterialChoice(Material.IRON_SWORD), // template
+            new RecipeChoice.MaterialChoice(Material.IRON_SWORD), // base
+            new RecipeChoice.MaterialChoice(Material.DIAMOND) // addition
+            );
+    RecipeUtil.addSmithingRecipe(recipe);
+  }
 
     @Override
     public boolean shouldEnable() {
