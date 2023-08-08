@@ -14,8 +14,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.util.ItemStackUtil;
 
 import java.util.Map;
 
@@ -192,7 +195,9 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
         if (slot == -1) return;
         ItemStack item = inventory.getItem(slot);
         if (item == null) return;
-        item.damage(1);
+        ItemMeta meta = item.getItemMeta();
+        if (!(meta instanceof Damageable)) return;
+        ItemStackUtil.damage(item, 1, false);
     }
 
     private ItemStack consumeItem(ItemStack itemStack) {
