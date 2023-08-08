@@ -39,7 +39,7 @@ public class ForceNametaggedForRidingModule implements PurpurExtrasModule, Liste
         if (entity.getType().equals(EntityType.PLAYER)) return;
 
         // if has nametag, ignore
-        if (entity.getCustomName() != null) return;
+        if (entity.customName() != null) return;
 
         // otherwise don't allow mounting
         event.setCancelled(true);
@@ -51,7 +51,7 @@ public class ForceNametaggedForRidingModule implements PurpurExtrasModule, Liste
         if (vehicle.getPassengers().isEmpty()) return;
         Entity passenger = vehicle.getPassengers().get(0);
         if (!(passenger instanceof Player player)) return;
-        if (vehicle.getCustomName() != null && player.hasPermission("allow.ride."+vehicle.getType().getKey().getKey())) return;
+        if (vehicle.customName() != null && player.hasPermission("allow.ride."+vehicle.getType().getKey().getKey())) return;
         event.setCancelled(true);
     }
 }
