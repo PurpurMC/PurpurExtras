@@ -101,7 +101,7 @@ tasks {
         doFirst {
             pluginDir.resolve("PurpurExtras.jar").delete()
             Files.copy(
-                buildDir.resolve("libs").resolve("PurpurExtras-${version}.jar").toPath(),
+                layout.buildDirectory.file("libs/PurpurExtras-${version}.jar").get().asFile.toPath(),
                 pluginDir.resolve("PurpurExtras.jar").toPath()
             )
         }
@@ -111,6 +111,4 @@ tasks {
         args = listOf("--nogui")
         standardInput = System.`in`
     }
-
 }
-
