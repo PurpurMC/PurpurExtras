@@ -38,8 +38,9 @@ public class RunFasterOnPathsModule implements PurpurExtrasModule, Listener {
 
         int rawSpeedMultiplier = config.getInt("settings.gameplay-settings.run-faster-on-paths.speed-multiplier", 0);
         speedMultiplier = Math.max(0, rawSpeedMultiplier);
+        int duration = config.getInt("settings.gameplay-settings.run-faster-on-paths.duration", 2);
 
-        speedEffect = new PotionEffect(PotionEffectType.SPEED, 2, Math.max(speedMultiplier - 1, 0), false, false, false);
+        speedEffect = new PotionEffect(PotionEffectType.SPEED, duration, Math.max(speedMultiplier - 1, 0), false, false, false);
 
         List<String> rawPathBlocks = config.getList("settings.gameplay-settings.run-faster-on-paths.path-blocks", defaults);
         rawPathBlocks.forEach((string) -> {
@@ -51,6 +52,7 @@ public class RunFasterOnPathsModule implements PurpurExtrasModule, Listener {
             pathBlocks.add(material);
         });
     }
+
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
