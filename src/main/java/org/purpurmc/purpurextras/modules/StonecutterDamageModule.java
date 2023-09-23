@@ -38,6 +38,12 @@ public class StonecutterDamageModule implements PurpurExtrasModule, Listener {
 
     @Override
     public void enable() {
+        try {
+            Class.forName("org.purpurmc.purpur.PurpurConfig");
+        } catch (ClassNotFoundException e) {
+            PurpurExtras.getInstance().getLogger().warning(this.getClass().getSimpleName() + " module requires you to run Purpur as your server software.");
+            return;
+        }
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
