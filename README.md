@@ -11,7 +11,7 @@
 [![Purpur Forks](https://img.shields.io/github/forks/PurpurMC/PurpurExtras?label=forks&logo=github)](https://github.com/PurpurMC/PurpurExtras/network/members)
 [![Purpur Watchers](https://img.shields.io/github/watchers/PurpurMC/PurpurExtras?label=watchers&logo=github)](https://github.com/PurpurMC/PurpurExtras/watchers)
 
-PurpurExtras is a plugin designed to add all [Purpur](https://github.com/PurpurMC/Purpur) suggestions that should be in a plugin. Adding configurability, new fun and exciting gameplay features. All features can be found on the [GitHub wiki](https://github.com/PurpurMC/PurpurExtras/wiki).
+PurpurExtras is a plugin designed to add all [Purpur](https://github.com/PurpurMC/Purpur) suggestions that should be in a plugin. Adding configurability, new fun and exciting gameplay features. All features can be found on the [Purpur wiki](https://purpurmc.org/docs/purpurextras/).
 
 </div>
 
