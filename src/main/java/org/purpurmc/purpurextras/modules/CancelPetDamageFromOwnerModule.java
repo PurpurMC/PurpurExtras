@@ -31,7 +31,7 @@ public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule, Liste
         Entity damager = damageEvent.getDamager();
         if(!(damageEvent.getEntity() instanceof Tameable pet)) return;
         if(!pet.isTamed()) return;
-        Player owner = (Player) pet.getOwner();
+        if (!(pet.getOwner() instanceof Player owner)) return;
         if(damager instanceof Projectile projectile) {
             ProjectileSource shooter = projectile.getShooter();
             if (!(shooter instanceof Player playerShooter)) return;
