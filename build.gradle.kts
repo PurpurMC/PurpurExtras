@@ -42,7 +42,7 @@ dependencies {
 }
 
 group = "org.purpurmc.purpurextras"
-version = "1.28.1"
+version = "1.28.2"
 description = "\"This should be a plugin\" features from Purpur"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17

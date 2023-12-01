@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,10 +32,10 @@ public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule, Liste
         Entity damager = damageEvent.getDamager();
         if(!(damageEvent.getEntity() instanceof Tameable pet)) return;
         if(!pet.isTamed()) return;
-        if (!(pet.getOwner() instanceof Player owner)) return;
+        if (!(pet.getOwner() instanceof OfflinePlayer owner)) return;
         if(damager instanceof Projectile projectile) {
             ProjectileSource shooter = projectile.getShooter();
-            if (!(shooter instanceof Player playerShooter)) return;
+            if (!(shooter instanceof OfflinePlayer playerShooter)) return;
             if (playerShooter != owner) return;
             damageEvent.setCancelled(true);
             if ((projectile instanceof AbstractArrow && !projectile.getType().equals(EntityType.TRIDENT))){
@@ -42,8 +43,8 @@ public class CancelPetDamageFromOwnerModule implements PurpurExtrasModule, Liste
             }
             return;
         }
-        if(!(damager instanceof Player damagingPlayer)) return;
-        if(damagingPlayer != owner) return;
+        if(!(damager instanceof OfflinePlayer damagingPlayer)) return;
+        if(damagingPlayer.getUniqueId() != owner.getUniqueId()) return;
         damageEvent.setCancelled(true);
     }
 }
