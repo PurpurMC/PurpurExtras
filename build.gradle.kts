@@ -38,11 +38,11 @@ repositories {
 dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
-    compileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
+    compileOnly("org.purpurmc.purpur:purpur-api:1.20.4-R0.1-SNAPSHOT")
 }
 
 group = "org.purpurmc.purpurextras"
-version = "1.28.2"
+version = "1.29.0"
 description = "\"This should be a plugin\" features from Purpur"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
