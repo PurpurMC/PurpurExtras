@@ -1,5 +1,7 @@
 package org.purpurmc.purpurextras.modules;
 
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.bukkit.Sound;
@@ -20,6 +22,8 @@ import org.bukkit.inventory.EquipmentSlot;
 public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener {
 
     private final boolean doors, trapdoors;
+    private final String openIronDoorsPermission = "purpurextras.openirondoors";
+    private final String openIronTrapdoorsPermission = "purpurextras.openirontrapdoors";
 
     protected OpenIronDoorsWithHandModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
@@ -34,6 +38,8 @@ public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener
 
     @Override
     public boolean shouldEnable() {
+        DefaultPermissions.registerPermission(openIronDoorsPermission, "Allows for opening iron doors with a hand", PermissionDefault.TRUE);
+        DefaultPermissions.registerPermission(openIronTrapdoorsPermission, "Allows for opening iron trapdoors with a hand", PermissionDefault.TRUE);
         return doors || trapdoors;
     }
 
@@ -48,6 +54,7 @@ public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener
         switch (block.getType()) {
             case IRON_DOOR -> {
                 if (!doors) return;
+                if (!event.getPlayer().hasPermission(openIronDoorsPermission)) return;
                 event.setCancelled(true);
                 if (open(block, event.getPlayer())) {
                     world.playSound(block.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
@@ -57,6 +64,7 @@ public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener
             }
             case IRON_TRAPDOOR -> {
                 if (!trapdoors) return;
+                if (!event.getPlayer().hasPermission(openIronTrapdoorsPermission)) return;
                 event.setCancelled(true);
                 if (open(block, event.getPlayer())) {
                     world.playSound(block.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1f, 1f);
