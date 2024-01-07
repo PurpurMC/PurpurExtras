@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+import java.util.ArrayList;
+
 public class SnowGolemShearDropsPumpkinModule implements PurpurExtrasModule, Listener {
 
     @Override
@@ -20,23 +22,21 @@ public class SnowGolemShearDropsPumpkinModule implements PurpurExtrasModule, Lis
 
     @Override
     public boolean shouldEnable() {
-        return PurpurExtras.getPurpurConfig().getBoolean("settings.mobs.snow_golem.drop-pumpkin-when-sheared", false);
+        return !PurpurExtras.getPurpurConfig().getBoolean("settings.mobs.snow_golem.drop-pumpkin-when-sheared", true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onSnowGolemShear(PlayerShearEntityEvent event) {
         if (!(event.getEntity() instanceof Snowman snowman)) return;
         if (snowman.isDerp()) return;
-        snowman.setDerp(true);
-        snowman.getLocation().getWorld().dropItem(snowman.getLocation(), new ItemStack(Material.CARVED_PUMPKIN));
+        event.setDrops(new ArrayList<>());
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onSnowGolemShear(BlockShearEntityEvent event) {
         if (!(event.getEntity() instanceof Snowman snowman)) return;
         if (snowman.isDerp()) return;
-        snowman.setDerp(true);
-        snowman.getLocation().getWorld().dropItem(snowman.getLocation(), new ItemStack(Material.CARVED_PUMPKIN));
+        event.setDrops(new ArrayList<>());
     }
 
 }
