@@ -14,6 +14,9 @@ import org.purpurmc.purpurextras.PurpurExtras;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * If enabled causes sheep named jeb_ to drop random colors of wool
+ */
 public class RandomColorJebSheepShearModule implements PurpurExtrasModule, Listener {
 
     private final List<Material> coloredWool = new ArrayList<>();

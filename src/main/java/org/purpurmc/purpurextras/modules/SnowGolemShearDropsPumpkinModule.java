@@ -10,6 +10,9 @@ import org.purpurmc.purpurextras.PurpurExtras;
 
 import java.util.ArrayList;
 
+/**
+ * A module that disables the dropping of pumpkins when a Snow Golem is sheared.
+ */
 public class SnowGolemShearDropsPumpkinModule implements PurpurExtrasModule, Listener {
 
     @Override
