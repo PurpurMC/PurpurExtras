@@ -51,7 +51,7 @@ public class RandomColorJebSheepShearModule implements PurpurExtrasModule, Liste
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onJebSheepShear(PlayerShearEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity livingEntity)) return;
-        if (Entiddy.JEB_SHEEP.entiddy().isInstance(livingEntity)) return;
+        if (!Entiddy.JEB_SHEEP.entiddy().isInstance(livingEntity)) return;
         List<ItemStack> loot = event.getDrops();
         for (ItemStack item : loot) {
             if (!item.getType().getKey().getKey().contains("_wool")) continue;
@@ -63,7 +63,7 @@ public class RandomColorJebSheepShearModule implements PurpurExtrasModule, Liste
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onJebSheepShear(BlockShearEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity livingEntity)) return;
-        if (Entiddy.JEB_SHEEP.entiddy().isInstance(livingEntity)) return;
+        if (!Entiddy.JEB_SHEEP.entiddy().isInstance(livingEntity)) return;
         List<ItemStack> loot = event.getDrops();
         for (ItemStack item : loot) {
             if (!item.getType().getKey().getKey().contains("_wool")) continue;
