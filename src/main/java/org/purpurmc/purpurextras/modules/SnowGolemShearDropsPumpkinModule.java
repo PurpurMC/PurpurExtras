@@ -1,13 +1,11 @@
 package org.purpurmc.purpurextras.modules;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockShearEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
 
 import java.util.ArrayList;
