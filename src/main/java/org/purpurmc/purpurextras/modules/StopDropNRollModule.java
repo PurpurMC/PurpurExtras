@@ -41,7 +41,7 @@ public class StopDropNRollModule implements PurpurExtrasModule, Listener {
         Player player = event.getPlayer();
         boolean isSneaking = event.isSneaking();
 
-        if (player.getFireTicks() > 0 && isSneaking && !playerLastSneakMap.get(player)) {
+        if (player.getFireTicks() > 0 && isSneaking && !playerLastSneakMap.get(player) && Math.random() < chance) {
             player.setFireTicks((int) (player.getFireTicks() * (1f - amount)));
         }
 
