@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class StopDropNRollModule implements PurpurExtrasModule, Listener {
 
-    private final Map<Player, Boolean> playerLastSneakMap = new HashMap<>();;
+    private final Map<Player, Boolean> playerLastSneakMap = new HashMap<>();
     private double chance;
     private double amount;
 
@@ -36,7 +36,7 @@ public class StopDropNRollModule implements PurpurExtrasModule, Listener {
         return PurpurExtras.getPurpurConfig().getDouble("settings.stopdropandroll.chance", 0) != 0;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event){
         Player player = event.getPlayer();
         boolean isSneaking = event.isSneaking();
