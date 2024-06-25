@@ -2,6 +2,8 @@ package org.purpurmc.purpurextras.modules;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Vault;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -60,11 +62,21 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDestroyBlockWithLoot(BlockBreakEvent event) {
-        if (!(event.getBlock().getState() instanceof Lootable lootable)) return;
-        if (!(lootable.hasLootTable())) return;
+        if (event.getBlock().getState() instanceof Lootable lootable) {
+            if (!lootable.hasLootTable()) return;
+            handleLootBlockDestruction(event);
+            return;
+        }
+        if (event.getBlock().getState() instanceof Vault) {
+            handleLootBlockDestruction(event);
+            return;
+        }
+
+    }
+
+    private void handleLootBlockDestruction(BlockBreakEvent event) {
         if (event.getPlayer().hasPermission(permission)) return;
         if (allowBreakingInSneak && event.getPlayer().isSneaking()) return;
-
         event.setCancelled(true);
         switch (messageType) {
             case CHAT -> event.getPlayer().sendMessage(message);
