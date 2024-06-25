@@ -10,6 +10,6 @@ jobs:
       - uses: actions/setup-java@v3.6.0
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
       - name: Build with Gradle
         run: gradle shadowJar
