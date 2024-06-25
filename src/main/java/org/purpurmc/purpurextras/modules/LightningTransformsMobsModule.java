@@ -61,7 +61,7 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onLightningStrike(EntityDamageByEntityEvent event) {
-        if (!event.getDamager().getType().equals(EntityType.LIGHTNING)) return;
+        if (!event.getDamager().getType().equals(EntityType.LIGHTNING_BOLT)) return;
         Entity entity = event.getEntity();
         if (!(entity instanceof LivingEntity livingEntity)) return;
         if (entity.getEntitySpawnReason().equals(CreatureSpawnEvent.SpawnReason.LIGHTNING)) {

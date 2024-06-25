@@ -22,7 +22,7 @@ public class ItemStackUtil {
         ItemMeta meta = itemStack.getItemMeta();
         Damageable damageable = (Damageable) itemStack.getItemMeta();
         if (amount > 0) {
-            int unbreaking = meta.getEnchantLevel(Enchantment.DURABILITY);
+            int unbreaking = meta.getEnchantLevel(Enchantment.UNBREAKING);
             int reduce = 0;
             for (int i = 0; unbreaking > 0 && i < amount; ++i) {
                 if (reduceDamage(itemStack, ThreadLocalRandom.current(), unbreaking)) {

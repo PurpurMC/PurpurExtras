@@ -30,7 +30,7 @@ public class NoFallDamageWhileHavingJumpBoostModule implements PurpurExtrasModul
     public void onFallDamage(EntityDamageEvent event){
         if (!EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) return;
         if (!(event.getEntity() instanceof LivingEntity livingEntity)) return;
-        if (!livingEntity.hasPotionEffect(PotionEffectType.JUMP)) return;
+        if (!livingEntity.hasPotionEffect(PotionEffectType.JUMP_BOOST)) return;
         event.setCancelled(true);
     }
 }

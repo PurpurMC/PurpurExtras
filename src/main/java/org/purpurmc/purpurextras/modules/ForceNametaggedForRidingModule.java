@@ -1,12 +1,12 @@
 package org.purpurmc.purpurextras.modules;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.spigotmc.event.entity.EntityMountEvent;
 
 /**
  * If enabled, only nametagged mobs can be mounted/steered using purpur's rideable option.
