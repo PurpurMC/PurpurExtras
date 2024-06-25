@@ -38,14 +38,14 @@ repositories {
 dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
-    compileOnly("org.purpurmc.purpur:purpur-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("org.purpurmc.purpur:purpur-api:1.21-R0.1-SNAPSHOT")
 }
 
 group = "org.purpurmc.purpurextras"
 version = "1.31.0"
 description = "\"This should be a plugin\" features from Purpur"
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 tasks {
 
@@ -86,7 +86,7 @@ tasks {
         doFirst {
             serverDir.mkdirs()
             pluginDir.mkdirs()
-            URL("https://api.purpurmc.org/v2/purpur/1.20.1/latest/download").openStream().use {
+            URL("https://api.purpurmc.org/v2/purpur/1.21/latest/download").openStream().use {
                 Files.copy(it, serverDir.resolve("server.jar").toPath())
             }
         }
