@@ -3,6 +3,7 @@ package org.purpurmc.purpurextras.modules;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.DecoratedPot;
 import org.bukkit.block.Vault;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -62,6 +63,8 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDestroyBlockWithLoot(BlockBreakEvent event) {
+        // decorated pots are only lootable by breaking them
+        if (event.getBlock().getState() instanceof DecoratedPot) return;
         if (event.getBlock().getState() instanceof Lootable lootable) {
             if (!lootable.hasLootTable()) return;
             handleLootBlockDestruction(event);
