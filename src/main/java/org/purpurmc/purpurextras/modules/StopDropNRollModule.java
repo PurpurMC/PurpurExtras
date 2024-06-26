@@ -21,19 +21,20 @@ public class StopDropNRollModule implements PurpurExtrasModule, Listener {
     private double chance;
     private double amount;
 
-    protected StopDropNRollModule() {}
-
-    @Override
-    public void enable() {
-        PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    protected StopDropNRollModule() {
         chance = PurpurExtras.getPurpurConfig().getDouble("settings.twerk-to-reduce-burn-time.chance", 0);
         amount = PurpurExtras.getPurpurConfig().getDouble("settings.twerk-to-reduce-burn-time.amount", 0.5);
     }
 
     @Override
+    public void enable() {
+        PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
     public boolean shouldEnable() {
-        return PurpurExtras.getPurpurConfig().getDouble("settings.twerk-to-reduce-burn-time.chance", 0) != 0;
+        return chance != 0;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
