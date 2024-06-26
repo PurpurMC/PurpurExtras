@@ -26,7 +26,7 @@ public class LeashSnapSoundModule implements PurpurExtrasModule, Listener {
         try {
             sound = org.bukkit.Sound.valueOf(soundId.replace('.', '_').toUpperCase(Locale.ROOT)).key();
         } catch (IllegalArgumentException e) {
-            System.out.println("Could not set sound to '" + soundId + "', using default value 'block.bamboo.break'");
+            PurpurExtras.getInstance().getLogger().warning("Could not set sound to '" + soundId + "', using default value 'block.bamboo.break'");
             sound = Key.key(Key.MINECRAFT_NAMESPACE, "block.bamboo.break");
         }
 
