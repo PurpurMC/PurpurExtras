@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityUnleashEvent;
 import org.purpurmc.purpurextras.PurpurExtras;
 
+import java.util.Locale;
+
 /**
  * Adds a sound for when the leash snaps
  */
@@ -21,10 +23,11 @@ public class LeashSnapSoundModule implements PurpurExtrasModule, Listener {
     protected LeashSnapSoundModule() {
         String soundId = PurpurExtras.getPurpurConfig().getString("settings.leash-snap.sound", "block.bamboo.break");
 
-        for (org.bukkit.Sound bukkitSound : org.bukkit.Sound.values()) {
-            if (bukkitSound.key().value().equals(soundId)) {
-                sound = bukkitSound.key();
-            }
+        try {
+            sound = org.bukkit.Sound.valueOf(soundId.replace('.', '_').toUpperCase(Locale.ROOT)).key();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Could not set sound to '" + soundId + "', using default value 'block.bamboo.break'");
+            sound = Key.key(Key.MINECRAFT_NAMESPACE, "block.bamboo.break");
         }
 
         volume = PurpurExtras.getPurpurConfig().getDouble("settings.leash-snap.volume", 1f);
