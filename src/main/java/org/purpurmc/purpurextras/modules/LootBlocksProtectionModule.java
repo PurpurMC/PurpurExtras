@@ -2,7 +2,6 @@ package org.purpurmc.purpurextras.modules;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DecoratedPot;
 import org.bukkit.block.Vault;
