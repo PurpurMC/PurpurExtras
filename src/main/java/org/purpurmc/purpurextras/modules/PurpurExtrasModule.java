@@ -34,7 +34,7 @@ public interface PurpurExtrasModule {
                     module.enable();
                 }
             } catch (Exception e) {
-                PurpurExtras.getInstance().getSLF4JLogger().warn("Failed to load module " + clazz.getSimpleName());
+                PurpurExtras.getInstance().getSLF4JLogger().warn("Failed to load module {}", clazz.getSimpleName(), e);
             }
         });
 
