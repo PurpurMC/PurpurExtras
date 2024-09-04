@@ -29,7 +29,7 @@ public class SpawnersProtectionModule implements PurpurExtrasModule, Listener {
 
     private final String permission = "purpurextras.spawnerprotectionbypass";
 
-    protected SpawnersProtectionModule() {
+    public SpawnersProtectionModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
 
         DefaultPermissions.registerPermission(
