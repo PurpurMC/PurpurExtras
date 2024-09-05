@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.TrialSpawner;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -94,7 +95,7 @@ public class SpawnersProtectionModule implements PurpurExtrasModule, Listener {
     }
 
     private boolean isProtected(BlockState blockState) {
-        return blockState instanceof CreatureSpawner;
+        return blockState instanceof CreatureSpawner || blockState instanceof TrialSpawner;
     }
 
 }
