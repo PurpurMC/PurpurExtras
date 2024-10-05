@@ -1,4 +1,4 @@
-import java.net.URL
+import java.net.URI
 import java.nio.file.Files
 
 val serverDir: File = projectDir.resolve("run")
@@ -6,7 +6,7 @@ val pluginDir: File = serverDir.resolve("plugins")
 
 plugins {
     `java-library`
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("io.github.goooler.shadow") version "8.1.8"
 }
 
 repositories {
@@ -42,7 +42,7 @@ dependencies {
 }
 
 group = "org.purpurmc.purpurextras"
-version = "1.34.1"
+version = "1.34.2"
 description = "\"This should be a plugin\" features from Purpur"
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
@@ -86,7 +86,7 @@ tasks {
         doFirst {
             serverDir.mkdirs()
             pluginDir.mkdirs()
-            URL("https://api.purpurmc.org/v2/purpur/1.21/latest/download").openStream().use {
+            URI("https://api.purpurmc.org/v2/purpur/1.21.1/latest/download").toURL().openStream().use {
                 Files.copy(it, serverDir.resolve("server.jar").toPath())
             }
         }
