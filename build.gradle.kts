@@ -1,4 +1,5 @@
-import java.net.URL
+
+import java.net.URI
 import java.nio.file.Files
 
 val serverDir: File = projectDir.resolve("run")
@@ -6,12 +7,16 @@ val pluginDir: File = serverDir.resolve("plugins")
 
 plugins {
     `java-library`
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("io.github.goooler.shadow") version "8.1.8"
 }
 
 repositories {
     maven {
         url = uri("https://oss.sonatype.org/content/groups/public/")
+    }
+
+    maven {
+        url = uri("https://jitpack.io")
     }
 
     maven {
@@ -27,10 +32,6 @@ repositories {
     }
 
     maven {
-        url = uri("https://jitpack.io")
-    }
-
-    maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
 }
@@ -38,7 +39,7 @@ repositories {
 dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
-    compileOnly("org.purpurmc.purpur:purpur-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("org.purpurmc.purpur:purpur-api:1.21.1-R0.1-SNAPSHOT")
 }
 
 group = "org.purpurmc.purpurextras"
@@ -86,7 +87,7 @@ tasks {
         doFirst {
             serverDir.mkdirs()
             pluginDir.mkdirs()
-            URL("https://api.purpurmc.org/v2/purpur/1.21/latest/download").openStream().use {
+            URI("https://api.purpurmc.org/v2/purpur/1.21.1/latest/download").toURL().openStream().use {
                 Files.copy(it, serverDir.resolve("server.jar").toPath())
             }
         }
