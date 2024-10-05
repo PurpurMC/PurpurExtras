@@ -2,7 +2,6 @@ package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import me.youhavetrouble.entiddy.Entiddy;
-import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -13,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.purpurmc.purpurextras.PurpurExtras;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,7 +35,7 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
     protected LightningTransformsMobsModule() {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("villager", "witch");
-        defaults.put("pig", "zombie_piglin");
+        defaults.put("pig", "zombified_piglin");
         ConfigurationSection section = PurpurExtras.getPurpurConfig().getConfigSection("settings.lightning-transforms-entities.entities", defaults);
         HashMap<String, String> lightningTransformEntities = new HashMap<>();
         for (String key : section.getKeys(false)) {
