@@ -79,6 +79,10 @@ tasks {
         archiveFileName.set("PurpurExtras-${version}.jar")
         relocate("org.reflections", "org.purpurmc.purpurextras.reflections")
         relocate("me.youhavetrouble.entiddy", "org.purpurmc.purpurextras.entiddy")
+
+        manifest {
+            attributes["paperweight-mappings-namespace"] = "mojang"
+        }
     }
 
     register("downloadServer") {
