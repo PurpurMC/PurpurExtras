@@ -28,6 +28,8 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
     private final int dropChance;
     private final Map<UUID, Raider> raiders = new HashMap<>();
 
+    private final ItemStack totem = new ItemStack(Material.TOTEM_OF_UNDYING);
+
     protected RaidTotemDropsModule() {
         dropChance = PurpurExtras.getPurpurConfig().getInt("settings.raid-totem-drops.chance", 0);
         random = new SplittableRandom();
@@ -43,13 +45,11 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
         if (raiders.get(event.getEntity().getUniqueId()) == null) return;
         raiders.remove(event.getEntity().getUniqueId());
         if (event.getEntityType() != EntityType.EVOKER) return;
-        boolean totem = dropChance >= 100 || random.nextInt(1, 101) <= dropChance;
+        boolean totemShouldDrop = dropChance >= 1 || random.nextFloat() <= dropChance;
         event.getDrops().stream().filter(i -> i.getType() == Material.TOTEM_OF_UNDYING).findFirst().ifPresentOrElse(i -> {
-            if (!totem)
-                event.getDrops().remove(i);
+            if (!totemShouldDrop) event.getDrops().remove(i);
         }, () -> {
-            if (totem)
-                event.getDrops().add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            if (totemShouldDrop) event.getDrops().add(totem);
         });
     }
 
