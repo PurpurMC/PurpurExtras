@@ -25,13 +25,13 @@ import java.util.UUID;
 public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
 
     private final SplittableRandom random;
-    private final int dropChance;
+    private final double dropChance;
     private final Map<UUID, Raider> raiders = new HashMap<>();
 
     private final ItemStack totem = new ItemStack(Material.TOTEM_OF_UNDYING);
 
     protected RaidTotemDropsModule() {
-        dropChance = PurpurExtras.getPurpurConfig().getInt("settings.raid-totem-drops.chance", 0);
+        dropChance = PurpurExtras.getPurpurConfig().getDouble("settings.raid-totem-drops.chance", 0);
         random = new SplittableRandom();
     }
 
