@@ -45,7 +45,7 @@ public class RaidTotemDropsModule implements PurpurExtrasModule, Listener {
         if (raiders.get(event.getEntity().getUniqueId()) == null) return;
         raiders.remove(event.getEntity().getUniqueId());
         if (event.getEntityType() != EntityType.EVOKER) return;
-        boolean totemShouldDrop = dropChance >= 1 || random.nextFloat() <= dropChance;
+        boolean totemShouldDrop = random.nextFloat() < dropChance;
         event.getDrops().stream().filter(i -> i.getType() == Material.TOTEM_OF_UNDYING).findFirst().ifPresentOrElse(i -> {
             if (!totemShouldDrop) event.getDrops().remove(i);
         }, () -> {
