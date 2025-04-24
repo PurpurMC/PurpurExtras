@@ -90,7 +90,7 @@ public class VoidTotemModule implements PurpurExtrasModule, Listener {
         totem.subtract();
         player.setFallDistance(0);
         player.setHealth(1);
-        player.playEffect(EntityEffect.TOTEM_RESURRECT);
+        player.playEffect(EntityEffect.PROTECTED_FROM_DEATH);
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         player.addPotionEffects(this.totemEffects);
     }
