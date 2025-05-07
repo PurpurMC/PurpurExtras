@@ -2,9 +2,17 @@ package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.MaterialSetTag;
 import com.destroystokyo.paper.MaterialTags;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Tool;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.keys.BlockTypeKeys;
+import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockType;
 import org.bukkit.block.Jukebox;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
@@ -114,6 +122,10 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
             if (tryBreakBlock(item, blockDispenser, block)) return;
         }
         if (breakBlockHoe && MaterialTags.HOES.isTagged(item)) {
+            event.setCancelled(true);
+            if (tryBreakBlock(item, blockDispenser, block)) return;
+        }
+        if (breakBlockShears && Material.SHEARS.equals(item.getType())) {
             event.setCancelled(true);
             if (tryBreakBlock(item, blockDispenser, block)) return;
         }
