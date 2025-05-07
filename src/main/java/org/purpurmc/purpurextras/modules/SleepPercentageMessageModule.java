@@ -54,10 +54,11 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
         String playerName = event.getPlayer().getName();
         String worldName = world.getName();
         int currentSleepCount = 0;
-        int worldOnlineTotal = playerList.size();
+        long worldOnlineTotal = playerList.stream().filter(player -> !player.isSleepingIgnored()).count();
         Integer worldSleepPercent = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
         Integer neededSleepers = (int) Math.ceil((worldSleepPercent / 100.0) * worldOnlineTotal);
         for (Player player : playerList) {
+            if (player.isSleepingIgnored()) continue;
             if (player.isDeeplySleeping()) currentSleepCount += 1;
         }
         world.sendMessage(miniMsg.deserialize(playerSleepMessage,
