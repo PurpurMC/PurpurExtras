@@ -31,13 +31,6 @@ public final class PurpurExtras extends JavaPlugin {
         instance = this;
         config = new PurpurConfig();
 
-        PluginCommand command = getCommand("purpurextras");
-        if (command != null) {
-            PurpurExtrasCommand cmd = new PurpurExtrasCommand();
-            command.setExecutor(cmd);
-            command.setTabCompleter(cmd);
-        }
-
         PurpurExtrasModule.reloadModules();
         config.saveConfig();
     }
