@@ -16,10 +16,12 @@ import org.bukkit.command.CommandSender;
 
 public class PurpurExtrasBootstrap implements PluginBootstrap {
 
+  String DESCRIPTION = "Command controlling PurpurExtras";
+
   @Override
   public void bootstrap(BootstrapContext context) {
     LiteralCommandNode<CommandSourceStack> purpurCommand = Commands.literal("purpurextras")
-      .requires(source -> source.getSender().getPermission(("purpurextras.command")))
+      .requires(source -> source.getSender().hasPermission("purpurextras.command"))
       .executes(ctx -> {
             final CommandSender commandSender = ctx.getSource().getSender();
               commandSender.sendMessage(
@@ -47,7 +49,7 @@ public class PurpurExtrasBootstrap implements PluginBootstrap {
       .build();
 
     context.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-      commands.registrar().register(purpurCommand);
+      commands.registrar().register(purpurCommand, DESCRIPTION);
     });
   }
 
