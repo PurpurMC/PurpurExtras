@@ -15,6 +15,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.purpurmc.purpurextras.util.MessageType;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
     private boolean exclusionListStatus;
     private List<String> exclusionList;
     private String exclusionMessage;
+    private MessageType messageType;
 
     @Override
     public void enable() {
@@ -42,6 +44,11 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
         this.exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enable-item-exclusion-list", false);
         this.exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.item-exclusion-list", List.of("SHULKER_BOX"));
         this.exclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.item-excluded-message", "<red>The item you're using is on the excluded list!");
+        try {
+            this.messageType = MessageType.valueOf(PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.message-type", "CHAT").toUpperCase());
+        } catch (IllegalArgumentException e) {
+            this.messageType = MessageType.CHAT;
+        }
         return susBlocksEnabled;
     }
 
@@ -57,7 +64,10 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
         if (itemStack == null) return;
         if (this.exclusionListStatus && this.exclusionList.contains(itemStack.getType().name())) {
             if (this.exclusionMessage.isEmpty()) return;
-            player.sendMessage(MiniMessage.miniMessage().deserialize(this.exclusionMessage));
+            switch (this.messageType) {
+                case CHAT -> player.sendMessage(MiniMessage.miniMessage().deserialize(this.exclusionMessage));
+                case ACTION_BAR -> player.sendActionBar(MiniMessage.miniMessage().deserialize(this.exclusionMessage));
+            }
             return;
         }
 
