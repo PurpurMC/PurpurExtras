@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
+import java.util.List;
 
 /**
  * If enabled, players will be able to shift-right click on sand and gravel with items in their hands to create
@@ -32,16 +33,20 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return PurpurExtras.getPurpurConfig().getBoolean("settings.create-suspicious-blocks", false);
+        Boolean susBlocksEnabled = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
+        Boolean exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enable-item-exclusion-list", false);
+        List<String> exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.item-exclusion-list", List.of("SHULKER_BOX"));
+        return susBlocksEnabled;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onInteractWithSusBlock(PlayerInteractEvent event) {
+    public void onInteractWithSusBlock(PlayerInteractEvent event, Boolean exclusionListStatus, List<String> exclusionList) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Player player = event.getPlayer();
         if (!player.isSneaking()) return;
         Block block = event.getClickedBlock();
         if (block == null) return;
+        if (exclusionListStatus && exclusionList.contains(event.getItem().getType().name())) return;
         if (block.getType() != Material.SAND && block.getType() != Material.GRAVEL) return;
         ItemStack itemStack = event.getItem();
         if (itemStack == null) return;
