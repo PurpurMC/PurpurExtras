@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
 
     protected CreateSusBlocksModule() {}
 
+    private boolean exclusionListStatus;
+    private List<String> exclusionList;
+    private String exclusionMessage;
+
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
@@ -33,14 +38,15 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        Boolean susBlocksEnabled = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
-        Boolean exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enable-item-exclusion-list", false);
-        List<String> exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.item-exclusion-list", List.of("SHULKER_BOX"));
+        boolean susBlocksEnabled = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
+        this.exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enable-item-exclusion-list", false);
+        this.exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.item-exclusion-list", List.of("SHULKER_BOX"));
+        this.exclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.item-excluded-message", "<red>The item you're using is on the excluded list!");
         return susBlocksEnabled;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onInteractWithSusBlock(PlayerInteractEvent event, Boolean exclusionListStatus, List<String> exclusionList) {
+    public void onInteractWithSusBlock(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Player player = event.getPlayer();
         if (!player.isSneaking()) return;
@@ -48,7 +54,12 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
         if (block == null) return;
         if (block.getType() != Material.SAND && block.getType() != Material.GRAVEL) return;
         ItemStack itemStack = event.getItem();
-        if (itemStack == null || exclusionListStatus && exclusionList.contains(itemStack.getType().name())) return;
+        if (itemStack == null) return;
+        if (this.exclusionListStatus && this.exclusionList.contains(itemStack.getType().name())) {
+            if (this.exclusionMessage.isEmpty()) return;
+            player.sendMessage(MiniMessage.miniMessage().deserialize(this.exclusionMessage));
+            return;
+        }
 
         switch (block.getType()) {
             case SAND -> block.setType(Material.SUSPICIOUS_SAND);
