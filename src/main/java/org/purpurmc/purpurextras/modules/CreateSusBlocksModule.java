@@ -46,10 +46,9 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
         if (!player.isSneaking()) return;
         Block block = event.getClickedBlock();
         if (block == null) return;
-        if (exclusionListStatus && exclusionList.contains(event.getItem().getType().name())) return;
         if (block.getType() != Material.SAND && block.getType() != Material.GRAVEL) return;
         ItemStack itemStack = event.getItem();
-        if (itemStack == null) return;
+        if (itemStack == null || exclusionListStatus && exclusionList.contains(itemStack.getType().name())) return;
 
         switch (block.getType()) {
             case SAND -> block.setType(Material.SUSPICIOUS_SAND);
