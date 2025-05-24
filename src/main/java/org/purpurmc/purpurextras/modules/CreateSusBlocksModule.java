@@ -40,16 +40,15 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        boolean susBlocksEnabled = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
-        this.exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enable-item-exclusion-list", false);
-        this.exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.item-exclusion-list", List.of("SHULKER_BOX"));
-        this.exclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.item-excluded-message", "<red>The item you're using is on the excluded list!");
+        this.exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.exclusion-list.enable-item-exclusion-list", false);
+        this.exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.exclusion-list.item-exclusion-list", List.of("SHULKER_BOX"));
+        this.exclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.item-excluded-message", "<red>The item you're using is on the excluded list!");
         try {
-            this.messageType = MessageType.valueOf(PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.message-type", "CHAT").toUpperCase());
+            this.messageType = MessageType.valueOf(PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.message-type", "CHAT").toUpperCase());
         } catch (IllegalArgumentException e) {
             this.messageType = MessageType.CHAT;
         }
-        return susBlocksEnabled;
+            return PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
