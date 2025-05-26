@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -16,7 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.purpurmc.purpurextras.PurpurExtras;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.purpurmc.purpurextras.util.MessageType;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * If enabled, players will be able to shift-right click on sand and gravel with items in their hands to create
@@ -28,8 +33,8 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
     protected CreateSusBlocksModule() {}
 
     private boolean exclusionListStatus;
-    private List<String> exclusionList;
-    private String exclusionMessage;
+    private final Set<String> exclusions = new HashSet<>();
+    private Component exclusionMessage;
     private MessageType messageType;
 
     @Override
@@ -41,14 +46,18 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
     @Override
     public boolean shouldEnable() {
         this.exclusionListStatus = PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.exclusion-list.enable-item-exclusion-list", false);
-        this.exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.exclusion-list.item-exclusion-list", List.of("SHULKER_BOX"));
-        this.exclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.item-excluded-message", "<red>The item you're using is on the excluded list!");
+        List<String> exclusionList = PurpurExtras.getPurpurConfig().getList("settings.suspicious-blocks.exclusion-list.item-exclusion-list", List.of("shulker_box"));
+        for (String exclusion : exclusionList) {
+            exclusions.add(exclusion.toLowerCase(Locale.ENGLISH));
+        }
+        String rawExclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.item-excluded-message", "<red>The item you're using is on the excluded list!");
+        this.exclusionMessage = rawExclusionMessage.isBlank() ? MiniMessage.miniMessage().deserialize(rawExclusionMessage) : null;
         try {
             this.messageType = MessageType.valueOf(PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.message-type", "CHAT").toUpperCase());
         } catch (IllegalArgumentException e) {
             this.messageType = MessageType.CHAT;
         }
-            return PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -61,11 +70,11 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
         if (block.getType() != Material.SAND && block.getType() != Material.GRAVEL) return;
         ItemStack itemStack = event.getItem();
         if (itemStack == null) return;
-        if (this.exclusionListStatus && this.exclusionList.contains(itemStack.getType().name())) {
-            if (this.exclusionMessage.isEmpty()) return;
+        if (this.exclusionListStatus && this.exclusions.contains(itemStack.getType().name().toLowerCase(Locale.ENGLISH))) {
+            if (this.exclusionMessage == null) return;
             switch (this.messageType) {
-                case CHAT -> player.sendMessage(MiniMessage.miniMessage().deserialize(this.exclusionMessage));
-                case ACTION_BAR -> player.sendActionBar(MiniMessage.miniMessage().deserialize(this.exclusionMessage));
+                case CHAT -> player.sendMessage(this.exclusionMessage);
+                case ACTION_BAR -> player.sendActionBar(this.exclusionMessage);
             }
             return;
         }
