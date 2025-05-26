@@ -4,7 +4,4 @@ main: "org.purpurmc.purpurextras.PurpurExtras"
 api-version: '1.21.4'
 authors: [ YouHaveTrouble ]
 description: "${description}"
-commands:
-  purpurextras:
-    description: Command controlling PurpurExtras
-    permission: purpurextras.command
+bootstrapper: "org.purpurmc.purpurextras.PurpurExtrasBootstrap"
