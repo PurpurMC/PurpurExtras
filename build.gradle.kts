@@ -23,7 +23,7 @@ repositories {
     }
 
     maven {
-        url = uri("https://papermc.io/repo/repository/maven-public/")
+        url = uri("repo.papermc.io/repository/maven-public/")
     }
 
     maven {
@@ -38,11 +38,11 @@ repositories {
 dependencies {
     api("com.github.YouHaveTrouble:Entiddy:v2.0.1")
     api("org.reflections:reflections:0.10.2")
-    compileOnly("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("org.purpurmc.purpur:purpur-api:1.21.7-R0.1-SNAPSHOT")
 }
 
 group = "org.purpurmc.purpurextras"
-version = "1.36.0"
+version = "1.36.1"
 description = "\"This should be a plugin\" features from Purpur"
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21

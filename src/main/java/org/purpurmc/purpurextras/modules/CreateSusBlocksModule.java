@@ -51,7 +51,7 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
             exclusions.add(exclusion.toLowerCase(Locale.ENGLISH));
         }
         String rawExclusionMessage = PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.item-excluded-message", "<red>The item you're using is on the excluded list!");
-        this.exclusionMessage = rawExclusionMessage.isBlank() ? MiniMessage.miniMessage().deserialize(rawExclusionMessage) : null;
+        this.exclusionMessage = rawExclusionMessage.isBlank() ? null : MiniMessage.miniMessage().deserialize(rawExclusionMessage);
         try {
             this.messageType = MessageType.valueOf(PurpurExtras.getPurpurConfig().getString("settings.suspicious-blocks.exclusion-list.message-type", "CHAT").toUpperCase());
         } catch (IllegalArgumentException e) {
