@@ -75,13 +75,14 @@ public class RunFasterOnPathsModule implements PurpurExtrasModule, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onPlayerMoveOnPath(PlayerMoveEvent event) {
-        if (!event.hasChangedBlock()) return;
+        if (!event.hasChangedPosition()) return;
         Player player = event.getPlayer();
         if (player.isFlying()) return;
         if (player.isGliding()) return;
         if (player.isInsideVehicle()) return;
 
         Block block = player.getLocation().clone().subtract(0.0, 0.1, 0.0).getBlock();
+        if (block.getType().isAir()) return;
         AttributeInstance attributeInstance = player.getAttribute(Attribute.MOVEMENT_SPEED);
         if (attributeInstance == null) return;
         if (!pathBlocks.contains(block.getType())) {
