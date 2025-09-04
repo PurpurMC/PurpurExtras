@@ -19,11 +19,12 @@ import org.purpurmc.purpur.event.inventory.GrindstoneTakeResultEvent;
 import java.util.Map;
 
 /**
- * If enabled and player has books in their inventory while disenchanting item in a grindstone,
- * books will be consumed to return the enchantments removed from the item to the player.
+ * If enabled and player has books in their inventory while disenchanting a non-book item in a grindstone,
+ * books will be consumed to return the enchantments removed from the item to the player as enchanted books.
  * No exp will drop when doing this.
- * <p>
- * Listeners yoinked from <a href="https://gist.github.com/BillyGalbreath/de0f899a27b39daad5f5bf7c00e11045">here</a>}
+ *
+ * When disenchanting an ENCHANTED_BOOK in the grindstone, this module lets vanilla behavior convert it
+ * to a normal BOOK (removing non-cursed enchants) and simply zeros the XP payout.
  */
 public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule, Listener {
 
@@ -62,19 +63,24 @@ public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule, Listen
             return; // upper slot is empty, do nothing
         }
 
-        Map<Enchantment, Integer> enchants;
+        // If the upper item is an ENCHANTED_BOOK, don't give enchants back as new books.
+        // Let vanilla produce a normal BOOK (if any non-cursed enchants are present) and just zero XP.
         if (upperItem.getType() == Material.ENCHANTED_BOOK) {
-            if (!upperItem.hasItemMeta()) {
-                return;
+            if (upperItem.hasItemMeta()) {
+                Map<Enchantment, Integer> stored = ((EnchantmentStorageMeta) upperItem.getItemMeta()).getStoredEnchants();
+                boolean hasNonCursed = stored.keySet().stream().anyMatch(e -> !e.isCursed());
+                if (hasNonCursed) {
+                    event.setExperienceAmount(0);
+                }
             }
-            enchants = ((EnchantmentStorageMeta) upperItem.getItemMeta()).getStoredEnchants();
-        } else {
-            if (!upperItem.hasEnchants()) {
-                return;
-            }
-            enchants = upperItem.getEnchants();
+            return;
         }
 
+        // For non-book items, consume blank BOOKs and give removed enchants back as enchanted books.
+        if (!upperItem.hasEnchants()) {
+            return;
+        }
+        Map<Enchantment, Integer> enchants = upperItem.getEnchants();
         if (enchants.isEmpty()) {
             return;
         }
@@ -84,29 +90,41 @@ public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule, Listen
         World world = location.getWorld();
         PlayerInventory playerInventory = player.getInventory();
 
+        boolean gaveAny = false;
+
         for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
-            if (entry.getKey().isCursed()) {
+            Enchantment enchant = entry.getKey();
+            int level = entry.getValue();
+
+            if (enchant.isCursed()) {
                 continue; // grindstones don't remove curses
             }
-            if (player.getGameMode() != GameMode.CREATIVE) {
-                if (!playerInventory.containsAtLeast(BOOK, 1)) {
-                    return; // no more books to extract to
-                }
 
+            if (player.getGameMode() != GameMode.CREATIVE) {
+                // need one blank book per enchant we return
+                if (!playerInventory.containsAtLeast(BOOK, 1)) {
+                    break; // out of blank books - stop returning enchants
+                }
                 if (!playerInventory.removeItem(BOOK).isEmpty()) {
-                    return; // could not remove book
+                    break; // could not remove book
                 }
             }
 
             ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
-            meta.addStoredEnchant(entry.getKey(), entry.getValue(), true);
+            meta.addStoredEnchant(enchant, level, true);
             book.setItemMeta(meta);
 
+            // add to inventory or drop if full
             playerInventory.addItem(book).forEach((index, stack) -> {
                 Item drop = world.dropItemNaturally(location, stack);
                 drop.setPickupDelay(0);
             });
+
+            gaveAny = true;
+        }
+
+        if (gaveAny) {
             event.setExperienceAmount(0);
         }
     }
