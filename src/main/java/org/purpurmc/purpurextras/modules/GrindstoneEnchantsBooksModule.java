@@ -55,12 +55,12 @@ public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule, Listen
         GrindstoneInventory grindstoneInventory = event.getInventory();
 
         ItemStack lowerItem = grindstoneInventory.getLowerItem();
-        if (lowerItem != null && !lowerItem.getType().isEmpty()) {
+        if (lowerItem != null && !lowerItem.getType().isAir()) {
             return; // lower slot is not empty, do nothing
         }
 
         ItemStack upperItem = grindstoneInventory.getUpperItem();
-        if (upperItem == null || upperItem.getType().isEmpty()) {
+        if (upperItem == null || upperItem.getType().isAir()) {
             return; // upper slot is empty, do nothing
         }
 
