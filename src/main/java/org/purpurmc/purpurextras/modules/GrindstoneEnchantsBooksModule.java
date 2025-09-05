@@ -22,7 +22,7 @@ import java.util.Map;
  * If enabled and player has books in their inventory while disenchanting a non-book item in a grindstone,
  * books will be consumed to return the enchantments removed from the item to the player as enchanted books.
  * No exp will drop when doing this.
- *
+ * <p>
  * When disenchanting an ENCHANTED_BOOK in the grindstone, this module lets vanilla behavior convert it
  * to a normal BOOK (removing non-cursed enchants) and simply zeros the XP payout.
  */
@@ -30,7 +30,8 @@ public class GrindstoneEnchantsBooksModule implements PurpurExtrasModule, Listen
 
     private final ItemStack BOOK = new ItemStack(Material.BOOK);
 
-    protected GrindstoneEnchantsBooksModule() {}
+    protected GrindstoneEnchantsBooksModule() {
+    }
 
     @Override
     public void enable() {
