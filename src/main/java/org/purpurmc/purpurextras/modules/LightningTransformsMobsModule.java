@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.purpurmc.purpurextras.util.EntityStatePreserverUtil.preserveEntityState;
+
 /**
  * If enabled, entities with type on the left will be transformed into entity of type on the right.
  * This overrides vanilla transformations. Vanilla mob ids are used to identify mobs.
@@ -85,12 +87,15 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         spawnEntity(targetEntity, location);
     }
 
-    private void spawnEntity(Object entity, Location location) {
+    private Entity spawnEntity(Object entity, Location location) {
+        Entity spawnedEntity = null;
         if (entity instanceof EntityType entityType) {
-            location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.LIGHTNING);
+           spawnedEntity = location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.LIGHTNING);
         } else if (entity instanceof Entiddy entiddy) {
-            entiddy.entiddy().spawn(location, CreatureSpawnEvent.SpawnReason.LIGHTNING);
+          spawnedEntity = entiddy.entiddy().spawn(location, CreatureSpawnEvent.SpawnReason.LIGHTNING);
         }
+
+          return  spawnedEntity;
     }
 
     private void getEntityTypeOrSpecial(String key, String value) {
@@ -136,7 +141,10 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
             entity.remove();
             String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
             Object targetEntity = entities.get(specialEntityKey);
-            spawnEntity(targetEntity, location);
+            Entity spawnedEntity = spawnEntity(targetEntity, location);
+            if(spawnedEntity instanceof  LivingEntity newEntity) {
+                preserveEntityState((LivingEntity) entity,  newEntity);
+            }
             return;
         }
         Object targetEntity = entities.get(entity.getType().getKey().getKey());
@@ -146,7 +154,10 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
             return;
         }
         entity.remove();
-        spawnEntity(targetEntity, location);
+        Entity spawnedEntity = spawnEntity(targetEntity, location);
+        if(spawnedEntity instanceof  LivingEntity newEntity) {
+            preserveEntityState((LivingEntity) entity,  newEntity);
+        }
         event.setCancelled(true);
     }
 
