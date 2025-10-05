@@ -33,12 +33,14 @@ import static org.purpurmc.purpurextras.util.EntityStatePreserverUtil.preserveEn
 public class LightningTransformsMobsModule implements PurpurExtrasModule, Listener {
 
     private final HashMap<String, Object> entities = new HashMap<>();
+    private  final boolean preserveMobStateOnLightningTransformation;
 
     protected LightningTransformsMobsModule() {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("villager", "witch");
         defaults.put("pig", "zombified_piglin");
         ConfigurationSection section = PurpurExtras.getPurpurConfig().getConfigSection("settings.lightning-transforms-entities.entities", defaults);
+        this.preserveMobStateOnLightningTransformation = PurpurExtras.getPurpurConfig().getBoolean("settings.lightning-transforms-entities.preserve-entity-state", false);
         HashMap<String, String> lightningTransformEntities = new HashMap<>();
         for (String key : section.getKeys(false)) {
             String value = section.getString(key);
@@ -142,7 +144,7 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
             String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
             Object targetEntity = entities.get(specialEntityKey);
             Entity spawnedEntity = spawnEntity(targetEntity, location);
-            if(spawnedEntity instanceof  LivingEntity newEntity) {
+            if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
                 preserveEntityState((LivingEntity) entity,  newEntity);
             }
             return;
@@ -155,7 +157,7 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         }
         entity.remove();
         Entity spawnedEntity = spawnEntity(targetEntity, location);
-        if(spawnedEntity instanceof  LivingEntity newEntity) {
+        if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
             preserveEntityState((LivingEntity) entity,  newEntity);
         }
         event.setCancelled(true);
