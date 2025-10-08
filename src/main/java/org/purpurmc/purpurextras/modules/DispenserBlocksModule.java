@@ -126,8 +126,10 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
             if (tryBreakBlock(item, blockDispenser, block)) return;
         }
         if (breakBlockShears && Material.SHEARS.equals(item.getType())) {
-            event.setCancelled(true);
-            if (tryBreakBlock(item, blockDispenser, block)) return;
+            if (tryBreakBlock(item, blockDispenser, block)) {
+                event.setCancelled(true);
+                return;
+            }
         }
 
         // Shear pumpkin
