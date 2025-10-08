@@ -1,53 +1,87 @@
 package org.purpurmc.purpurextras;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.command.Command;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class PurpurExtrasCommand implements TabExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+public class PurpurExtrasCommand {
 
-        if (strings.length == 0) {
-            commandSender.sendMessage(
-                    Component.text("PurpurExtras", NamedTextColor.DARK_PURPLE, TextDecoration.BOLD)
-                    .append(Component.text(" by YouHaveTrouble"))
-            );
-        }
+    private static final String reloadCommand = "reload";
+    private static final Permission reloadPermission = new Permission("purpurextras.reload");
+    private static final String versionCommand = "version";
+    private static final String purpurExtrasCommand = "purpurextras";
 
-        if (strings.length == 1 && strings[0].equalsIgnoreCase("reload")) {
-            if (!commandSender.hasPermission("purpurextras.reload")) {
-                commandSender.sendMessage(Component.text("You don't have permission to do that.", NamedTextColor.RED));
-                return true;
-            }
-            commandSender.sendMessage(Component.text("Reloading PurpurExtras config..."));
-            PurpurExtras.getInstance().reloadPurpurExtrasConfig(commandSender);
-            return true;
-        }
+    public static LiteralCommandNode<CommandSourceStack> createCommand() {
+        return Commands.literal(purpurExtrasCommand)
+                .requires(css -> css.getSender().hasPermission("purpurextras.command"))
+                .executes(PurpurExtrasCommand::executeDefault)
+                .then(Commands.argument("command", StringArgumentType.word())
+                        .suggests(PurpurExtrasCommand::suggestSubCommands)
+                        .executes(PurpurExtrasCommand::execute)).build();
 
-        if (strings.length == 1 && strings[0].equalsIgnoreCase("version")) {
-            commandSender.sendMessage(Component.text("PurpurExtras version "+PurpurExtras.getInstance().getDescription().getVersion()));
-        }
-
-        return true;
     }
 
 
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        List<String> cmds = List.of("reload", "version");
-        if(args.length == 1) {
-            return cmds.stream().filter(s -> s.toLowerCase().startsWith(args[0])).toList();
-        }else {
-            return Collections.emptyList();
-        }
+    public static int executeDefault(CommandContext<CommandSourceStack> ctx) {
+        //I am making this fancier because its cooler
+        ctx.getSource().getSender().sendRichMessage("<gradient:#8d54ff:#adf3ff><b>PurpurExtras</b></gradient> <white>by YouHaveTrouble");
+        return Command.SINGLE_SUCCESS;
     }
+
+    public static int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        CommandSender sender = ctx.getSource().getSender();
+        String argument = StringArgumentType.getString(ctx, "command");
+        if (argument.equalsIgnoreCase(reloadCommand)) return executeReload(sender);
+        if (argument.equalsIgnoreCase(versionCommand)) return executeVersion(sender);
+        sender.sendRichMessage("<gray>Unknown Command</gray>");
+        return Command.SINGLE_SUCCESS;
+    }
+
+    public static int executeVersion(CommandSender sender) {
+        sender.sendRichMessage("<gradient:#8d54ff:#adf3ff><b>PurpurExtras</b></gradient> version: " + PurpurExtras.getInstance().getDescription().getVersion());
+        return Command.SINGLE_SUCCESS;
+    }
+
+    public static int executeReload(CommandSender sender) throws CommandSyntaxException {
+        if (!sender.hasPermission(reloadPermission)) {
+            throw NO_PERMISSION.create();
+        }
+        sender.sendRichMessage("Reloading PurpurExtras config...");
+        PurpurExtras.getInstance().reloadPurpurExtrasConfig(sender);
+        return Command.SINGLE_SUCCESS;
+    }
+
+
+    private static CompletableFuture<Suggestions> suggestSubCommands(@NotNull CommandContext<?> context, @NotNull SuggestionsBuilder builder) {
+        CommandSourceStack css = (CommandSourceStack) context.getSource();
+        CommandSender sender = css.getSender();
+
+        if (sender.hasPermission(reloadPermission) && reloadCommand.startsWith(builder.getRemainingLowerCase()))
+            builder.suggest(reloadCommand);
+        if (versionCommand.startsWith(builder.getRemainingLowerCase())) builder.suggest(versionCommand);
+        return builder.buildFuture();
+    }
+
+    private static final SimpleCommandExceptionType NO_PERMISSION = new SimpleCommandExceptionType(
+            MessageComponentSerializer.message().serialize(
+                    PurpurExtras.getInstance().miniMessage.deserialize(
+                            "<red>You don't have permission to do that.</red>"
+                    )
+            )
+    );
+
+
 }

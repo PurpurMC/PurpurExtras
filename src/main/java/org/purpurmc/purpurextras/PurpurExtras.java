@@ -1,13 +1,13 @@
 package org.purpurmc.purpurextras;
 
-import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
 
 public final class PurpurExtras extends JavaPlugin {
 
@@ -31,12 +31,11 @@ public final class PurpurExtras extends JavaPlugin {
         instance = this;
         config = new PurpurConfig();
 
-        PluginCommand command = getCommand("purpurextras");
-        if (command != null) {
-            PurpurExtrasCommand cmd = new PurpurExtrasCommand();
-            command.setExecutor(cmd);
-            command.setTabCompleter(cmd);
-        }
+        this.getLifecycleManager().registerEventHandler(
+                LifecycleEvents.COMMANDS, commands -> {
+                    commands.registrar().register(PurpurExtrasCommand.createCommand());
+                }
+        );
 
         PurpurExtrasModule.reloadModules();
         config.saveConfig();

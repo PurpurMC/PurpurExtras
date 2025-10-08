@@ -64,7 +64,7 @@ tasks {
     }
 
     processResources {
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(
                 mapOf(
                     "name" to project.name,
