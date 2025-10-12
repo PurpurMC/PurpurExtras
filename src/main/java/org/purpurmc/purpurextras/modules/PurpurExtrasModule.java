@@ -12,7 +12,7 @@ public interface PurpurExtrasModule {
     Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
 
     /**
-     * Enables the feature, registers the listeners.
+     * Enables the feature, registers the listeners and permissions.
      */
     void enable();
 
@@ -39,5 +39,7 @@ public interface PurpurExtrasModule {
         });
 
     }
+
+
 
 }

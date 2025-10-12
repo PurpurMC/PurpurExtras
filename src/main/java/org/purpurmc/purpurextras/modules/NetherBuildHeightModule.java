@@ -8,8 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 
@@ -30,7 +30,9 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
 
     private final int configBuildHeight;
     private final String noPermissionMessageContent;
-    private final String netherBuildHeightBypassPermission = "purpurextras.netherbuildheightbypass";
+    private final Permission netherBuildHeightBypassPermission = new Permission("purpurextras.netherbuildheightbypass",
+            "Allows player to bypass the configured max nether build height",
+            PermissionDefault.OP);
 
     protected NetherBuildHeightModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
@@ -41,12 +43,12 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().addPermission(netherBuildHeightBypassPermission);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
     public boolean shouldEnable() {
-        DefaultPermissions.registerPermission(netherBuildHeightBypassPermission, "Allows player to bypass the configured max nether build height", PermissionDefault.OP);
         return PurpurExtras.getPurpurConfig().getBoolean("settings.block-building-above-nether.enabled", false);
     }
 

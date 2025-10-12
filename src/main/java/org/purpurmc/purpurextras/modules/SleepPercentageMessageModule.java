@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class SleepPercentageMessageModule implements PurpurExtrasModule, Listener {
     private final MiniMessage miniMsg = PurpurExtras.getInstance().miniMessage;
     private final String playerSleepMessage, nightSkipMessage;
-    private final String sleepMessageBypass = "purpurextras.sleepmessagebypass";
+    private final Permission sleepMessageBypass = new Permission("purpurextras.sleepmessagebypass", "Allows player to not display a message in chat when they sleep", PermissionDefault.OP);
 
     protected SleepPercentageMessageModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
@@ -34,12 +34,12 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().addPermission(sleepMessageBypass);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
     public boolean shouldEnable() {
-        DefaultPermissions.registerPermission(sleepMessageBypass, "Allows player to not display a message in chat when they sleep", PermissionDefault.OP);
         if ((playerSleepMessage == null || playerSleepMessage.isBlank()) && (nightSkipMessage == null || nightSkipMessage.isBlank()))
             return false;
         return PurpurExtras.getPurpurConfig().getBoolean("settings.chat.send-sleep-percentage-message.enabled", false);

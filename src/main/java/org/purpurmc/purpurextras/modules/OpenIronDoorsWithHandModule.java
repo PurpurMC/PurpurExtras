@@ -1,9 +1,5 @@
 package org.purpurmc.purpurextras.modules;
 
-import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.util.permissions.DefaultPermissions;
-import org.purpurmc.purpurextras.PurpurExtras;
-import org.purpurmc.purpurextras.PurpurConfig;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
@@ -15,6 +11,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.purpurmc.purpurextras.PurpurConfig;
+import org.purpurmc.purpurextras.PurpurExtras;
 
 /**
  * Allows opening iron doors and trapdoors with a hand, just like wooden doors.
@@ -22,8 +22,8 @@ import org.bukkit.inventory.EquipmentSlot;
 public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener {
 
     private final boolean doors, trapdoors;
-    private final String openIronDoorsPermission = "purpurextras.openirondoors";
-    private final String openIronTrapdoorsPermission = "purpurextras.openirontrapdoors";
+    private final Permission openIronDoorsPermission = new Permission("purpurextras.openirondoors", "Allows for opening iron doors with a hand", PermissionDefault.TRUE);
+    private final Permission openIronTrapdoorsPermission = new Permission("purpurextras.openirontrapdoors","Allows for opening iron trapdoors with a hand", PermissionDefault.TRUE);
 
     protected OpenIronDoorsWithHandModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
@@ -33,13 +33,13 @@ public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().addPermission(openIronDoorsPermission);
+        plugin.getServer().getPluginManager().addPermission(openIronTrapdoorsPermission);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
     public boolean shouldEnable() {
-        DefaultPermissions.registerPermission(openIronDoorsPermission, "Allows for opening iron doors with a hand", PermissionDefault.TRUE);
-        DefaultPermissions.registerPermission(openIronTrapdoorsPermission, "Allows for opening iron trapdoors with a hand", PermissionDefault.TRUE);
         return doors || trapdoors;
     }
 

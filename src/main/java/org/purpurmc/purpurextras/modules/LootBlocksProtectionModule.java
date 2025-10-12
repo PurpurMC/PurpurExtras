@@ -12,8 +12,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.loot.Lootable;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.util.MessageType;
@@ -28,17 +28,14 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
     private final boolean allowBreakingInSneak;
     private final boolean blocksImmuneToExplosions;
 
-    private final String permission = "purpurextras.lootblockprotectionbypass";
+    private final Permission lootBlockBypass = new Permission(
+            "purpurextras.lootblockprotectionbypass",
+            "Players with this permission will be able to break blocks with loot tables that can regenerate loot",
+            PermissionDefault.OP
+    );
 
     protected LootBlocksProtectionModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
-
-        DefaultPermissions.registerPermission(
-                permission,
-                "Players with this permission will be able to break blocks with loot tables that can regenerate loot",
-                PermissionDefault.OP
-        );
-
         String defaultMessage = "<red>Prevented you from breaking this block because it can regenerate loot. Sneak to break it anyway.";
         message = MiniMessage.miniMessage().deserialize(
                 config.getString("settings.protect-blocks-with-loot.message", defaultMessage)
@@ -57,6 +54,7 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
+        plugin.getServer().getPluginManager().addPermission(lootBlockBypass);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -86,7 +84,7 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
     }
 
     private void handleLootBlockDestruction(BlockBreakEvent event) {
-        if (event.getPlayer().hasPermission(permission)) return;
+        if (event.getPlayer().hasPermission(lootBlockBypass)) return;
         if (allowBreakingInSneak && event.getPlayer().isSneaking()) return;
         event.setCancelled(true);
         switch (messageType) {
