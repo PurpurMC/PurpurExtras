@@ -27,12 +27,12 @@ public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule, Li
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
-        registerSpawnerPermissions(plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
     public boolean shouldEnable() {
+        registerSpawnerPermissions(PurpurExtras.getInstance());
         return PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay-settings.spawner-placement-requires-specific-permission", false);
     }
 

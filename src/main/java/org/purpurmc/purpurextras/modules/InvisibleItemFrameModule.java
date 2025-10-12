@@ -30,12 +30,12 @@ public class InvisibleItemFrameModule implements PurpurExtrasModule, Listener {
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().addPermission(invisFramePermission);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
     public boolean shouldEnable() {
+        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(invisFramePermission);
         return PurpurExtras.getPurpurConfig().getBoolean("settings.blocks.shift-right-click-for-invisible-item-frames", false);
     }
 

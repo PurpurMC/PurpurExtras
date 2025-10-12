@@ -27,12 +27,13 @@ public class UnlockAllRecipesModule implements PurpurExtrasModule, Listener {
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
-        plugin.getServer().getPluginManager().addPermission(unlockRecipesPermission);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
     }
 
     @Override
     public boolean shouldEnable() {
+        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(unlockRecipesPermission);
         return PurpurExtras.getPurpurConfig().getBoolean("settings.unlock-all-recipes-on-join", false);
     }
 

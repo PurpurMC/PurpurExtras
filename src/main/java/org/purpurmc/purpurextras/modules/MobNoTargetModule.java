@@ -18,12 +18,12 @@ public class MobNoTargetModule implements PurpurExtrasModule, Listener {
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
-        registerTargetPermissions(plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
     public boolean shouldEnable() {
+        registerTargetPermissions(PurpurExtras.getInstance());
         return PurpurExtras.getPurpurConfig().getBoolean("settings.use-notarget-permissions", false);
     }
 

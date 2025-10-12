@@ -12,11 +12,12 @@ public interface PurpurExtrasModule {
     Reflections reflections = new Reflections("org.purpurmc.purpurextras.modules");
 
     /**
-     * Enables the feature, registers the listeners and permissions.
+     * Enables the feature, registers the listeners.
      */
     void enable();
 
     /**
+     * Registers permissions and checks config for if this module should be enabled.
      * @return true if the feature should be enabled
      */
     boolean shouldEnable();
