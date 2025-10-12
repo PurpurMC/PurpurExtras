@@ -23,7 +23,7 @@ import java.util.List;
 public class SleepPercentageMessageModule implements PurpurExtrasModule, Listener {
     private final MiniMessage miniMsg = PurpurExtras.getInstance().miniMessage;
     private final String playerSleepMessage, nightSkipMessage;
-    private final Permission sleepMessageBypass = new Permission("purpurextras.sleepmessagebypass", "Allows player to not display a message in chat when they sleep", PermissionDefault.OP);
+    private final Permission sleepMessageBypass = new Permission("purpurextras.sleepmessagebypass", "Allows player to not display a message in chat when they sleep", PermissionDefault.FALSE);
 
     protected SleepPercentageMessageModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();

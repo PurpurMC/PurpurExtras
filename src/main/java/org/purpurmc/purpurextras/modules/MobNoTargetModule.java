@@ -42,7 +42,7 @@ public class MobNoTargetModule implements PurpurExtrasModule, Listener {
             String description = "Prevents a user from being targeted by " + name + "s ";
             plugin.getServer().getPluginManager().addPermission(new Permission(permissionName,
                     description,
-                    PermissionDefault.OP
+                    PermissionDefault.FALSE
             ));
         }
     }
