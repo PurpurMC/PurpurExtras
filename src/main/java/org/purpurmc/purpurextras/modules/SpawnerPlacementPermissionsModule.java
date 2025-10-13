@@ -9,59 +9,54 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.purpurmc.purpurextras.PurpurExtras;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import static org.bukkit.util.permissions.DefaultPermissions.registerPermission;
 
 /**
  * Players will need purpurextras.spawnerplace.<mobtype> permission to place spawners of that mob.
  */
 public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule, Listener {
 
-    protected SpawnerPlacementPermissionsModule() {}
+    protected SpawnerPlacementPermissionsModule() {
+    }
 
-    private final String spawnerPlacePermission = "purpurextras.spawnerplace";
-    private final Map<String, Boolean> mobSpawners = new HashMap<String, Boolean>();
+    private final String basePermissionString = "purpurextras.spawnerplace.";
 
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        for (EntityType type : EntityType.values())
-        {
-            if (type.isAlive() && type.isSpawnable() )
-            {
-                String entityPermission = "." + type.toString().toLowerCase(Locale.ENGLISH);
-                mobSpawners.put((spawnerPlacePermission + entityPermission), true);
-            }
-        }
-        registerPermission(spawnerPlacePermission, "Allows player to place spawner", PermissionDefault.OP, mobSpawners);
     }
 
     @Override
     public boolean shouldEnable() {
+        registerSpawnerPermissions(PurpurExtras.getInstance());
         return PurpurExtras.getPurpurConfig().getBoolean("settings.gameplay-settings.spawner-placement-requires-specific-permission", false);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onSpawnerPlace(BlockPlaceEvent event){
+    public void onSpawnerPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        String entityType;
-        String entityTypePermission;
-        if (event.getBlock().getState(false) instanceof CreatureSpawner spawner) {
-            entityType = String.valueOf(spawner.getSpawnedType()).toLowerCase(Locale.ENGLISH);
-            entityTypePermission = ("." + entityType);
-        } else {
-            return;
-        }
-        if (player.hasPermission( spawnerPlacePermission + entityTypePermission)) return;
+        if (!(event.getBlock().getState(false) instanceof CreatureSpawner spawner)) return;
+        EntityType type = spawner.getSpawnedType();
+        if (type == null) return;
+        String entityName = type.getKey().getKey();
+        if (player.hasPermission(basePermissionString + entityName)) return;
         event.setCancelled(true);
-        player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You do not have permission to place a <spawner> spawner!", Placeholder.unparsed("spawner", entityType)));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You do not have permission to place a <spawner> spawner!", Placeholder.unparsed("spawner", entityName)));
+    }
+
+    private void registerSpawnerPermissions(PurpurExtras plugin){
+        for (EntityType type : EntityType.values()) {
+            if (!type.isAlive() || !type.isSpawnable()) continue;
+            String entityName = type.getKey().getKey();
+            Permission spawnerPermissions = new Permission(basePermissionString + entityName,
+                    "Allows player to place a " + entityName + " spawner",
+                    PermissionDefault.OP);
+            plugin.getServer().getPluginManager().addPermission(spawnerPermissions);
+        }
     }
 }
 

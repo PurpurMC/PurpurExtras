@@ -17,6 +17,7 @@ public interface PurpurExtrasModule {
     void enable();
 
     /**
+     * Registers permissions and checks config for if this module should be enabled.
      * @return true if the feature should be enabled
      */
     boolean shouldEnable();
@@ -39,5 +40,4 @@ public interface PurpurExtrasModule {
         });
 
     }
-
 }

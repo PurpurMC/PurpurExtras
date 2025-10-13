@@ -11,8 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.util.permissions.DefaultPermissions;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.PurpurExtrasModule;
@@ -28,16 +28,12 @@ public class SpawnersProtectionModule implements PurpurExtrasModule, Listener {
     private final boolean allowBreakingInSneak;
     private final boolean blocksImmuneToExplosions;
 
-    private final String permission = "purpurextras.spawnerprotectionbypass";
+    private final Permission protectionBypassPermission = new Permission("purpurextras.spawnerprotectionbypass",
+            "Players with this permission will be able to destroy spawners",
+            PermissionDefault.OP);
 
     public SpawnersProtectionModule() {
         PurpurConfig config = PurpurExtras.getPurpurConfig();
-
-        DefaultPermissions.registerPermission(
-                permission,
-                "Players with this permission will be able to destroy spawners",
-                PermissionDefault.OP
-        );
 
         String defaultMessage = "<red>Prevented you from breaking this block. Sneak to break it anyway.";
         message = MiniMessage.miniMessage().deserialize(
@@ -62,6 +58,7 @@ public class SpawnersProtectionModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
+        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(protectionBypassPermission);
         return PurpurExtras.getPurpurConfig().getBoolean("settings.protect-spawners.enabled", false);
     }
 
@@ -85,7 +82,7 @@ public class SpawnersProtectionModule implements PurpurExtrasModule, Listener {
     }
 
     private void handleLootBlockDestruction(BlockBreakEvent event) {
-        if (event.getPlayer().hasPermission(permission)) return;
+        if (event.getPlayer().hasPermission(protectionBypassPermission)) return;
         if (allowBreakingInSneak && event.getPlayer().isSneaking()) return;
         event.setCancelled(true);
         switch (messageType) {
