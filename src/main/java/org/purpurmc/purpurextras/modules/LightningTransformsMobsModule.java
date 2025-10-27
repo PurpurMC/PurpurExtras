@@ -74,19 +74,25 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         }
         Location location = entity.getLocation();
         Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
+        Object targetEntity = null;
+        String entityKey = null;
         if (specialEntity != null) {
-            event.setCancelled(true);
-            entity.remove();
-            String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
-            Object targetEntity = entities.get(specialEntityKey);
-            spawnEntity(targetEntity, location);
-            return;
+            entityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
+            targetEntity = entities.get(entityKey);
         }
-        Object targetEntity = entities.get(entity.getType().getKey().getKey());
+        else {
+            entityKey = entity.getType().getKey().getKey();
+            targetEntity = entities.get(entityKey);
+        }
         if (targetEntity == null) return;
         event.setCancelled(true);
+        Entity spawnedEntity = spawnEntity(targetEntity, location);
+        // Preserve entity state before it is removed
+        if (preserveMobStateOnLightningTransformation && spawnedEntity instanceof LivingEntity newEntity) {
+            preserveEntityState(livingEntity, newEntity);
+        }
+
         entity.remove();
-        spawnEntity(targetEntity, location);
     }
 
     private Entity spawnEntity(Object entity, Location location) {
@@ -140,13 +146,14 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
         if (specialEntity != null) {
             event.setCancelled(true);
-            entity.remove();
             String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
             Object targetEntity = entities.get(specialEntityKey);
             Entity spawnedEntity = spawnEntity(targetEntity, location);
             if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
                 preserveEntityState((LivingEntity) entity,  newEntity);
             }
+            // Remove old entity after preserving the state
+            entity.remove();
             return;
         }
         Object targetEntity = entities.get(entity.getType().getKey().getKey());
@@ -155,11 +162,12 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
             event.setCancelled(true);
             return;
         }
-        entity.remove();
         Entity spawnedEntity = spawnEntity(targetEntity, location);
         if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
             preserveEntityState((LivingEntity) entity,  newEntity);
         }
+        // Remove old entity after transformation
+        entity.remove();
         event.setCancelled(true);
     }
 
