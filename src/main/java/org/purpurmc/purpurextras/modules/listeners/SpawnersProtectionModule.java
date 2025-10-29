@@ -58,7 +58,9 @@ public class SpawnersProtectionModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(protectionBypassPermission);
+        if (!isRegistered(protectionBypassPermission)) {
+            PurpurExtras.getInstance().getServer().getPluginManager().addPermission(protectionBypassPermission);
+        }
         return PurpurExtras.getPurpurConfig().getBoolean("settings.protect-spawners.enabled", false);
     }
 

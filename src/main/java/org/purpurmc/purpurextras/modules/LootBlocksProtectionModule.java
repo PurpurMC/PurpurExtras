@@ -59,7 +59,9 @@ public class LootBlocksProtectionModule implements PurpurExtrasModule, Listener 
 
     @Override
     public boolean shouldEnable() {
-        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(lootBlockBypass);
+        if (!isRegistered(lootBlockBypass)) {
+            PurpurExtras.getInstance().getServer().getPluginManager().addPermission(lootBlockBypass);
+        }
         return PurpurExtras.getPurpurConfig().getBoolean("settings.protect-blocks-with-loot.enabled", false);
     }
 

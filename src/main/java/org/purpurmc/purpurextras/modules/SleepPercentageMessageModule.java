@@ -39,7 +39,9 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
 
     @Override
     public boolean shouldEnable() {
-        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(sleepMessageBypass);
+        if (!isRegistered(sleepMessageBypass)) {
+            PurpurExtras.getInstance().getServer().getPluginManager().addPermission(sleepMessageBypass);
+        }
         if ((playerSleepMessage == null || playerSleepMessage.isBlank()) && (nightSkipMessage == null || nightSkipMessage.isBlank()))
             return false;
         return PurpurExtras.getPurpurConfig().getBoolean("settings.chat.send-sleep-percentage-message.enabled", false);

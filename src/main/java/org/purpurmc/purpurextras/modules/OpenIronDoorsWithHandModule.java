@@ -38,8 +38,12 @@ public class OpenIronDoorsWithHandModule implements PurpurExtrasModule, Listener
 
     @Override
     public boolean shouldEnable() {
-        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(openIronDoorsPermission);
-        PurpurExtras.getInstance().getServer().getPluginManager().addPermission(openIronTrapdoorsPermission);
+        if (!isRegistered(openIronDoorsPermission)) {
+            PurpurExtras.getInstance().getServer().getPluginManager().addPermission(openIronDoorsPermission);
+        }
+        if (!isRegistered(openIronTrapdoorsPermission)) {
+            PurpurExtras.getInstance().getServer().getPluginManager().addPermission(openIronTrapdoorsPermission);
+        }
         return doors || trapdoors;
     }
 
