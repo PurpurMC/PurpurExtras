@@ -46,7 +46,7 @@ public class MobNoTargetModule implements PurpurExtrasModule, Listener {
                     description,
                     PermissionDefault.FALSE
             );
-            if (!isRegistered(perm)) {
+            if (!isPermissionRegistered(perm)) {
                 plugin.getServer().getPluginManager().addPermission(perm);
             }
         }

@@ -39,7 +39,7 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
 
     @Override
     public boolean shouldEnable() {
-        if (!isRegistered(sleepMessageBypass)) {
+        if (!isPermissionRegistered(sleepMessageBypass)) {
             PurpurExtras.getInstance().getServer().getPluginManager().addPermission(sleepMessageBypass);
         }
         if ((playerSleepMessage == null || playerSleepMessage.isBlank()) && (nightSkipMessage == null || nightSkipMessage.isBlank()))
