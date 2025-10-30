@@ -52,10 +52,10 @@ public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule, Li
         for (EntityType type : EntityType.values()) {
             if (!type.isAlive() || !type.isSpawnable()) continue;
             String entityName = type.getKey().getKey();
-            Permission spawnerPermissions = new Permission(basePermissionString + entityName,
+            Permission permission = new Permission(basePermissionString + entityName,
                     "Allows player to place a " + entityName + " spawner",
                     PermissionDefault.OP);
-            plugin.getServer().getPluginManager().addPermission(spawnerPermissions);
+            registerPermissions(permission);
         }
     }
 }

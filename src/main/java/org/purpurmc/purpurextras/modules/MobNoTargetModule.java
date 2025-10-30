@@ -14,7 +14,9 @@ import org.purpurmc.purpurextras.PurpurExtras;
  * If enabled, players having target.bypass.<mojang_mob_name> permission won't be targetted by that type of mob.
  */
 public class MobNoTargetModule implements PurpurExtrasModule, Listener {
-    protected MobNoTargetModule() {}
+    protected MobNoTargetModule() {
+    }
+
     @Override
     public void enable() {
         PurpurExtras plugin = PurpurExtras.getInstance();
@@ -34,16 +36,17 @@ public class MobNoTargetModule implements PurpurExtrasModule, Listener {
         event.setCancelled(true);
     }
 
-    private void registerTargetPermissions(PurpurExtras plugin){
+    private void registerTargetPermissions(PurpurExtras plugin) {
         for (EntityType entityType : EntityType.values()) {
             if (!entityType.isAlive()) continue;
             String name = entityType.getKey().getKey();
             String permissionName = "target.bypass." + name;
             String description = "Prevents a user from being targeted by " + name + "s ";
-            plugin.getServer().getPluginManager().addPermission(new Permission(permissionName,
+            Permission perm = new Permission(permissionName,
                     description,
                     PermissionDefault.FALSE
-            ));
+            );
+            registerPermissions(perm);
         }
     }
 }

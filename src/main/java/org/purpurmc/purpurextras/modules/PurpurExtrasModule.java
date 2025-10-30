@@ -1,5 +1,7 @@
 package org.purpurmc.purpurextras.modules;
 
+import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
 import org.purpurmc.purpurextras.PurpurExtras;
 import org.bukkit.event.HandlerList;
 import org.reflections.Reflections;
@@ -21,6 +23,15 @@ public interface PurpurExtrasModule {
      * @return true if the feature should be enabled
      */
     boolean shouldEnable();
+
+    default void registerPermissions(Permission... permissions) {
+        for (Permission permission : permissions) {
+            String permName = permission.getName();
+            boolean alreadyRegistered = Bukkit.getServer().getPluginManager().getPermission(permName) != null;
+            if (alreadyRegistered) continue;
+            Bukkit.getServer().getPluginManager().addPermission(permission);
+        }
+    }
 
     static void reloadModules() {
 
