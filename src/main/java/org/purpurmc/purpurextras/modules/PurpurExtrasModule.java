@@ -24,9 +24,13 @@ public interface PurpurExtrasModule {
      */
     boolean shouldEnable();
 
-    default boolean isPermissionRegistered(Permission permission) {
-        String permName = permission.getName();
-        return Bukkit.getServer().getPluginManager().getPermission(permName) != null;
+    default void registerPermissions(Permission... permissions) {
+        for (Permission permission : permissions) {
+            String permName = permission.getName();
+            boolean alreadyRegistered = Bukkit.getServer().getPluginManager().getPermission(permName) != null;
+            if (alreadyRegistered) continue;
+            Bukkit.getServer().getPluginManager().addPermission(permission);
+        }
     }
 
     static void reloadModules() {

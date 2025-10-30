@@ -48,9 +48,7 @@ public class NetherBuildHeightModule implements PurpurExtrasModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        if (!isPermissionRegistered(netherBuildHeightBypassPermission)) {
-            PurpurExtras.getInstance().getServer().getPluginManager().addPermission(netherBuildHeightBypassPermission);
-        }
+        registerPermissions(netherBuildHeightBypassPermission);
         return PurpurExtras.getPurpurConfig().getBoolean("settings.block-building-above-nether.enabled", false);
     }
 

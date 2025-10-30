@@ -55,9 +55,7 @@ public class SpawnerPlacementPermissionsModule implements PurpurExtrasModule, Li
             Permission permission = new Permission(basePermissionString + entityName,
                     "Allows player to place a " + entityName + " spawner",
                     PermissionDefault.OP);
-            if (!isPermissionRegistered(permission)) {
-                plugin.getServer().getPluginManager().addPermission(permission);
-            }
+            registerPermissions(permission);
         }
     }
 }
