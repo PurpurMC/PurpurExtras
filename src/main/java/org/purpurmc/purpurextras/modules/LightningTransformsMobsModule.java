@@ -18,11 +18,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.purpurmc.purpurextras.util.EntityStatePreserverUtil.preserveEntityState;
+
 /**
  * If enabled, entities with type on the left will be transformed into entity of type on the right.
  * This overrides vanilla transformations. Vanilla mob ids are used to identify mobs.
  * There are also special cases:
- *
+ * <p>
  * `killer_bunny` - a killer bunny
  * `jeb_sheep` - rainbow sheep
  * `johhny` - vindicator aggressive to most mobs
@@ -31,12 +33,14 @@ import java.util.Map;
 public class LightningTransformsMobsModule implements PurpurExtrasModule, Listener {
 
     private final HashMap<String, Object> entities = new HashMap<>();
+    private final boolean preserveMobStateOnLightningTransformation;
 
     protected LightningTransformsMobsModule() {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("villager", "witch");
         defaults.put("pig", "zombified_piglin");
         ConfigurationSection section = PurpurExtras.getPurpurConfig().getConfigSection("settings.lightning-transforms-entities.entities", defaults);
+        this.preserveMobStateOnLightningTransformation = PurpurExtras.getPurpurConfig().getBoolean("settings.lightning-transforms-entities.preserve-entity-state", false);
         HashMap<String, String> lightningTransformEntities = new HashMap<>();
         for (String key : section.getKeys(false)) {
             String value = section.getString(key);
@@ -70,27 +74,35 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         }
         Location location = entity.getLocation();
         Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
+        Object targetEntity = null;
+        String entityKey = null;
         if (specialEntity != null) {
-            event.setCancelled(true);
-            entity.remove();
-            String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
-            Object targetEntity = entities.get(specialEntityKey);
-            spawnEntity(targetEntity, location);
-            return;
+            entityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
+            targetEntity = entities.get(entityKey);
+        } else {
+            entityKey = entity.getType().getKey().getKey();
+            targetEntity = entities.get(entityKey);
         }
-        Object targetEntity = entities.get(entity.getType().getKey().getKey());
         if (targetEntity == null) return;
         event.setCancelled(true);
+        Entity spawnedEntity = spawnEntity(targetEntity, location);
+        // Preserve entity state before it is removed
+        if (preserveMobStateOnLightningTransformation && spawnedEntity instanceof LivingEntity newEntity) {
+            preserveEntityState(livingEntity, newEntity);
+        }
+
         entity.remove();
-        spawnEntity(targetEntity, location);
     }
 
-    private void spawnEntity(Object entity, Location location) {
+    private Entity spawnEntity(Object entity, Location location) {
+        Entity spawnedEntity = null;
         if (entity instanceof EntityType entityType) {
-            location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.LIGHTNING);
+            spawnedEntity = location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.LIGHTNING);
         } else if (entity instanceof Entiddy entiddy) {
-            entiddy.entiddy().spawn(location, CreatureSpawnEvent.SpawnReason.LIGHTNING);
+            spawnedEntity = entiddy.entiddy().spawn(location, CreatureSpawnEvent.SpawnReason.LIGHTNING);
         }
+
+        return spawnedEntity;
     }
 
     private void getEntityTypeOrSpecial(String key, String value) {
@@ -108,14 +120,16 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         }
         if (sourceKey == null) {
             try {
-                Entiddy entiddy = Entiddy.valueOf(key.toUpperCase(Locale.ROOT));
+                Entiddy.valueOf(key.toUpperCase(Locale.ROOT));
                 sourceKey = key;
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
         if (goal == null) {
             try {
                 goal = Entiddy.valueOf(value.toUpperCase(Locale.ROOT));
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
         entities.put(sourceKey, goal);
     }
@@ -133,10 +147,14 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         Entiddy specialEntity = Entiddy.fromEntity(livingEntity);
         if (specialEntity != null) {
             event.setCancelled(true);
-            entity.remove();
             String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
             Object targetEntity = entities.get(specialEntityKey);
-            spawnEntity(targetEntity, location);
+            Entity spawnedEntity = spawnEntity(targetEntity, location);
+            if (preserveMobStateOnLightningTransformation && spawnedEntity instanceof LivingEntity newEntity) {
+                preserveEntityState(livingEntity, newEntity);
+            }
+            // Remove old entity after preserving the state
+            entity.remove();
             return;
         }
         Object targetEntity = entities.get(entity.getType().getKey().getKey());
@@ -145,8 +163,12 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
             event.setCancelled(true);
             return;
         }
+        Entity spawnedEntity = spawnEntity(targetEntity, location);
+        if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
+            preserveEntityState(livingEntity,  newEntity);
+        }
+        // Remove old entity after transformation
         entity.remove();
-        spawnEntity(targetEntity, location);
         event.setCancelled(true);
     }
 
