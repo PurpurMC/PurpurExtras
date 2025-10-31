@@ -24,7 +24,7 @@ import static org.purpurmc.purpurextras.util.EntityStatePreserverUtil.preserveEn
  * If enabled, entities with type on the left will be transformed into entity of type on the right.
  * This overrides vanilla transformations. Vanilla mob ids are used to identify mobs.
  * There are also special cases:
- *
+ * <p>
  * `killer_bunny` - a killer bunny
  * `jeb_sheep` - rainbow sheep
  * `johhny` - vindicator aggressive to most mobs
@@ -33,7 +33,7 @@ import static org.purpurmc.purpurextras.util.EntityStatePreserverUtil.preserveEn
 public class LightningTransformsMobsModule implements PurpurExtrasModule, Listener {
 
     private final HashMap<String, Object> entities = new HashMap<>();
-    private  final boolean preserveMobStateOnLightningTransformation;
+    private final boolean preserveMobStateOnLightningTransformation;
 
     protected LightningTransformsMobsModule() {
         Map<String, Object> defaults = new HashMap<>();
@@ -79,8 +79,7 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         if (specialEntity != null) {
             entityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
             targetEntity = entities.get(entityKey);
-        }
-        else {
+        } else {
             entityKey = entity.getType().getKey().getKey();
             targetEntity = entities.get(entityKey);
         }
@@ -98,12 +97,12 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
     private Entity spawnEntity(Object entity, Location location) {
         Entity spawnedEntity = null;
         if (entity instanceof EntityType entityType) {
-           spawnedEntity = location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.LIGHTNING);
+            spawnedEntity = location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.LIGHTNING);
         } else if (entity instanceof Entiddy entiddy) {
-          spawnedEntity = entiddy.entiddy().spawn(location, CreatureSpawnEvent.SpawnReason.LIGHTNING);
+            spawnedEntity = entiddy.entiddy().spawn(location, CreatureSpawnEvent.SpawnReason.LIGHTNING);
         }
 
-          return  spawnedEntity;
+        return spawnedEntity;
     }
 
     private void getEntityTypeOrSpecial(String key, String value) {
@@ -121,14 +120,16 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         }
         if (sourceKey == null) {
             try {
-                Entiddy entiddy = Entiddy.valueOf(key.toUpperCase(Locale.ROOT));
+                Entiddy.valueOf(key.toUpperCase(Locale.ROOT));
                 sourceKey = key;
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
         if (goal == null) {
             try {
                 goal = Entiddy.valueOf(value.toUpperCase(Locale.ROOT));
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
         entities.put(sourceKey, goal);
     }
@@ -149,8 +150,8 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
             String specialEntityKey = specialEntity.entiddy().toString().toLowerCase(Locale.ROOT);
             Object targetEntity = entities.get(specialEntityKey);
             Entity spawnedEntity = spawnEntity(targetEntity, location);
-            if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
-                preserveEntityState((LivingEntity) entity,  newEntity);
+            if (preserveMobStateOnLightningTransformation && spawnedEntity instanceof LivingEntity newEntity) {
+                preserveEntityState(livingEntity, newEntity);
             }
             // Remove old entity after preserving the state
             entity.remove();
@@ -164,7 +165,7 @@ public class LightningTransformsMobsModule implements PurpurExtrasModule, Listen
         }
         Entity spawnedEntity = spawnEntity(targetEntity, location);
         if(preserveMobStateOnLightningTransformation && spawnedEntity instanceof  LivingEntity newEntity) {
-            preserveEntityState((LivingEntity) entity,  newEntity);
+            preserveEntityState(livingEntity,  newEntity);
         }
         // Remove old entity after transformation
         entity.remove();
