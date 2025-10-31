@@ -1,5 +1,6 @@
 package org.purpurmc.purpurextras.modules;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -10,12 +11,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.material.Attachable;
 import org.purpurmc.purpurextras.PurpurExtras;
 
@@ -46,15 +48,17 @@ public class ReachThroughModule implements PurpurExtrasModule, Listener {
         if (!passableEntities.contains(entityClicked.getType())) return;
         if (!(entityClicked instanceof Attachable attachableBlock)) return;
         if ((entityClicked instanceof ItemFrame itemFrame) && !itemFramePassthroughEnabled(itemFrame)) return;
-        Inventory containerInv = getContainerInventory(attachableBlock.getAttachedFace(), entityClicked.getLocation().toBlockLocation());
-        if (containerInv == null) return;
+        BlockFace face = attachableBlock.getAttachedFace();
+        Container container = getContainer(face, entityClicked.getLocation().toBlockLocation());
+        if (container == null) return;
+        if (!canInteractWithContainer(player, container, face)) return;
         interactEntityEvent.setCancelled(true);
-        player.openInventory(containerInv);
+        player.openInventory(container.getInventory());
 
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInteractEvent(PlayerInteractEvent interactEvent){
+    public void onInteractEvent(PlayerInteractEvent interactEvent) {
         if (!bypassWaxedSigns && !bypassUnwaxedSigns) return;
         Player player = interactEvent.getPlayer();
         Block blockClicked = interactEvent.getClickedBlock();
@@ -65,10 +69,11 @@ public class ReachThroughModule implements PurpurExtrasModule, Listener {
         if (!signPassthroughEnabled(signClicked)) return;
         if (!(blockClicked.getBlockData() instanceof Directional directionalBlock)) return;
         BlockFace face = directionalBlock.getFacing().getOppositeFace();
-        Inventory inventoryClicked = getContainerInventory(face, blockClicked.getLocation());
-        if (inventoryClicked == null) return;
+        Container container = getContainer(face, blockClicked.getLocation());
+        if (container == null) return;
+        if (!canInteractWithContainer(player, container, face)) return;
         interactEvent.setCancelled(true);
-        player.openInventory(inventoryClicked);
+        player.openInventory(container.getInventory());
     }
 
     @Override
@@ -81,23 +86,31 @@ public class ReachThroughModule implements PurpurExtrasModule, Listener {
         return bypassEmptyFrames || bypassFilledFrames || bypassPaintings || bypassUnwaxedSigns || bypassWaxedSigns;
     }
 
-    private Inventory getContainerInventory(BlockFace face, Location location) {
+    @SuppressWarnings("UnstableApiUsage")
+    private boolean canInteractWithContainer(Player player, Container containerBlock, BlockFace attachedFace) {
+        Block block = containerBlock.getBlock();
+        PlayerInteractEvent newEvent = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, player.getInventory().getItemInMainHand(), block, attachedFace, EquipmentSlot.HAND);
+        Bukkit.getServer().getPluginManager().callEvent(newEvent);
+        return !newEvent.useInteractedBlock().equals(Event.Result.DENY);
+    }
+
+    private Container getContainer(BlockFace face, Location location) {
         int attachedXOffset = face.getModX();
         int attachedYOffset = face.getModY();
         int attachedZOffset = face.getModZ();
         Location attachedBlockLocation = location.add(attachedXOffset, attachedYOffset, attachedZOffset);
         Block blockAtLocation = attachedBlockLocation.getBlock();
         if (!(blockAtLocation.getState() instanceof Container containerBlock)) return null;
-        return containerBlock.getInventory();
+        return containerBlock;
     }
 
-    private boolean signPassthroughEnabled(Sign sign){
+    private boolean signPassthroughEnabled(Sign sign) {
         if (sign.isWaxed() && !bypassWaxedSigns) return false;
         if (!sign.isWaxed() && !bypassUnwaxedSigns) return false;
         return true;
     }
 
-    private boolean itemFramePassthroughEnabled(ItemFrame itemFrame){
+    private boolean itemFramePassthroughEnabled(ItemFrame itemFrame) {
         if (itemFrame.getItem().isEmpty() && !bypassEmptyFrames) return false;
         return true;
     }
