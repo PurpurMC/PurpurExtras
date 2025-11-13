@@ -57,7 +57,7 @@ public class CreateSusBlocksModule implements PurpurExtrasModule, Listener {
         } catch (IllegalArgumentException e) {
             this.messageType = MessageType.CHAT;
         }
-        return PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanIfExists("settings.create-suspicious-blocks", false));
+        return PurpurExtras.getPurpurConfig().getBoolean("settings.suspicious-blocks.enabled", PurpurExtras.getPurpurConfig().getBooleanAndRemove("settings.create-suspicious-blocks", false));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

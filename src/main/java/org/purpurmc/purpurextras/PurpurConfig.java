@@ -30,7 +30,7 @@ public class PurpurConfig {
         }
     }
 
-    public boolean getBooleanIfExists(String path, boolean def) {
+    public boolean getBooleanAndRemove(String path, boolean def) {
         if (config.isSet(path)) {
             Boolean setting = config.getBoolean(path, def);
             config.set(path, null);
