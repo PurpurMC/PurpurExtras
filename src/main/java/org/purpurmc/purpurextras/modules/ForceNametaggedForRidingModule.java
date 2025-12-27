@@ -29,6 +29,9 @@ public class ForceNametaggedForRidingModule implements PurpurExtrasModule, Liste
     public void onMount(EntityMountEvent event) {
         Entity entity = event.getMount();
 
+        // Mobs only
+        if (!(entity instanceof Mob)) return;
+
         // if pig or strider with a saddle, ignore
         if (entity instanceof Steerable steerable && steerable.hasSaddle()) return;
 
@@ -49,7 +52,7 @@ public class ForceNametaggedForRidingModule implements PurpurExtrasModule, Liste
     public void onMountMove(EntityMoveEvent event) {
         if (!(event.getEntity() instanceof Vehicle vehicle)) return;
         if (vehicle.getPassengers().isEmpty()) return;
-        Entity passenger = vehicle.getPassengers().get(0);
+        Entity passenger = vehicle.getPassengers().getFirst();
         if (!(passenger instanceof Player player)) return;
         if (vehicle.customName() != null && player.hasPermission("allow.ride."+vehicle.getType().getKey().getKey())) return;
         event.setCancelled(true);
