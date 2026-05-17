@@ -1,6 +1,6 @@
 name: "${name}"
 version: ${version}
 main: "org.purpurmc.purpurextras.PurpurExtras"
-api-version: '1.21.4'
+api-version: '26.1.2'
 authors: [ YouHaveTrouble ]
 description: "${description}"
