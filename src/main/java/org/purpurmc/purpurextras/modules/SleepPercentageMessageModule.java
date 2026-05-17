@@ -3,7 +3,7 @@ package org.purpurmc.purpurextras.modules;
 import io.papermc.paper.event.player.PlayerDeepSleepEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,7 +55,7 @@ public class SleepPercentageMessageModule implements PurpurExtrasModule, Listene
         String worldName = world.getName();
         int currentSleepCount = 0;
         long worldOnlineTotal = playerList.stream().filter(player -> !player.isSleepingIgnored()).count();
-        Integer worldSleepPercent = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
+        Integer worldSleepPercent = world.getGameRuleValue(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
         Integer neededSleepers = (int) Math.ceil((worldSleepPercent / 100.0) * worldOnlineTotal);
         for (Player player : playerList) {
             if (player.isSleepingIgnored()) continue;
