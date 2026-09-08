@@ -34,6 +34,7 @@ public final class PurpurExtras extends JavaPlugin {
         this.getLifecycleManager().registerEventHandler(
                 LifecycleEvents.COMMANDS, commands -> {
                     commands.registrar().register(PurpurExtrasCommand.createCommand());
+                    commands.registrar().register(JFSListCommand.createCommand());
                 }
         );
 
