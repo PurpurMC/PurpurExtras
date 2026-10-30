@@ -17,6 +17,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * If enabled, block list will be used. Key is the block material that will be converted from and value
+ * is block material that will be converted to. In default config if anvil falls on a
+ * cobblestone block, that cobblestone will be converted to sand.
+ */
 public class AnvilChangesBlocksModule implements PurpurExtrasModule, Listener {
 
     private final HashSet<Material> anvils = new HashSet<>();

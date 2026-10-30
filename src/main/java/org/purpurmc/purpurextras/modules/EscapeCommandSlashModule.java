@@ -9,6 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+/**
+ * Allows players to send a message with a slash at the start by escaping it with backslash
+ * (\/command that will appear as /command in chat).
+ */
 public class EscapeCommandSlashModule implements PurpurExtrasModule, Listener {
 
     protected EscapeCommandSlashModule() {}

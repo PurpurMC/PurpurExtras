@@ -2,9 +2,17 @@ package org.purpurmc.purpurextras.modules;
 
 import com.destroystokyo.paper.MaterialSetTag;
 import com.destroystokyo.paper.MaterialTags;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Tool;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.keys.BlockTypeKeys;
+import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockType;
 import org.bukkit.block.Jukebox;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
@@ -14,11 +22,31 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.purpurmc.purpurextras.PurpurConfig;
 import org.purpurmc.purpurextras.PurpurExtras;
+import org.purpurmc.purpurextras.util.ItemStackUtil;
 
 import java.util.Map;
 
+/**
+ * Dispenser modifications
+ *
+ * **break-blocks**
+ * If a tool category is enabled, that tool dispensed from dispenser will destroy the block in front of it.
+ * It will only destroy blocks that tool can destroy and it will destroy them like that tool was used on it,
+ * so wooden pickaxe will destroy diamond ore, but will not drop any items.
+ *
+ * **shears-shear-pumpkin**
+ * If enabled, when shears are dispensed and there's a pumpkin in front of a dispenser, shears will be used, making carved pumpkin.
+ *
+ * **interact-with-cauldron**
+ * If enabled, will allow dispensers fill and empty cauldrons.
+ *
+ * **put-discs-in-jukebox**
+ * If enabled, dispensers will be able to insert into or swap music discs in jukeboxes.
+ */
 public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
 
     private static final MaterialSetTag CAULDRON_BUCKETS = new MaterialSetTag(new NamespacedKey(PurpurExtras.getInstance(), "cauldron_buckets"))
@@ -96,6 +124,12 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
         if (breakBlockHoe && MaterialTags.HOES.isTagged(item)) {
             event.setCancelled(true);
             if (tryBreakBlock(item, blockDispenser, block)) return;
+        }
+        if (breakBlockShears && Material.SHEARS.equals(item.getType())) {
+            if (tryBreakBlock(item, blockDispenser, block)) {
+                event.setCancelled(true);
+                return;
+            }
         }
 
         // Shear pumpkin
@@ -175,7 +209,9 @@ public class DispenserBlocksModule implements PurpurExtrasModule, Listener {
         if (slot == -1) return;
         ItemStack item = inventory.getItem(slot);
         if (item == null) return;
-        item.damage(1);
+        ItemMeta meta = item.getItemMeta();
+        if (!(meta instanceof Damageable)) return;
+        ItemStackUtil.damage(item, 1, false);
     }
 
     private ItemStack consumeItem(ItemStack itemStack) {

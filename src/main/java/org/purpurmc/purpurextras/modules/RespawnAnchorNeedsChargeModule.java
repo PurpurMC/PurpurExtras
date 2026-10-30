@@ -13,6 +13,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.util.BoundingBox;
 
+/**
+ * If false, will make it so respawn anchors will never run out of charges.
+ */
 public class RespawnAnchorNeedsChargeModule implements PurpurExtrasModule, Listener {
 
     protected RespawnAnchorNeedsChargeModule() {}

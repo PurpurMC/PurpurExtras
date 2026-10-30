@@ -5,6 +5,14 @@ import org.purpurmc.purpurextras.PurpurExtras;
 import org.purpurmc.purpurextras.modules.listeners.ShieldCooldownListener;
 import org.purpurmc.purpurextras.modules.listeners.ShieldDamageReductionListener;
 
+/**
+ * Shield configurations
+ * {@link ShieldCooldownListener} - Amount of ticks (1/20th of a second) of cooldown for a shield after
+ * hitting it with an axe crit. By default this is 100 ticks (5 seconds).
+ *
+ * {@link ShieldDamageReductionListener} - Value between 0 and 1. This is the percentage of damage reduction
+ * that defending with a shield will provide. By default shield reduces 100% of the damage (1.0).
+ */
 public class ShieldSettingsModule implements PurpurExtrasModule, Listener {
 
     private static final double DEFAULT_SHIELD_DAMAGE_REDUCTION = 1.0;

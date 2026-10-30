@@ -12,6 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * If enabled, allows filtering which entity types don't get damaged by stonecutters if
+ * <a href="https://purpurmc.org/docs/Configuration/stonecutter_1"> stonecutter dealing damage</a> Purpur feature is
+ * enabled.
+ */
 public class StonecutterDamageModule implements PurpurExtrasModule, Listener {
 
     private final HashSet<EntityType> stonecutterDamageBlacklist = new HashSet<>();
@@ -33,6 +38,12 @@ public class StonecutterDamageModule implements PurpurExtrasModule, Listener {
 
     @Override
     public void enable() {
+        try {
+            Class.forName("org.purpurmc.purpur.PurpurConfig");
+        } catch (ClassNotFoundException e) {
+            PurpurExtras.getInstance().getLogger().warning(this.getClass().getSimpleName() + " module requires you to run Purpur as your server software.");
+            return;
+        }
         PurpurExtras plugin = PurpurExtras.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
